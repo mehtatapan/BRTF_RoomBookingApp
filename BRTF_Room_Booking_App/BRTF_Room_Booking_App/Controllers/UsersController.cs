@@ -73,7 +73,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Username,Password,FullName,Email,EmailBookingNotifications,EmailCancelNotifications,UserGroupID,RoleID")] User user)
+        public async Task<IActionResult> Create([Bind("ID,Username,Password,FullName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user)
         {
             try
             {
@@ -224,7 +224,7 @@ namespace BRTF_Room_Booking_App.Controllers
         private SelectList TermAndProgramSelectList(int? selectedId)
         {
             return new SelectList(_context.TermAndPrograms
-                .OrderBy(u => u.ProgramCode).ThenBy(u => u.ProgramLevel), "ID", "UserGroupName", selectedId);
+                .OrderBy(u => u.ProgramCode).ThenBy(u => u.ProgramLevel), "ID", "TermAndProgramSummary", selectedId);
         }
         private void PopulateDropDownLists(User user = null)
         {
