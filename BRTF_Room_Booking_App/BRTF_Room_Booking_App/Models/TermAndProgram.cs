@@ -8,7 +8,25 @@ namespace BRTF_Room_Booking_App.Models
 {
     public class TermAndProgram
     {
+        public TermAndProgram()
+        {
+            this.Users = new HashSet<User>();
+        }
+
         public int ID { get; set; }
+
+        [Display(Name = "Term and Program")]
+        public string TermAndProgramSummary
+        {
+            get
+            {
+                // Generate return string.
+                string termAndProgramString = ProgramCode + " - Level " + ProgramLevel.ToString() + ", " + ProgramName;
+
+                // Example output: "P0164 - Level 1, TV Production"
+                return termAndProgramString;
+            }
+        }
 
         [Display(Name = "Program Name")]
         [Required(ErrorMessage = "Cannot be blank.")]
@@ -32,5 +50,8 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "User Group")]
         public UserGroup UserGroup { get; set; }
+
+        [Display(Name = "Users")]
+        public ICollection<User> Users { get; set; }
     }
 }

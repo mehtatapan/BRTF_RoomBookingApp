@@ -265,7 +265,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<int>("RoleID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserGroupID")
+                    b.Property<int>("TermAndProgramID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
@@ -277,7 +277,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
                     b.HasIndex("RoleID");
 
-                    b.HasIndex("UserGroupID");
+                    b.HasIndex("TermAndProgramID");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -372,9 +372,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BRTF_Room_Booking_App.Models.UserGroup", "UserGroup")
+                    b.HasOne("BRTF_Room_Booking_App.Models.TermAndProgram", "TermAndProgram")
                         .WithMany("Users")
-                        .HasForeignKey("UserGroupID")
+                        .HasForeignKey("TermAndProgramID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

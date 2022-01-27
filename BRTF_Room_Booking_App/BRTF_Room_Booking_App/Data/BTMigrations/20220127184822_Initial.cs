@@ -165,7 +165,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     Email = table.Column<string>(maxLength: 200, nullable: true),
                     EmailBookingNotifications = table.Column<bool>(nullable: false),
                     EmailCancelNotifications = table.Column<bool>(nullable: false),
-                    UserGroupID = table.Column<int>(nullable: false),
+                    TermAndProgramID = table.Column<int>(nullable: false),
                     RoleID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -178,9 +178,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_UserGroups_UserGroupID",
-                        column: x => x.UserGroupID,
-                        principalTable: "UserGroups",
+                        name: "FK_Users_TermAndPrograms_TermAndProgramID",
+                        column: x => x.TermAndProgramID,
+                        principalTable: "TermAndPrograms",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -304,9 +304,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 column: "RoleID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_UserGroupID",
+                name: "IX_Users_TermAndProgramID",
                 table: "Users",
-                column: "UserGroupID");
+                column: "TermAndProgramID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
@@ -327,9 +327,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 name: "RoomUserGroupPermissions");
 
             migrationBuilder.DropTable(
-                name: "TermAndPrograms");
-
-            migrationBuilder.DropTable(
                 name: "BookingTimes");
 
             migrationBuilder.DropTable(
@@ -343,6 +340,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "TermAndPrograms");
 
             migrationBuilder.DropTable(
                 name: "UserGroups");

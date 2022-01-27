@@ -38,13 +38,13 @@ namespace BRTF_Room_Booking_App.Data
                 .HasForeignKey(p => p.RoleID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete from UserGroup to User
-            //so we are prevented from deleting a UserGroup with
+            //Prevent Cascade Delete from TermAndProgram to User
+            //so we are prevented from deleting a TermAndProgram with
             //Users assigned
-            modelBuilder.Entity<UserGroup>()
+            modelBuilder.Entity<TermAndProgram>()
                 .HasMany<User>(d => d.Users)
-                .WithOne(p => p.UserGroup)
-                .HasForeignKey(p => p.UserGroupID)
+                .WithOne(p => p.TermAndProgram)
+                .HasForeignKey(p => p.TermAndProgramID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete from UserGroup to TermAndProgram

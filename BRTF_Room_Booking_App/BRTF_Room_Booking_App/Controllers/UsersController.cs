@@ -28,7 +28,7 @@ namespace BRTF_Room_Booking_App.Controllers
             // options later.
             var users = from u in _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.UserGroup)
+                .Include(u => u.TermAndProgram)
                 select u;
 
             //Handle Paging
@@ -50,7 +50,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.UserGroup)
+                .Include(u => u.TermAndProgram)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
@@ -136,7 +136,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (await TryUpdateModelAsync<User>(userToUpdate, "",
                 p => p.Username, p => p.Password, p => p.FullName, p => p.Email,
                 p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
-                p => p.UserGroupID, p => p.RoleID))
+                p => p.TermAndProgramID, p => p.RoleID))
             {
                 try
                 {
@@ -180,7 +180,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.UserGroup)
+                .Include(u => u.TermAndProgram)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
@@ -221,15 +221,15 @@ namespace BRTF_Room_Booking_App.Controllers
             return new SelectList(_context.Roles
                 .OrderBy(r => r.RoleName), "ID", "RoleName", selectedId);
         }
-        private SelectList UserGroupSelectList(int? selectedId)
+        private SelectList TermAndProgramSelectList(int? selectedId)
         {
-            return new SelectList(_context.UserGroups
-                .OrderBy(u => u.UserGroupName), "ID", "UserGroupName", selectedId);
+            return new SelectList(_context.TermAndPrograms
+                .OrderBy(u => u.ProgramCode).ThenBy(u => u.ProgramLevel), "ID", "UserGroupName", selectedId);
         }
         private void PopulateDropDownLists(User user = null)
         {
             ViewData["RoleID"] = RoleSelectList(user?.RoleID);
-            ViewData["UserGroupID"] = UserGroupSelectList(user?.UserGroupID);
+            ViewData["TermAndProgramID"] = TermAndProgramSelectList(user?.TermAndProgramID);
         }
 
         private string ControllerName()

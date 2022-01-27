@@ -10,7 +10,6 @@ namespace BRTF_Room_Booking_App.Models
     {
         public UserGroup()
         {
-            this.Users = new HashSet<User>();
             this.TermAndPrograms = new HashSet<TermAndProgram>();
             this.RoomUserGroupPermissions = new HashSet<RoomUserGroupPermission>();
         }
@@ -21,9 +20,6 @@ namespace BRTF_Room_Booking_App.Models
         [Required(ErrorMessage = "Cannot be blank.")]
         [StringLength(20, ErrorMessage = "Cannot be more than 20 characters long.")]
         public string UserGroupName { get; set; }
-
-        [Display(Name = "Users")]
-        public ICollection<User> Users { get; set; }
 
         [Display(Name = "Terms and Programs")]
         public ICollection<TermAndProgram> TermAndPrograms { get; set; }

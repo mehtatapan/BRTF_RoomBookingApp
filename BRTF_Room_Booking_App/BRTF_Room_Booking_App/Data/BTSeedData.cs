@@ -83,9 +83,9 @@ namespace BRTF_Room_Booking_App.Data
                 if (!context.Users.Any())
                 {
                     int[] roleIDs = context.Roles.Where(r => !r.RoleName.ToUpper().Contains("ADMIN")).Select(r => r.ID).ToArray();  // DON'T SEED ANY ADMINS
-                    int[] userGroupIDs = context.UserGroups.Where(u => !u.UserGroupName.ToUpper().Contains("ADMIN")).Select(u => u.ID).ToArray();   // DON'T SEED ANY ADMINS
+                    int[] termAndProgramIDs = context.TermAndPrograms.Select(u => u.ID).ToArray();   // DON'T SEED ANY ADMINS
                     int roleIDCount = roleIDs.Count();
-                    int userGroupIDCount = userGroupIDs.Count();
+                    int termAndProgramIDCount = termAndProgramIDs.Count();
 
                     string[] firstNames = new string[] { "Lyric", "Antoinette", "Kendal", "Vivian", "Ruth", "Jamison", "Emilia", "Natalee", "Yadiel", "Jakayla", "Lukas", "Moses", "Kyler", "Karla", "Chanel", "Tyler", "Camilla", "Quintin", "Braden", "Clarence" };
                     string[] lastNames = new string[] { "Watts", "Randall", "Arias", "Weber", "Stone", "Carlson", "Robles", "Frederick", "Parker", "Morris", "Soto", "Bruce", "Orozco", "Boyer", "Burns", "Cobb", "Blankenship", "Houston", "Estes", "Atkins", "Miranda", "Zuniga", "Ward", "Mayo", "Costa", "Reeves", "Anthony", "Cook", "Krueger", "Crane", "Watts", "Little", "Henderson", "Bishop" };
@@ -111,7 +111,7 @@ namespace BRTF_Room_Booking_App.Data
                                 Email = firstName[1].ToString().ToLower() + lastName.ToLower() + random.Next(1, 10).ToString() + "@ncstudents.niagaracollege.ca",
                                 EmailBookingNotifications = true,
                                 EmailCancelNotifications = true,
-                                UserGroupID = userGroupIDs[random.Next(userGroupIDCount)],
+                                TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
                                 RoleID = roleIDs[random.Next(roleIDCount)]
                             };
                             context.Users.Add(user);
