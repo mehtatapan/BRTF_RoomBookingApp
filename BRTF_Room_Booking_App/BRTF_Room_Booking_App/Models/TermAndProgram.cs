@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BRTF_Room_Booking_App.Models
+{
+    public class TermAndProgram
+    {
+        public int ID { get; set; }
+
+        [Display(Name = "Program Name")]
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        public string ProgramName { get; set; }
+
+        [Display(Name = "Program Code")]
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [StringLength(5, ErrorMessage = "Cannot be more than 5 characters long.")]
+        [RegularExpression("^P\\d{4}$", ErrorMessage = "Please enter a valid 5 character Code (e.g. P0122).")]
+        public string ProgramCode { get; set; }
+
+        [Display(Name = "Program Level")]
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Must be greater than or equal to 1.")]
+        public int ProgramLevel { get; set; }
+
+        [Display(Name = "User Group")]
+        [Required(ErrorMessage = "You must assign a User Group.")]        
+        public int UserGroupID { get; set; }
+
+        [Display(Name = "User Group")]
+        public UserGroup UserGroup { get; set; }
+    }
+}

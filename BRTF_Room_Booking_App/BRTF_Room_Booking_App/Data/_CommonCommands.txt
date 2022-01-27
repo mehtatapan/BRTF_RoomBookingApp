@@ -1,0 +1,3 @@
+﻿Add-Migration -Context BTRFRoomBookingContext -o Data\BTMigrations Initial
+Update-Database -Context ApplicationDbContext
+Update-Database -Context BTRFRoomBookingContext
