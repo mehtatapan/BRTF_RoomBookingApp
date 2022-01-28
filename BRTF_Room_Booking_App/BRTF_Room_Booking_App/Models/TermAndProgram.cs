@@ -21,10 +21,8 @@ namespace BRTF_Room_Booking_App.Models
             get
             {
                 // Generate return string.
-                string termAndProgramString = ProgramCode + " - Level " + ProgramLevel.ToString() + ", " + ProgramName;
-
                 // Example output: "P0164 - Level 1, TV Production"
-                return termAndProgramString;
+                return ProgramCode + " - Level " + ProgramLevel.ToString() + ", " + ProgramName;
             }
         }
 

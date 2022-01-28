@@ -252,10 +252,19 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<bool>("EmailCancelNotifications")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Password")
                         .IsRequired()

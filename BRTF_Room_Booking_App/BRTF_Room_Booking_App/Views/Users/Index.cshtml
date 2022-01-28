@@ -9,6 +9,19 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="control-label">Upload CSV File:</label>
+        <input type="file" class="" name="theExcel" /><br />
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Upload Data" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
 <form asp-action="Index" method="get">
     <table class="table">
         <thead>
@@ -23,7 +36,7 @@
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TermAndProgram)
+                    @Html.DisplayNameFor(model => model.TermAndProgram.UserGroup.UserGroupName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Role)
@@ -45,7 +58,7 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TermAndProgram.TermAndProgramSummary)
+                        @Html.DisplayFor(modelItem => item.TermAndProgram.UserGroup.UserGroupName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Role.RoleName)

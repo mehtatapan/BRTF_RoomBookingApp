@@ -22,8 +22,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Users<b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserGroups" asp-action="Index">User Groups</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TermAndPrograms" asp-action="Index">Terms&nbsp;and&nbsp;Programs</a>
+                            </div>
                         </li>
                     </ul>
                 </div>

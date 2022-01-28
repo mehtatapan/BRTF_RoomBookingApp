@@ -107,7 +107,8 @@ namespace BRTF_Room_Booking_App.Data
                             {
                                 Username = random.Next(4000000, 5000000).ToString(),
                                 Password = "password",
-                                FullName = firstName + " " + lastName,
+                                FirstName = firstName,
+                                LastName = lastName,
                                 Email = firstName[1].ToString().ToLower() + lastName.ToLower() + random.Next(1, 10).ToString() + "@ncstudents.niagaracollege.ca",
                                 EmailBookingNotifications = true,
                                 EmailCancelNotifications = true,

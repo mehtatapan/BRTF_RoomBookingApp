@@ -10,6 +10,18 @@ namespace BRTF_Room_Booking_App.Models
     {
         public int ID { get; set; }
 
+        [Display(Name = "Name")]
+        public string FullName
+        {
+            get
+            {
+                return FirstName
+                    + (string.IsNullOrEmpty(MiddleName) ? " " :
+                        (" " + (char?)MiddleName[0] + ". ").ToUpper())
+                    + LastName;
+            }
+        }
+
         [Display(Name = "Username")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
@@ -20,10 +32,19 @@ namespace BRTF_Room_Booking_App.Models
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string Password { get; set; }
 
-        [Display(Name = "Full Name")]
+        [Display(Name = "First Name")]
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Middle Name")]
+        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        public string MiddleName { get; set; }
+
+        [Display(Name = "Last Name")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [StringLength(100, ErrorMessage = "Cannot be more than 100 characters long.")]
-        public string FullName { get; set; }
+        public string LastName { get; set; }
 
         [Display(Name = "Email")]
         [StringLength(200, ErrorMessage = "Cannot be more than 200 characters long.")]

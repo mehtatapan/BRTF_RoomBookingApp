@@ -27,7 +27,7 @@ namespace BRTF_Room_Booking_App.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        [Display(Name = "Minimum Blackout Time Between Consecutive Bookings in This Area")]
+        [Display(Name = "Hours of Blackout Time Between Consecutive Bookings in This Area")]
         [Required(ErrorMessage = "Cannot be blank.")]
         public int BlackoutTime { get; set; }
 

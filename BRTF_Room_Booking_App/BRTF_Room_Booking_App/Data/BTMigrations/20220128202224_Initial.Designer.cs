@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Room_Booking_App.Data.BTMigrations
 {
     [DbContext(typeof(BTRFRoomBookingContext))]
-    [Migration("20220127184822_Initial")]
+    [Migration("20220128202224_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,10 +254,19 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<bool>("EmailCancelNotifications")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Password")
                         .IsRequired()
