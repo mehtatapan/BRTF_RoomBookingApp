@@ -120,7 +120,9 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             if (await TryUpdateModelAsync<RoomGroup>(roomGroupToUpdate, "",
-                rg => rg.AreaName))
+                r => r.AreaName, r => r.Description, r => r.BlackoutTime,
+                r => r.MaxHoursPerSingleBooking, r => r.MaxHoursTotal,
+                r => r.MaxNumberOfBookings))
             {
                 try
                 {
