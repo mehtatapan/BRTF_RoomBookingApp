@@ -415,3 +415,13 @@ C:\Users\ShatteredLegends\source\repos\PROG1440-Prototype_1\BRTF_Room_Booking_Ap
 C:\Users\ShatteredLegends\source\repos\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Details.cshtml.g.cs
 C:\Users\ShatteredLegends\source\repos\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Edit.cshtml.g.cs
 C:\Users\ShatteredLegends\source\repos\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Index.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Create.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Delete.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Details.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Edit.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomGroups\Index.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomBookings\Create.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomBookings\Delete.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomBookings\Details.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomBookings\Edit.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\RoomBookings\Index.cshtml.g.cs

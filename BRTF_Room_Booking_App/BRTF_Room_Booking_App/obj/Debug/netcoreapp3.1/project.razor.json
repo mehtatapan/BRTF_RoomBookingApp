@@ -14432,6 +14432,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomBookings\\Details.cshtml",
+      "TargetPath": "Views\\RoomBookings\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\TermAndPrograms\\Details.cshtml",
       "TargetPath": "Views\\TermAndPrograms\\Details.cshtml",
       "FileKind": "mvc"
@@ -14442,13 +14447,28 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomBookings\\Edit.cshtml",
+      "TargetPath": "Views\\RoomBookings\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\Shared\\Error.cshtml",
       "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomGroups\\Edit.cshtml",
+      "TargetPath": "Views\\RoomGroups\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\Home\\Index.cshtml",
       "TargetPath": "Views\\Home\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomGroups\\Details.cshtml",
+      "TargetPath": "Views\\RoomGroups\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14462,13 +14482,28 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\UserGroups\\Details.cshtml",
+      "TargetPath": "Views\\UserGroups\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomGroups\\Delete.cshtml",
+      "TargetPath": "Views\\RoomGroups\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\Users\\Index.cshtml",
       "TargetPath": "Views\\Users\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomGroups\\Index.cshtml",
+      "TargetPath": "Views\\RoomGroups\\Index.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14479,6 +14514,21 @@
     {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\TermAndPrograms\\Delete.cshtml",
       "TargetPath": "Views\\TermAndPrograms\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomBookings\\Create.cshtml",
+      "TargetPath": "Views\\RoomBookings\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\UserGroups\\Delete.cshtml",
+      "TargetPath": "Views\\UserGroups\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomGroups\\Create.cshtml",
+      "TargetPath": "Views\\RoomGroups\\Create.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14497,6 +14547,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\UserGroups\\Index.cshtml",
+      "TargetPath": "Views\\UserGroups\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\Users\\Create.cshtml",
       "TargetPath": "Views\\Users\\Create.cshtml",
       "FileKind": "mvc"
@@ -14504,6 +14559,16 @@
     {
       "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\TermAndPrograms\\Create.cshtml",
       "TargetPath": "Views\\TermAndPrograms\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomBookings\\Index.cshtml",
+      "TargetPath": "Views\\RoomBookings\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\DT\\Desktop\\Working\\PROG1440-Prototype_1\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\Views\\RoomBookings\\Delete.cshtml",
+      "TargetPath": "Views\\RoomBookings\\Delete.cshtml",
       "FileKind": "mvc"
     },
     {
