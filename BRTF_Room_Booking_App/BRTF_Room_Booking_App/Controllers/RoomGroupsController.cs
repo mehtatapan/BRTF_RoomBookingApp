@@ -44,6 +44,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomGroup = await _context.RoomGroups
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (roomGroup == null)
             {
@@ -165,6 +166,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomGroup = await _context.RoomGroups
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (roomGroup == null)
             {
