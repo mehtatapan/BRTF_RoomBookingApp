@@ -10,6 +10,11 @@ namespace BRTF_Room_Booking_App.Models
     {
         public int ID { get; set; }
 
+        [Display(Name = "Special Notes")]
+        [StringLength(1000, ErrorMessage = "Cannot be more than 1000 characters long.")]
+        [DataType(DataType.MultilineText)]
+        public string SpecialNotes { get; set; }
+
         [Display(Name = "Date")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [DataType(DataType.Date)]

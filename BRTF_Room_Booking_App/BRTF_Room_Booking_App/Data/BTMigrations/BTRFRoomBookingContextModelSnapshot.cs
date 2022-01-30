@@ -127,6 +127,10 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("SpecialNotes")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(1000);
+
                     b.Property<int>("StartTimeID")
                         .HasColumnType("INTEGER");
 
@@ -161,7 +165,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 

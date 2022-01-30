@@ -60,7 +60,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AreaName = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 1000, nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     BlackoutTime = table.Column<int>(nullable: false),
                     MaxHoursPerSingleBooking = table.Column<int>(nullable: true),
                     MaxHoursTotal = table.Column<int>(nullable: true),
@@ -193,6 +193,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    SpecialNotes = table.Column<string>(maxLength: 1000, nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     RoomID = table.Column<int>(nullable: false),
                     UserID = table.Column<int>(nullable: false),

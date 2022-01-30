@@ -22,7 +22,6 @@ namespace BRTF_Room_Booking_App.Models
         public string AreaName { get; set; }
 
         [Display(Name = "Description")]
-        [Required(ErrorMessage = "Cannot be blank.")]
         [StringLength(1000, ErrorMessage = "Cannot be more than 1000 characters long.")]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }

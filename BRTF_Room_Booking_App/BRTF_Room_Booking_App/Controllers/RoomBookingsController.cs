@@ -77,7 +77,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Date,RoomID,UserID,StartTimeID,EndTimeID")] RoomBooking roomBooking)
+        public async Task<IActionResult> Create([Bind("ID,SpecialNotes,Date,RoomID,UserID,StartTimeID,EndTimeID")] RoomBooking roomBooking)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace BRTF_Room_Booking_App.Controllers
             //, [Bind("ID,Date,RoomID,UserID,StartTimeID,EndTimeID")] RoomBooking roomBooking
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<RoomBooking>(roomBookingToUpdate, "",
-                p => p.Date, p => p.RoomID, p => p.UserID,
+                p => p.SpecialNotes, p => p.Date, p => p.RoomID, p => p.UserID,
                 p => p.StartTimeID, p => p.EndTimeID))
             {
                 try

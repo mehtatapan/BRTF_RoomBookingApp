@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Room_Booking_App.Data.BTMigrations
 {
     [DbContext(typeof(BTRFRoomBookingContext))]
-    [Migration("20220128202224_Initial")]
+    [Migration("20220129235749_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,10 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("SpecialNotes")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(1000);
+
                     b.Property<int>("StartTimeID")
                         .HasColumnType("INTEGER");
 
@@ -163,7 +167,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
