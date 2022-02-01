@@ -10,9 +10,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BRTF Room Booking App</a>
+                <a class="navbar-link" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="~/img/Logo.png" alt="Logo of BRTF"/></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,33 +20,33 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item1">
+                            <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Create" style="color: #E4E6E6">Book a Room</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Users<b class="caret"></b>
+                        <li class="nav-item2">
+                            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
+                        </li>
+                        <li class="nav-item3">
+                            <a class="nav-link" asp-area="" asp-controller="Reports" asp-action="index" style="color: #E4E6E6">Admin Reports</a>
+                        </li>
+                        <li class="nav-item4">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a>
+                        </li>
+                        <li class="nav-item5 dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
+                                Lists<b class="caret"></b>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserGroups" asp-action="Index">User&nbsp;Groups</a>
+                                <a class="nav-link" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TermAndPrograms" asp-action="Index">Terms&nbsp;and&nbsp;Programs</a>
+                                <a class="nav-link " asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Help">Help</a>
+                                 <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a>
+                                 <div class="dropdown-divider"></div>
+                                <a class="nav-link" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a>
                             </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Rooms<b class="caret"></b>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="RoomGroups" asp-action="Index">Room&nbsp;Groups</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="RoomBookings" asp-action="Index">Bookings</a>
                         </li>
                     </ul>
                 </div>

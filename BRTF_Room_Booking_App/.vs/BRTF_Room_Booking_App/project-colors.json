@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "df0fe429-5b27-4b65-bb10-8d59ce99a67f": {
+      "ProjectGuid": "df0fe429-5b27-4b65-bb10-8d59ce99a67f",
+      "DisplayName": "BRTF_Room_Booking_App",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
