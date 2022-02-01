@@ -1,0 +1,139 @@
+﻿*,
+*:before,
+*:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #E4E6E6;
+}
+
+.header {
+    position: absolute;
+    color: #282828;
+    left: 15%;
+    top: 15%;
+}
+
+.section-one-title {
+    min-width: 500px;
+    position: absolute;
+    color: #282828;
+    transform: translate(-50%,-50%);
+    top: 37%;
+    left: 33%;
+}
+
+.section-one {
+    width: 35%;
+    min-width: 500px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
+
+.section-two-title {
+    min-width: 500px;
+    position: absolute;
+    color: #282828;
+    transform: translate(-50%,-50%);
+    top: 79%;
+    left: 33%;
+}
+
+.section-two {
+    width: 35%;
+    min-width: 500px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 80%;
+    left: 50%;
+}
+
+.section-three-title {
+    min-width: 500px;
+    position: absolute;
+    color: #282828;
+    transform: translate(-50%,-50%);
+    top: 102%;
+    left: 35%;
+}
+
+.section-three {
+    width: 35%;
+    min-width: 500px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 130%;
+    left: 50%;
+}
+
+.section-four-title {
+    min-width: 500px;
+    position: absolute;
+    color: #282828;
+    transform: translate(-50%,-50%);
+    top: 178%;
+    left: 32%;
+}
+
+.section-four {
+    width: 35%;
+    min-width: 500px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 186%;
+    left: 50%;
+}
+
+.final-note {
+    position: absolute;
+    color: #282828;
+    left: 15%;
+    top: 210%;
+    padding-bottom: 150px;
+}
+
+.wrapper {
+    background-color: #2F7DBB;
+    margin-bottom: 20px;
+    padding: 15px 40px;
+    border-radius: 5px;
+    box-shadow: 0 15px 25px rgba(0,0,50,0.2);
+}
+
+.toggle,
+.content {
+    font-family: "Poppins",sans-serif;
+}
+
+.toggle {
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 15px 0;
+}
+
+.content {
+    position: relative;
+    font-size: 14px;
+    text-align: justify;
+    line-height: 30px;
+    color: #fff;
+    height: 0;
+    overflow: hidden;
+    transition: all 1s;
+}
+

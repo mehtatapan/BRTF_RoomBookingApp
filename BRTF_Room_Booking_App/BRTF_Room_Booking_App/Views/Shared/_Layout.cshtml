@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - BRTF Room Booking App</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    
 </head>
 <body>
     <header>
@@ -32,6 +33,8 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserGroups" asp-action="Index">User&nbsp;Groups</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="TermAndPrograms" asp-action="Index">Terms&nbsp;and&nbsp;Programs</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Help">Help</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -64,6 +67,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

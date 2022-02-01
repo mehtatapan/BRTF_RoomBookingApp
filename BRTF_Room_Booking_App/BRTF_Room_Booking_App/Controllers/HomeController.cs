@@ -28,6 +28,11 @@ namespace BRTF_Room_Booking_App.Controllers
             return View();
         }
 
+        public IActionResult Help()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
