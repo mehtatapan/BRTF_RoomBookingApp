@@ -194,11 +194,22 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SpecialNotes = table.Column<string>(maxLength: 1000, nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
                     RoomID = table.Column<int>(nullable: false),
                     UserID = table.Column<int>(nullable: false),
                     StartTimeID = table.Column<int>(nullable: false),
-                    EndTimeID = table.Column<int>(nullable: false)
+                    EndTimeID = table.Column<int>(nullable: false),
+                    Monday = table.Column<bool>(nullable: false),
+                    Tuesday = table.Column<bool>(nullable: false),
+                    Wednesday = table.Column<bool>(nullable: false),
+                    Thursday = table.Column<bool>(nullable: false),
+                    Friday = table.Column<bool>(nullable: false),
+                    Saturday = table.Column<bool>(nullable: false),
+                    Sunday = table.Column<bool>(nullable: false),
+                    RepeatType = table.Column<string>(nullable: true),
+                    RepeatInterval = table.Column<int>(nullable: true),
+                    RepeatEndDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

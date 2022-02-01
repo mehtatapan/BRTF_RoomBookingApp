@@ -1,63 +1,75 @@
 ﻿@model IEnumerable<BRTF_Room_Booking_App.Models.RoomBooking>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Room Bookings";
 }
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
 
-<h1>Index</h1>
+</head>
+<body class="align-items-center text-center justify-content-center">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-action="Index" method="get">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Room)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.User)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StartTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EndTime)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Room.RoomName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartTime.TwelveHourTimeSummary)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndTime.TwelveHourTimeSummary)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <partial name="_PagingNavBar" />
-</form>
+
+    <h3>Room Bookings</h3>
+    <section style="background-color: rgb(250, 250, 250);display: block;" class="px-5 py-2 my-3">
+
+        <h4>
+            <a asp-action="Create">Book a Room</a>
+        </h4>
+        <form asp-action="Index" method="get">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Room)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.User)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StartTime)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.RoomName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime.TwelveHourTimeSummary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime.TwelveHourTimeSummary)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+   }
+                </tbody>
+            </table>
+            <partial name="_PagingNavBar" />
+        </form>
+        </section>
+</body>

@@ -26,12 +26,11 @@ namespace BRTF_Room_Booking_App.Controllers
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
-            var roombookings = from r in _context.RoomBookings
-                               .Include(r => r.Room)
-                               .Include(r => r.User)
-                               .Include(r => r.StartTime)
-                               .Include(r => r.EndTime)
-                               select r;
+            var roombookings = _context.RoomBookings
+                .Include(r => r.EndTime)
+                .Include(r => r.Room)
+                .Include(r => r.StartTime)
+                .Include(r => r.User);
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
@@ -51,17 +50,17 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomBooking = await _context.RoomBookings
-                .Include(r => r.Room)
-                .Include(r => r.User)
-                .Include(r => r.StartTime)
                 .Include(r => r.EndTime)
+                .Include(r => r.Room)
+                .Include(r => r.StartTime)
+                .Include(r => r.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (roomBooking == null)
             {
                 return NotFound();
             }
-
+            PopulateDropDownLists(roomBooking);
             return View(roomBooking);
         }
 
@@ -77,7 +76,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SpecialNotes,Date,RoomID,UserID,StartTimeID,EndTimeID")] RoomBooking roomBooking)
+        public async Task<IActionResult> Create([Bind("ID,SpecialNotes,StartDate,EndDate,RoomID,UserID,StartTimeID,EndTimeID,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,RepeatType,RepeatInterval,RepeatEndDate")] RoomBooking roomBooking)
         {
             try
             {
@@ -92,7 +91,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            PopulateDropDownLists(roomBooking);
+            PopulateDropDownLists();
             return View(roomBooking);
         }
 
@@ -124,15 +123,17 @@ namespace BRTF_Room_Booking_App.Controllers
             var roomBookingToUpdate = await _context.RoomBookings.FirstOrDefaultAsync(p => p.ID == id);
 
             // Check that you got it or exit with a not found error
-            if (roomBookingToUpdate == null)
+            if (id != roomBookingToUpdate.ID)
             {
                 return NotFound();
             }
             //, [Bind("ID,Date,RoomID,UserID,StartTimeID,EndTimeID")] RoomBooking roomBooking
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<RoomBooking>(roomBookingToUpdate, "",
-                p => p.SpecialNotes, p => p.Date, p => p.RoomID, p => p.UserID,
-                p => p.StartTimeID, p => p.EndTimeID))
+                p => p.SpecialNotes, p => p.StartDate, p => p.RoomID, p => p.UserID,
+                p => p.StartTimeID, p => p.EndTimeID, p => p.EndDate,
+                p => p.Monday, p => p.Tuesday, p => p.Wednesday, p => p.Thursday, p => p.Friday, p => p.Saturday, p => p.Saturday,
+                p => p.RepeatType, p => p.RepeatInterval, p => p.RepeatEndDate))
             {
                 try
                 {
@@ -168,17 +169,17 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomBooking = await _context.RoomBookings
-                .Include(r => r.Room)
-                .Include(r => r.User)
-                .Include(r => r.StartTime)
                 .Include(r => r.EndTime)
+                .Include(r => r.Room)
+                .Include(r => r.StartTime)
+                .Include(r => r.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (roomBooking == null)
             {
                 return NotFound();
             }
-
+            PopulateDropDownLists(roomBooking);
             return View(roomBooking);
         }
 
@@ -193,6 +194,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(r => r.StartTime)
                 .Include(r => r.EndTime)
                 .FirstOrDefaultAsync(m => m.ID == id);
+            _context.RoomBookings.Remove(roomBooking);
             try
             {
                 _context.RoomBookings.Remove(roomBooking);
@@ -204,9 +206,18 @@ namespace BRTF_Room_Booking_App.Controllers
                 //Note: there is really no reason a delete should fail if you can "talk" to the database.
                 ModelState.AddModelError("", "Unable to delete. Try again, and if the problem persists, see your system administrator.");
             }
-            return View(roomBooking);
+            return RedirectToAction(nameof(Index));
         }
 
+        private bool RoomBookingExists(int id)
+        {
+            return _context.RoomBookings.Any(e => e.ID == id);
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
         //This is a twist on the PopulateDropDownLists approach
         //  Create methods that return each SelectList separately
         //  and one method to put them all into ViewData.
@@ -218,10 +229,16 @@ namespace BRTF_Room_Booking_App.Controllers
                 .OrderBy(r => r.RoomName.Length)
                 .ThenBy(r => r.RoomName), "ID", "RoomName", selectedId);
         }
+        private SelectList RoomGroupSelectList(int? selectedId)
+        {
+            return new SelectList(_context.RoomGroups
+                .OrderBy(r => r.AreaName), "ID", "AreaName", selectedId);
+        }
+
         private SelectList UserSelectList(int? selectedId)
         {
             return new SelectList(_context.Users
-                .OrderBy(u => u.Username), "ID", "Username", selectedId);
+                .OrderBy(u => u.Username), "ID", "FullName", selectedId);
         }
         private SelectList StartTimeSelectList(int? selectedId)
         {
@@ -235,22 +252,14 @@ namespace BRTF_Room_Booking_App.Controllers
                 .OrderBy(t => t.MilitaryTimeHour)
                 .ThenBy(t => t.MilitaryTimeMinute), "ID", "TwelveHourTimeSummary", selectedId);
         }
+
         private void PopulateDropDownLists(RoomBooking roomBooking = null)
-        {   
+        {
             ViewData["RoomID"] = RoomSelectList(roomBooking?.RoomID);
+            ViewData["RoomGroupID"] = RoomGroupSelectList(1);
             ViewData["UserID"] = UserSelectList(roomBooking?.UserID);
             ViewData["StartTimeID"] = StartTimeSelectList(roomBooking?.StartTimeID);
             ViewData["EndTimeID"] = EndTimeSelectList(roomBooking?.EndTimeID);
-        }
-
-        private string ControllerName()
-        {
-            return this.ControllerContext.RouteData.Values["controller"].ToString();
-        }
-
-        private bool RoomBookingExists(int id)
-        {
-            return _context.RoomBookings.Any(e => e.ID == id);
         }
     }
 }
