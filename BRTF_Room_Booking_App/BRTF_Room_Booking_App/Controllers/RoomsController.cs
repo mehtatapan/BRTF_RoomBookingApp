@@ -55,7 +55,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
-
+            PopulateDropDownLists(room);
             return View(room);
         }
 
@@ -177,16 +177,16 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            var termAndProgram = await _context.Rooms
+            var room = await _context.Rooms
                 .Include(t => t.RoomGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (termAndProgram == null)
+            if (room == null)
             {
                 return NotFound();
             }
-
-            return View(termAndProgram);
+            PopulateDropDownLists(room);
+            return View(room);
         }
 
         // POST: Rooms/Delete/5

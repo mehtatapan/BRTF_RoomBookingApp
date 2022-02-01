@@ -1,37 +1,41 @@
 ﻿
 @model BRTF_Room_Booking_App.Models.Room
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Room";
 }
 
-<h1>Delete</h1>
+<h1>Delete Room</h1>
 
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>RoomGroup</h4>
-    <hr />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RoomName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RoomName)
-        </dd>
+<h4>Are you sure you want to delete this room?</h4>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RoomMaxHoursTotal)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RoomMaxHoursTotal)
-        </dd>
-
-    </dl>
-
-    <form asp-action="Delete">
+<h4>Room</h4>
+<hr />
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+        <div class="colform-group">
+            <label asp-for="RoomGroupID" class="control-label">Area:</label>
+            <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="RoomName" class="control-label"></label>
+            <input asp-for="RoomName" class="form-control" disabled />
+            <span asp-validation-for="RoomName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RoomMaxHoursTotal" class="control-label"></label>
+            <input asp-for="RoomMaxHoursTotal" class="form-control" disabled />
+            <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="ID" />
+            <input type="submit" value="Delete" class="btn btn-danger mx-2" style="width:100px;" />
+            <a asp-action="Index" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
+        </form>
+    </div>
 </div>

@@ -1,13 +1,12 @@
-﻿
-@model BRTF_Room_Booking_App.Models.Room
+﻿@model BRTF_Room_Booking_App.Models.Room
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Room Details";
 }
 
-<h1>Details</h1>
+<h1>Room Details</h1>
 
-<div>
-    <h4>RoomGroup</h4>
+@*<div>
+    <h4>Room</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -24,9 +23,32 @@
             @Html.DisplayFor(model => model.RoomMaxHoursTotal)
         </dd>
 
-    </dl>
+    </dl>*@
+
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <div class="colform-group">
+            <label asp-for="RoomGroupID" class="control-label">Area:</label>
+            <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="RoomName" class="control-label"></label>
+            <input asp-for="RoomName" class="form-control" disabled />
+            <span asp-validation-for="RoomName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RoomMaxHoursTotal" class="control-label"></label>
+            <input asp-for="RoomMaxHoursTotal" class="form-control" disabled />
+            <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
