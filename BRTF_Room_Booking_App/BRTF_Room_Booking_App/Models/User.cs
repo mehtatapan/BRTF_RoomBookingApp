@@ -29,8 +29,16 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Cannot be blank.")]
+        [DataType(DataType.Password)]
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string Password { get; set; }
+
+        [Display(Name = "Confirm Password")]
+        [Required(ErrorMessage = "Confirm password is required")]
+        [DataType(DataType.Password)]
+        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        [Compare("Password")]
+        public string confirmPassword { get; set; }
 
         [Display(Name = "First Name")]
         [Required(ErrorMessage = "Cannot be blank.")]
@@ -54,7 +62,7 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Receive email notifications when I make a booking")]
         public bool EmailBookingNotifications { get; set; }
 
-        [Display(Name = "Receive email notifications when my booking is cancelled")]
+        [Display(Name = "Receive email when my booking is cancelled")]
         public bool EmailCancelNotifications { get; set; }
 
         [Display(Name = "Term and Program")]
