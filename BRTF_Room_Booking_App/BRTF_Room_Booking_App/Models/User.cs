@@ -33,12 +33,6 @@ namespace BRTF_Room_Booking_App.Models
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string Password { get; set; }
 
-        [Display(Name = "Confirm Password")]
-        [Required(ErrorMessage = "Confirm password is required")]
-        [DataType(DataType.Password)]
-        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
-        [Compare("Password")]
-        public string confirmPassword { get; set; }
 
         [Display(Name = "First Name")]
         [Required(ErrorMessage = "Cannot be blank.")]
