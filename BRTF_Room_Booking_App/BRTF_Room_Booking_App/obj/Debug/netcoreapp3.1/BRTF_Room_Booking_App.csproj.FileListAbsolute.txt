@@ -868,3 +868,10 @@ C:\Users\mehta\Downloads\Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App
 C:\Users\mehta\Downloads\Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.csproj.CopyComplete
 C:\Users\mehta\Downloads\Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
 C:\Users\mehta\Downloads\Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Home\Reports.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Home\Help.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Home\Reports.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\Create.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\Delete.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\Details.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\Edit.cshtml.g.cs
+C:\Users\DT\Desktop\Working\PROG1440-Prototype_1\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\Index.cshtml.g.cs

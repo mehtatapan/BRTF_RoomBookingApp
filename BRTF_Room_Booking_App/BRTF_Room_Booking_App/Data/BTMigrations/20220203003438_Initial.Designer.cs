@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Room_Booking_App.Data.BTMigrations
 {
     [DbContext(typeof(BTRFRoomBookingContext))]
-    [Migration("20220201203300_Initial")]
+    [Migration("20220203003438_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,31 +120,10 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("EndTimeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Friday")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Monday")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("RepeatEndDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("RepeatInterval")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("RepeatType")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("RoomID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Saturday")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SpecialNotes")
@@ -157,19 +136,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<int>("StartTimeID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Sunday")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Thursday")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Tuesday")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Wednesday")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");

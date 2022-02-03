@@ -43,10 +43,10 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="EndDate" class="control-label">End:</label>
+                    <label for="EndDate" class="control-label">End:</label>
                 </div>
                 <div class="col-5">
-                    <input asp-for="EndDate" class="form-control" disabled />
+                    <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />
                 </div>
                 <div class="col-5">
                     <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID" disabled></select>
@@ -65,88 +65,11 @@
                     <label asp-for="RoomID" class="control-label">Room:</label>
                 </div>
                 <div class="col-10">
-                    <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" size="4" disabled></select>
+                    <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-2 text-right">
-                    <label asp-for="RepeatType" class="control-label">Every:</label>
-                </div>
-                <div class="col-5">
-                    <input asp-for="RepeatInterval" class="form-control" disabled />
-                </div>
-                <div class="col-5">
-                    <select asp-for="RepeatType" class="form-control" disabled>
-                        <option>None</option>
-                        <option>Days</option>
-                        <option>Weeks</option>
-                        <option>Months</option>
-                    </select>
-                    <span asp-validation-for="RepeatType" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="container mt-3">
-                <div class="row">
-                    <div class="col">
-                        <input type="checkbox" asp-for="Monday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Tuesday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Wednesday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Thursday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Friday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Saturday" style="width: 20px; height: 20px;" disabled />
-                    </div>
-                    <div class="col">
-                        <input type="checkbox" asp-for="Sunday" style="width: 20px; height: 20px " disabled />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label class="control-label">Mon</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Tue</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Wed</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Thu</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Fri</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Sat</label>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Sun</label>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-2 text-right pt-2">
-                        <label asp-for="RepeatEndDate" class="control-label">Repeat End Date:</label>
-                    </div>
-                    <div class="col-5">
-                        <input asp-for="RepeatEndDate" class="form-control" disabled />
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <form asp-action="Delete">
             <div class="form-group mt-3">
                 <input type="hidden" asp-for="ID" />
@@ -155,6 +78,22 @@
             </div>
         </form>
     </section>
-
-
 </body>
+@section Scripts {
+    <script type="text/javascript">
+        // Reload certain input fields when page loads
+        $(document).ready(function () {
+            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
+            var date = $('#StartDate')[0].valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+
+            // Write "None." if there are no Special Notes
+            var specialNotes = $.trim($("#SpecialNotes").val());
+            if (specialNotes == "") {
+                $("textarea#SpecialNotes").val("None.");
+            }
+        });
+    </script>
+}

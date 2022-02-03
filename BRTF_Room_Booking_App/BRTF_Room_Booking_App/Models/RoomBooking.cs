@@ -13,6 +13,7 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Special Notes")]
         [StringLength(1000, ErrorMessage = "Cannot be more than 1000 characters long.")]
         [DataType(DataType.MultilineText)]
+        [DisplayFormat(NullDisplayText = "None.")]
         public string SpecialNotes { get; set; }
 
         [Display(Name = "Start Date")]
@@ -21,14 +22,8 @@ namespace BRTF_Room_Booking_App.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
-        [Display(Name = "End Date")]
-        [Required(ErrorMessage = "Cannot be blank.")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
-
         [Display(Name = "Room")]
-        [Required(ErrorMessage = "You must assign an Room.")]
+        [Required(ErrorMessage = "You must select a Room.")]
         public int RoomID { get; set; }
 
         [Display(Name = "Room")]
@@ -54,33 +49,5 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "End Time")]
         public BookingTime EndTime { get; set; }
-
-        //Booleans to toggle repeat days on/off
-        public bool Monday { get; set; } = false;
-
-        public bool Tuesday { get; set; } = false;
-
-        public bool Wednesday { get; set; } = false;
-
-        public bool Thursday { get; set; } = false;
-
-        public bool Friday { get; set; } = false;
-
-        public bool Saturday { get; set; } = false;
-
-        public bool Sunday { get; set; } = false;
-
-        //String for type of repeat
-        public string RepeatType { get; set; } = "None";
-
-        //How frequently its repeated (for example, 14 if every 2 weeks if checked; or 1 if monthly is checked)
-        public int? RepeatInterval { get; set; }
-
-        [Display(Name = "Repeat End Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? RepeatEndDate { get; set; }
-
-
     }
 }

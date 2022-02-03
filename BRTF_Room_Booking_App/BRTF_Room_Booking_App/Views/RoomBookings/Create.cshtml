@@ -13,12 +13,12 @@
 
                 <form asp-action="Create">
                     <div class="row form-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="col-2 text-right pt-2">
                             <label asp-for="UserID" class="control-label">Full Name:</label>
                         </div>
                         <div class="col-10">
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
+                            <span asp-validation-for="UserID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -40,121 +40,124 @@
                         </div>
                         <div class="col-5">
                             <select asp-for="StartTimeID" class="form-control" asp-items="ViewBag.StartTimeID"></select>
+                            <span asp-validation-for="StartTimeID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="EndDate" class="control-label">End:</label>
+                            <label for="EndDate" class="control-label">End:</label>
                         </div>
                         <div class="col-5">
-                            <input asp-for="EndDate" class="form-control" />
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                            <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />@* Note: This end date is only used as a display. It does not save data *@
                         </div>
                         <div class="col-5">
                             <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID"></select>
+                            <span asp-validation-for="EndTimeID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="Room.RoomGroupID" class="control-label">Area:</label>
+                            <label for="RoomGroupID" class="control-label">Area:</label>
                         </div>
                         <div class="col-10">
-                            <select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
+                            <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-2 text-right pt-2">
-                            <label asp-for="RoomID" class="control-label">Room:</label>
+                        <div class="col-md-6">
+                            <label for="selectedOptions" class="control-label"> Current Rooms to Book</label> <button type="button" title="Remove Rooms from Booking" id="btnRight" class="btn btn-danger btn-sm">
+                                <strong>➖</strong>
+                            </button>
+                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                            <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
-                        <div class="col-10">
-                            <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" size="4"></select>
+                        <div class="col-md-6">
+                            <label for="availOptions" class="control-label"> Add Rooms to Booking</label> <button type="button" title="Add Rooms to Booking" id="btnLeft" class="btn btn-success btn-sm">
+                                <strong>➕</strong>
+                            </button>
+                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
                         </div>
                     </div>
 
                     <div>
                         <label for="chkRepeat" class="control-label">Repeat?</label>
-                        <input type="checkbox" id="chkRepeat" class="control-label" data-toggle="collapse" data-target="#collapseRepeat" aria-expanded="false" aria-controls="collapseRepeat" />
+                        <input type="checkbox" id="chkRepeat" name="chkRepeat" class="control-label" @Html.Raw(ViewBag.chkRepeat) data-toggle="collapse" data-target="#collapseRepeat" aria-expanded="false" aria-controls="collapseRepeat" />
                     </div>
-                    <div class="collapse" id="collapseRepeat">
+                    <div class="collapse @(ViewData["RepeatContainer"])" id="collapseRepeat">
                         <div class="container">
                             <div class="row">
                                 <div class="col-2 text-right">
-                                    <label asp-for="RepeatType" class="control-label">Every:</label>
+                                    <label for="RepeatInterval" class="control-label">Every:</label>
                                 </div>
                                 <div class="col-5">
-                                    <input asp-for="RepeatInterval" class="form-control" />
+                                    <input type="number" id="RepeatInterval" name="RepeatInterval" step="1" min="1" value="@(ViewData["RepeatInterval"])" class="form-control" />
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="RepeatInterval" data-valmsg-replace="true"></span>
                                 </div>
                                 <div class="col-5">
-                                    <select asp-for="RepeatType" class="form-control">
-                                        <option>None</option>
-                                        <option>Days</option>
-                                        <option>Weeks</option>
-                                        <option>Months</option>
-                                    </select>
-                                    <span asp-validation-for="RepeatType" class="text-danger"></span>
+                                    <select id="RepeatType" name="RepeatType" class="form-control" asp-items="ViewBag.RepeatType"></select>
                                 </div>
                             </div>
                             <div class="container mt-3">
                                 <div class="row">
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Monday" style="width: 20px; height: 20px;" />
+                                        <input type="checkbox" id="Monday" name="Monday" @Html.Raw(ViewBag.Monday) style="width: 20px; height: 20px;" />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Tuesday" style="width: 20px; height: 20px;" />
+                                        <input type="checkbox" id="Tuesday" name="Tuesday" @Html.Raw(ViewBag.Tuesday) style="width: 20px; height: 20px;" />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Wednesday" style="width: 20px; height: 20px; " />
+                                        <input type="checkbox" id="Wednesday" name="Wednesday" @Html.Raw(ViewBag.Wednesday) style="width: 20px; height: 20px; " />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Thursday" style="width: 20px; height: 20px; " />
+                                        <input type="checkbox" id="Thursday" name="Thursday" @Html.Raw(ViewBag.Thursday) style="width: 20px; height: 20px; " />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Friday" style="width: 20px; height: 20px; " />
+                                        <input type="checkbox" id="Friday" name="Friday" @Html.Raw(ViewBag.Friday) style="width: 20px; height: 20px; " />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Saturday" style="width: 20px; height: 20px; " />
+                                        <input type="checkbox" id="Saturday" name="Saturday" @Html.Raw(ViewBag.Saturday) style="width: 20px; height: 20px; " />
                                     </div>
                                     <div class="col">
-                                        <input type="checkbox" asp-for="Sunday" style="width: 20px; height: 20px; " />
+                                        <input type="checkbox" id="Sunday" name="Sunday" @Html.Raw(ViewBag.Sunday) style="width: 20px; height: 20px; " />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label class="control-label">Mon</label>
+                                        <label for="Monday" class="control-label">Mon</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Tue</label>
+                                        <label for="Tuesday" class="control-label">Tue</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Wed</label>
+                                        <label for="Wednesday" class="control-label">Wed</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Thu</label>
+                                        <label for="Thursday" class="control-label">Thu</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Fri</label>
+                                        <label for="Friday" class="control-label">Fri</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Sat</label>
+                                        <label for="Saturday" class="control-label">Sat</label>
                                     </div>
                                     <div class="col">
-                                        <label class="control-label">Sun</label>
+                                        <label for="Sunday" class="control-label">Sun</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-2 text-right pt-2">
-                                        <label asp-for="RepeatEndDate" class="control-label">Repeat End Date:</label>
+                                        <label for="RepeatEndDate" class="control-label">Repeat End Date:</label>
                                     </div>
                                     <div class="col-5">
-                                        <input asp-for="RepeatEndDate" class="form-control" />
-                                        <span asp-validation-for="RepeatEndDate" class="text-danger"></span>
+                                        <input type="date" id="RepeatEndDate" name="RepeatEndDate" value="@(ViewData["RepeatEndDate"])" class="form-control" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group mt-3">
                         <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
                         <a asp-action="Index" role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
@@ -170,4 +173,39 @@
 </body>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/refreshListbox.js"></script>
+    <script type="text/javascript">
+        // Reload certain input fields when page loads
+        $(document).ready(function () {
+            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
+            var date = $('#StartDate')[0].valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+        });
+        // Refresh Listbox of available rooms when Area is changed
+        $('#RoomGroupID').change(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
+            $("#selectedOptions").empty();  // Empty previously selected rooms because the area changed
+            refreshListbox('availOptions', URL, true, 'There are no Rooms available in this Area.', true);
+        });
+        // Update non-repeat end date display when Start Date is changed
+        // (Note: This end date is only used as a display. It does not save data)
+        $('#StartDate').change(function () {
+            var date = this.valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+        });
+        // Update non-repeat end date display when End Time is changed
+        // (Note: This end date is only used as a display. It does not save data)
+        $('#EndTimeID').change(function () {
+            var date = $('#StartDate')[0].valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+        });
+    </script>
 }

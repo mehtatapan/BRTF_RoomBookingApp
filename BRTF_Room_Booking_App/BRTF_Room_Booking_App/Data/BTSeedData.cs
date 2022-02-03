@@ -513,42 +513,51 @@ namespace BRTF_Room_Booking_App.Data
                         context.Rooms.Add(room);
                         context.SaveChanges();
                     }
+
+                    // Add 1 room to Camera Test area
+                    Room cameraRoom = new Room()
+                    {
+                        RoomName = "Red Camera 1",
+                        RoomMaxHoursTotal = Int32.MaxValue,
+                        RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("CAMERA TEST")).ID
+                    };
+                    context.Rooms.Add(cameraRoom);
+                    context.SaveChanges();
                 }
 
                 // Seed Room Bookings
-                if (!context.RoomBookings.Any())
-                {
-                    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
-                    int[] roomIDs = context.Rooms.Select(r => r.ID).ToArray();
-                    int userIDCount = userIDs.Count();
-                    int roomIDCount = roomIDs.Count();
+                //if (!context.RoomBookings.Any())
+                //{
+                //    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
+                //    int[] roomIDs = context.Rooms.Select(r => r.ID).ToArray();
+                //    int userIDCount = userIDs.Count();
+                //    int roomIDCount = roomIDs.Count();
 
-                    // Add a Room Booking in the afternoon for each Room
-                    for (int i = 0; i < roomIDCount; i++)
-                    {
-                        // Construct Room Booking details
-                        RoomBooking roomBooking = new RoomBooking()
-                        {
-                            StartDate = DateTime.Today.AddDays(i),
-                            EndDate = DateTime.Today.AddDays(i),
-                            RoomID = roomIDs[i],
-                            UserID = userIDs[random.Next(userIDCount)],
-                            StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12).ID,
-                            EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13).ID
-                        };
-                        context.RoomBookings.Add(roomBooking);
-                        try
-                        {
-                            // Could be duplicates
-                            context.SaveChanges();
-                        }
-                        catch (Exception e)
-                        {
-                            var m = e.Message;
-                            // So skip it and go on to the next
-                        }
-                    }
-                }
+                //    // Add a Room Booking in the afternoon for each Room
+                //    for (int i = 0; i < roomIDCount; i++)
+                //    {
+                //        // Construct Room Booking details
+                //        RoomBooking roomBooking = new RoomBooking()
+                //        {
+                //            StartDate = DateTime.Today.AddDays(i),
+                //            RoomID = roomIDs[i],
+                //            UserID = userIDs[random.Next(userIDCount)],
+                //            StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12).ID,
+                //            EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13).ID
+                //        };
+                //        context.RoomBookings.Add(roomBooking);
+                //        try
+                //        {
+                //            // Could be duplicates
+                //            context.SaveChanges();
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            var m = e.Message;
+                //            // So skip it and go on to the next
+                //        }
+                //    }
+                //}
 
                 // Seed Room User Group Permissions
                 if (!context.RoomUserGroupPermissions.Any())

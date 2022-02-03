@@ -44,26 +44,27 @@
                         </div>
                         <div class="col-5">
                             <select asp-for="StartTimeID" class="form-control" asp-items="ViewBag.StartTimeID"></select>
+                            <span asp-validation-for="StartTimeID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="EndDate" class="control-label">End:</label>
+                            <label for="EndDate" class="control-label">End:</label>
                         </div>
                         <div class="col-5">
-                            <input asp-for="EndDate" class="form-control" />
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                            <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />@* Note: This end date is only used as a display. It does not save data *@
                         </div>
                         <div class="col-5">
                             <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID"></select>
+                            <span asp-validation-for="EndTimeID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="Room.RoomGroupID" class="control-label">Area:</label>
+                            <label for="RoomGroupID" class="control-label">Area:</label>
                         </div>
                         <div class="col-10">
-                            <select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
+                            <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -71,91 +72,8 @@
                             <label asp-for="RoomID" class="control-label">Room:</label>
                         </div>
                         <div class="col-10">
-                            <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" size="4"></select>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="chkRepeat" class="control-label">Repeat?</label>
-                        <input type="checkbox" id="chkRepeat" class="control-label" data-toggle="collapse" data-target="#collapseRepeat" aria-expanded="false" aria-controls="collapseRepeat" />
-                    </div>
-                    <div class="collapse" id="collapseRepeat">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-2 text-right">
-                                    <label asp-for="RepeatType" class="control-label">Every:</label>
-                                </div>
-                                <div class="col-5">
-                                    <input asp-for="RepeatInterval" class="form-control" />
-                                </div>
-                                <div class="col-5">
-                                    <select asp-for="RepeatType" class="form-control">
-                                        <option>None</option>
-                                        <option>Days</option>
-                                        <option>Weeks</option>
-                                        <option>Months</option>
-                                    </select>
-                                    <span asp-validation-for="RepeatType" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="container mt-3">
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Monday" style="width: 20px; height: 20px;" />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Tuesday" style="width: 20px; height: 20px;" />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Wednesday" style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Thursday" style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Friday" style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Saturday" style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" asp-for="Sunday" style="width: 20px; height: 20px; " />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="control-label">Mon</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Tue</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Wed</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Thu</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Fri</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Sat</label>
-                                    </div>
-                                    <div class="col">
-                                        <label class="control-label">Sun</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-2 text-right pt-2">
-                                        <label asp-for="RepeatEndDate" class="control-label">Repeat End Date:</label>
-                                    </div>
-                                    <div class="col-5">
-                                        <input asp-for="RepeatEndDate" class="form-control" />
-                                        <span asp-validation-for="RepeatEndDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                            <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                            <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group mt-3">
@@ -171,15 +89,39 @@
     </div>
 
 </body>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
+        // Reload certain input fields when page loads
         $(document).ready(function () {
-            if ("@Model.RepeatType" != "None") {
-                document.getElementById("chkRepeat").click();
-            }
+            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
+            var date = $('#StartDate')[0].valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
         });
-
+        // Refresh DDL of available rooms when Area is changed
+        $('#RoomGroupID').change(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
+            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
+        });
+        // Update non-repeat end date display when Start Date is changed
+        // (Note: This end date is only used as a display. It does not save data)
+        $('#StartDate').change(function () {
+            var date = this.valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+        });
+        // Update non-repeat end date display when End Time is changed
+        // (Note: This end date is only used as a display. It does not save data)
+        $('#EndTimeID').change(function () {
+            var date = $('#StartDate')[0].valueAsDate;
+            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
+                date.setDate(date.getDate() + 1);
+            $('#EndDate')[0].valueAsDate = date;
+        });
     </script>
 }
