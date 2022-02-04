@@ -24,15 +24,40 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID)
         {
+            //Toggle the open/closed state of the collapse depending on if something is being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered
+
+            PopulateDropDownLists(); //data for User Filter DDL
+
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
             var users = from u in _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
+                .AsNoTracking()
                 select u;
+
+            //adding filters
+            if (UserGroupID.HasValue)
+            {
+                users = users.Where(u => u.TermAndProgram.UserGroupID == UserGroupID);
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchName))
+            {
+                users = users.Where(u => u.LastName.ToUpper().Contains(SearchName.ToUpper()) ||
+                                    u.MiddleName.ToUpper().Contains(SearchName.ToUpper()) ||
+                                    u.FirstName.ToUpper().Contains(SearchName.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchEmail))
+            {
+                users = users.Where(u => u.Email.ToUpper().Contains(SearchEmail.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
@@ -305,6 +330,11 @@ namespace BRTF_Room_Booking_App.Controllers
         //  and one method to put them all into ViewData.
         //This approach allows for AJAX requests to refresh
         //DDL Data at a later date.
+        private SelectList UserGroupsSelectList(int? selectedId)
+        {
+            return new SelectList(_context.UserGroups
+                .OrderBy(g => g.UserGroupName), "ID", "UserGroupName", selectedId);
+        }
         private SelectList RoleSelectList(int? selectedId)
         {
             return new SelectList(_context.Roles
@@ -319,6 +349,7 @@ namespace BRTF_Room_Booking_App.Controllers
         {
             ViewData["RoleID"] = RoleSelectList(user?.RoleID);
             ViewData["TermAndProgramID"] = TermAndProgramSelectList(user?.TermAndProgramID);
+            ViewData["UserGroupID"] = UserGroupsSelectList(user?.TermAndProgram.UserGroupID);
         }
 
         private string ControllerName()
