@@ -65,7 +65,7 @@ namespace BRTF_Room_Booking_App.Data
                 if (!context.TermAndPrograms.Any())
                 {
                     var termAndPrograms = new List<TermAndProgram>
-                    {   
+                    {
                         new TermAndProgram {
                             ProgramName = "TV Production",
                             ProgramCode = "P0164",
@@ -227,7 +227,58 @@ namespace BRTF_Room_Booking_App.Data
                     context.SaveChanges();
                 }
 
-                // Seed Users
+                // Seed many Users
+                //if (!context.Users.Any())
+                //{
+                //    int[] roleIDs = context.Roles.Where(r => !r.RoleName.ToUpper().Contains("ADMIN")).Select(r => r.ID).ToArray();  // DON'T SEED ANY ADMINS
+                //    int[] termAndProgramIDs = context.TermAndPrograms.Select(u => u.ID).ToArray();   // DON'T SEED ANY ADMINS
+                //    int roleIDCount = roleIDs.Count();
+                //    int termAndProgramIDCount = termAndProgramIDs.Count();
+
+                //    string[] firstNames = new string[] { "Lyric", "Antoinette", "Kendal", "Vivian", "Ruth", "Jamison", "Emilia", "Natalee", "Yadiel", "Jakayla", "Lukas", "Moses", "Kyler", "Karla", "Chanel", "Tyler", "Camilla", "Quintin", "Braden", "Clarence" };
+                //    string[] lastNames = new string[] { "Watts", "Randall", "Arias", "Weber", "Stone", "Carlson", "Robles", "Frederick", "Parker", "Morris", "Soto", "Bruce", "Orozco", "Boyer", "Burns", "Cobb", "Blankenship", "Houston", "Estes", "Atkins", "Miranda", "Zuniga", "Ward", "Mayo", "Costa", "Reeves", "Anthony", "Cook", "Krueger", "Crane", "Watts", "Little", "Henderson", "Bishop" };
+                //    int firstNameCount = firstNames.Count();
+
+                //    foreach (string lastName in lastNames)
+                //    {
+                //        // Choose a random HashSet of 2 (unique) first names
+                //        HashSet<string> selectedFirstNames = new HashSet<string>();
+                //        while (selectedFirstNames.Count() < 2)
+                //        {
+                //            selectedFirstNames.Add(firstNames[random.Next(firstNameCount)]);
+                //        }
+
+                //        foreach (string firstName in selectedFirstNames)
+                //        {
+                //            // Construct User details
+                //            User user = new User()
+                //            {
+                //                Username = random.Next(4000000, 5000000).ToString(),
+                //                Password = "password",
+                //                FirstName = firstName,
+                //                LastName = lastName,
+                //                Email = firstName[1].ToString().ToLower() + lastName.ToLower() + random.Next(1, 10).ToString() + "@ncstudents.niagaracollege.ca",
+                //                EmailBookingNotifications = true,
+                //                EmailCancelNotifications = true,
+                //                TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
+                //                RoleID = roleIDs[random.Next(roleIDCount)]
+                //            };
+                //            context.Users.Add(user);
+                //            try
+                //            {
+                //                // Could be duplicates
+                //                context.SaveChanges();
+                //            }
+                //            catch (Exception e)
+                //            {
+                //                var m = e.Message;
+                //                // So skip it and go on to the next
+                //            }
+                //        }
+                //    }
+                //}
+
+                // Seed 1 single User
                 if (!context.Users.Any())
                 {
                     int[] roleIDs = context.Roles.Where(r => !r.RoleName.ToUpper().Contains("ADMIN")).Select(r => r.ID).ToArray();  // DON'T SEED ANY ADMINS
@@ -235,47 +286,22 @@ namespace BRTF_Room_Booking_App.Data
                     int roleIDCount = roleIDs.Count();
                     int termAndProgramIDCount = termAndProgramIDs.Count();
 
-                    string[] firstNames = new string[] { "Lyric", "Antoinette", "Kendal", "Vivian", "Ruth", "Jamison", "Emilia", "Natalee", "Yadiel", "Jakayla", "Lukas", "Moses", "Kyler", "Karla", "Chanel", "Tyler", "Camilla", "Quintin", "Braden", "Clarence" };
-                    string[] lastNames = new string[] { "Watts", "Randall", "Arias", "Weber", "Stone", "Carlson", "Robles", "Frederick", "Parker", "Morris", "Soto", "Bruce", "Orozco", "Boyer", "Burns", "Cobb", "Blankenship", "Houston", "Estes", "Atkins", "Miranda", "Zuniga", "Ward", "Mayo", "Costa", "Reeves", "Anthony", "Cook", "Krueger", "Crane", "Watts", "Little", "Henderson", "Bishop" };
-                    int firstNameCount = firstNames.Count();
-
-                    foreach (string lastName in lastNames)
+                    // Construct User details
+                    User user = new User()
                     {
-                        // Choose a random HashSet of 2 (unique) first names
-                        HashSet<string> selectedFirstNames = new HashSet<string>();
-                        while (selectedFirstNames.Count() < 2)
-                        {
-                            selectedFirstNames.Add(firstNames[random.Next(firstNameCount)]);
-                        }
-
-                        foreach (string firstName in selectedFirstNames)
-                        {
-                            // Construct User details
-                            User user = new User()
-                            {
-                                Username = random.Next(4000000, 5000000).ToString(),
-                                Password = "password",
-                                FirstName = firstName,
-                                LastName = lastName,
-                                Email = firstName[1].ToString().ToLower() + lastName.ToLower() + random.Next(1, 10).ToString() + "@ncstudents.niagaracollege.ca",
-                                EmailBookingNotifications = true,
-                                EmailCancelNotifications = true,
-                                TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
-                                RoleID = roleIDs[random.Next(roleIDCount)]
-                            };
-                            context.Users.Add(user);
-                            try
-                            {
-                                // Could be duplicates
-                                context.SaveChanges();
-                            }
-                            catch (Exception e)
-                            {
-                                var m = e.Message;
-                                // So skip it and go on to the next
-                            }
-                        }
-                    }
+                        Username = random.Next(3000000, 4000000).ToString(),
+                        Password = "password",
+                        FirstName = "Dogs",
+                        MiddleName = "Sun",
+                        LastName = "Al-Bahran",
+                        Email = "dalbahran@ncstudents.niagaracollege.ca",
+                        EmailBookingNotifications = true,
+                        EmailCancelNotifications = true,
+                        TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
+                        RoleID = roleIDs[random.Next(roleIDCount)]
+                    };
+                    context.Users.Add(user);
+                    context.SaveChanges();
                 }
 
                 // Seed Room Groups
@@ -607,7 +633,7 @@ namespace BRTF_Room_Booking_App.Data
                     context.GlobalSettings.Add(globalSettings);
                     context.SaveChanges();
                 }
-                
+
                 // Seed Booking Times
                 if (!context.BookingTimes.Any())
                 {
