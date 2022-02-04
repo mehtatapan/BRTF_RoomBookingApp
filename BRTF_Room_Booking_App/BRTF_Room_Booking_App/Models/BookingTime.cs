@@ -22,7 +22,7 @@ namespace BRTF_Room_Booking_App.Models
             get
             {
                 // Generate return string.
-                string twelveHourTimeString = ":" + MilitaryTimeMinute.ToString() + " ";
+                string twelveHourTimeString = ":" + MilitaryTimeMinute.ToString("00") + " ";
 
                 int hourMod = MilitaryTimeHour % 12;
 
@@ -30,7 +30,7 @@ namespace BRTF_Room_Booking_App.Models
 
                 twelveHourTimeString += ((12 <= MilitaryTimeHour && MilitaryTimeHour <= 23) ? "p.m." : "a.m.");
 
-                if (MilitaryTimeHour == 0)
+                if (MilitaryTimeHour == 0 && MilitaryTimeMinute == 0)
                     twelveHourTimeString += " (Start of day)";
                 else if (MilitaryTimeHour == 24)
                     twelveHourTimeString += " (End of day)";
