@@ -19,6 +19,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enabled)
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -30,7 +33,10 @@
                         @Html.DisplayFor(modelItem => item.AreaName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        <textarea asp-for="@item.Description" class="form-control" disabled></textarea>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Enabled)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
