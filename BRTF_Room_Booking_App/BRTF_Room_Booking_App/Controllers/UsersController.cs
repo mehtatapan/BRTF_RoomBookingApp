@@ -24,7 +24,8 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID, 
+            string actionButton, string sortDirection = "asc", string sortField = "Full Name")
         {
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
@@ -58,6 +59,51 @@ namespace BRTF_Room_Booking_App.Controllers
                 users = users.Where(u => u.Email.ToUpper().Contains(SearchEmail.ToUpper()));
                 ViewData["Filtering"] = " show ";
             }
+
+            //Before sorting, you need to check to see if there has been a change to of filter/sort
+            if (!String.IsNullOrEmpty(actionButton)) //the form has been submitted
+            {
+                if (actionButton != "Filter")
+                {
+                    if (actionButton == sortField) //reversing on the same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton; //sorting by the button that was clicked
+                }
+            }
+            //now the sort field and direction is known
+            if (sortField == "Full Name")
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users
+                        .OrderBy(u => u.FirstName)
+                        .ThenBy(u => u.LastName);
+                }
+                else
+                {
+                    users = users
+                        .OrderByDescending(u => u.FirstName)
+                        .ThenByDescending(u => u.LastName); 
+                }
+            }
+            else //sorting by Term and Program
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users
+                        .OrderBy(u => u.TermAndProgram.UserGroup.UserGroupName);
+                }
+                else
+                {
+                    users = users
+                        .OrderByDescending(u => u.TermAndProgram.UserGroup.UserGroupName);
+                }  
+            }
+            //now to set the sort for the next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

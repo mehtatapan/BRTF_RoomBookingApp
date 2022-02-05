@@ -24,6 +24,8 @@
 </form>
 <hr />
 <form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
@@ -51,25 +53,23 @@
             </div>
         </div>
     </div>
-</form>
-<form asp-action="Index" method="get">
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Username)
+                    <input type="submit" name="actionButton" disabled="disabled" value="Username" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FullName)
+                    <input type="submit" name="actionButton" value="Full Name" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    <input type="submit" name="actionButton" disabled="disabled" value="Email" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TermAndProgram.UserGroup.UserGroupName)
+                    <input type="submit" name="actionButton" value="User Group" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Role)
+                    <input type="submit" name="actionButton" disabled="disabled" value="Role" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
