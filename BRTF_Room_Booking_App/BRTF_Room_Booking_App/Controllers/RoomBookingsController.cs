@@ -23,17 +23,95 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: RoomBookings
-        public async Task<IActionResult> Index(int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(int? page, int? pageSizeID, /* Paging */
+            int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, /* Filters/Search */
+            string actionButton, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
+            //Toggle the open/closed state of the collapse depending on if something is being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered
+
+            //NOTE: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "Start Date" };
+
+            ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
+            ViewData["RoomID"] = RoomSelectList(RoomGroupID, RoomID);
+
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
-            var roombookings = _context.RoomBookings
-                .Include(r => r.EndTime)
-                .Include(r => r.Room)
-                .Include(r => r.StartTime)
-                .Include(r => r.User)
-                .OrderBy(r => r.StartDate).ThenBy(r => r.StartTime.MilitaryTimeHour).ThenBy(r => r.StartTime.MilitaryTimeMinute);
+            var roombookings = from r in _context.RoomBookings
+                               .Include(r => r.EndTime)
+                               .Include(r => r.Room)
+                               .Include(r => r.StartTime)
+                               .Include(r => r.User)
+                               select r;
+
+            //Add as many filters as needed
+            if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
+            {
+                roombookings = roombookings.Where(r => afterDate <= r.StartDate);
+                ViewData["Filtering"] = "show";
+            }
+            if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
+            {
+                roombookings = roombookings.Where(r => r.StartDate <= beforeDate);
+                ViewData["Filtering"] = "show";
+            }
+            if (!String.IsNullOrEmpty(SearchUsername))
+            {
+                roombookings = roombookings.Where(r => r.User.Username.ToUpper().Contains(SearchUsername.ToUpper()));
+                ViewData["Filtering"] = "show";
+            }
+            if (!String.IsNullOrEmpty(SearchFullName))
+            {
+                roombookings = roombookings.Where(r => (r.User.FirstName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper())
+                                                    || (r.User.FirstName + " " + r.User.MiddleName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper()));
+                ViewData["Filtering"] = "show";
+            }
+            if (RoomGroupID.HasValue)
+            {
+                roombookings = roombookings.Where(r => r.Room.RoomGroupID == RoomGroupID);
+                ViewData["Filtering"] = " show ";
+            }
+            if (RoomID.HasValue)
+            {
+                roombookings = roombookings.Where(r => r.RoomID == RoomID);
+                ViewData["Filtering"] = " show ";
+            }
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
+            {
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+            //Now we know which field and direction to sort by
+            if (sortField == "Start Date")
+            {
+                if (sortDirection == "asc")
+                {
+                    roombookings = roombookings
+                        .OrderBy(p => p.StartDate)
+                        .ThenBy(p => p.StartTime.MilitaryTimeHour)
+                        .ThenBy(p => p.StartTime.MilitaryTimeMinute);
+                }
+                else
+                {
+                    roombookings = roombookings
+                        .OrderByDescending(p => p.StartDate)
+                        .ThenByDescending(p => p.StartTime.MilitaryTimeHour)
+                        .ThenByDescending(p => p.StartTime.MilitaryTimeMinute);
+                }
+            }
+            //Set sort for next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
@@ -63,7 +141,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);
+            ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
             return View(roomBooking);
@@ -148,13 +226,18 @@ namespace BRTF_Room_Booking_App.Controllers
                 ViewData["RepeatEndDate"] = RepeatEndDate;
 
                 // Add model errors for any Repeat controls that are not set correctly
+                int t;
                 if (RepeatInterval == null)
                 {
                     ModelState.AddModelError("", "You must set a Repeat Interval (e.g. Every 1 Days).");
                 }
-                else if (RepeatInterval.Contains(".") || !Int32.TryParse(RepeatInterval, out int t))
+                else if (RepeatInterval.Contains(".") || !Int32.TryParse(RepeatInterval, out t))
                 {
                     ModelState.AddModelError("", "Repeat Interval must be a whole number (No decimals).");
+                }
+                else if (t < 1)
+                {
+                    ModelState.AddModelError("", "Repeat Interval cannot be less than 1.");
                 }
 
                 if (RepeatEndDate == null)
