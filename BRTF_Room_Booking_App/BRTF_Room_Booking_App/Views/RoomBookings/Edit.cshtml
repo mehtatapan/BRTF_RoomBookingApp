@@ -4,6 +4,10 @@
     ViewData["Title"] = "Edit Booking";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
 
     <h3>Edit</h3>
@@ -19,7 +23,7 @@
                     <div class="row form-group">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="UserID" class="control-label">Full Name:</label>
+                            <label asp-for="UserID" class="label">Full Name:</label>
                         </div>
                         <div class="col-10">
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
@@ -27,7 +31,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="SpecialNotes" class="control-label">Special Notes:</label>
+                            <label asp-for="SpecialNotes" class="label">Special Notes:</label>
                         </div>
                         <div class="col-10">
                             <textarea asp-for="SpecialNotes" class="form-control"></textarea>
@@ -36,7 +40,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="StartDate" class="control-label">Start:</label>
+                            <label asp-for="StartDate" class="label">Start:</label>
                         </div>
                         <div class="col-5">
                             <input asp-for="StartDate" class="form-control" />
@@ -49,7 +53,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="EndDate" class="control-label">End:</label>
+                            <label for="EndDate" class="label">End:</label>
                         </div>
                         <div class="col-5">
                             <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />@* Note: This end date is only used as a display. It does not save data *@
@@ -61,7 +65,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="RoomGroupID" class="control-label">Area:</label>
+                            <label for="RoomGroupID" class="label">Area:</label>
                         </div>
                         <div class="col-10">
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
@@ -69,7 +73,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="RoomID" class="control-label">Room:</label>
+                            <label asp-for="RoomID" class="label">Room:</label>
                         </div>
                         <div class="col-10">
                             <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>

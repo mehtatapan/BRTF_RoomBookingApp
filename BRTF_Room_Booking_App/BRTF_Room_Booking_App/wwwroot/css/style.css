@@ -10,11 +10,21 @@ body {
     background-color: #E4E6E6;
 }
 
+.container-white {
+    background-color: white;
+    margin: 20px;
+    padding: 30px 40px 10px 40px;
+}
+
 .header {
     position: absolute;
     color: #282828;
     left: 15%;
     top: 15%;
+}
+
+.label {
+    font-weight: 700;
 }
 
 .section-one-title {

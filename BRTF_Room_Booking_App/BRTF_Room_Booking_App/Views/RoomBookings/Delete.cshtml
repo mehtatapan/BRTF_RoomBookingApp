@@ -4,6 +4,10 @@
     ViewData["Title"] = "Delete";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
 
     <h3>Delete Booking</h3>
@@ -16,7 +20,7 @@
 
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="UserID" class="control-label">Full Name:</label>
+                    <label asp-for="UserID" class="label">Full Name:</label>
                 </div>
                 <div class="col-10">
                     <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID" disabled></select>
@@ -24,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="SpecialNotes" class="control-label">Special Notes:</label>
+                    <label asp-for="SpecialNotes" class="label">Special Notes:</label>
                 </div>
                 <div class="col-10">
                     <textarea asp-for="SpecialNotes" class="form-control" disabled></textarea>
@@ -32,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="StartDate" class="control-label">Start:</label>
+                    <label asp-for="StartDate" class="label">Start:</label>
                 </div>
                 <div class="col-5">
                     <input asp-for="StartDate" class="form-control" disabled />
@@ -43,7 +47,7 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label for="EndDate" class="control-label">End:</label>
+                    <label for="EndDate" class="label">End:</label>
                 </div>
                 <div class="col-5">
                     <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />
@@ -54,7 +58,7 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="Room.RoomGroupID" class="control-label">Area:</label>
+                    <label asp-for="Room.RoomGroupID" class="label">Area:</label>
                 </div>
                 <div class="col-10">
                     <select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>
@@ -62,7 +66,7 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="RoomID" class="control-label">Room:</label>
+                    <label asp-for="RoomID" class="label">Room:</label>
                 </div>
                 <div class="col-10">
                     <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>
