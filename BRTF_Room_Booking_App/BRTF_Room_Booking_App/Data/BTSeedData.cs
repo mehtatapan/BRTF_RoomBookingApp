@@ -532,210 +532,245 @@ namespace BRTF_Room_Booking_App.Data
                         {
                             RoomName = "Red Camera 1",
                             RoomMaxHoursTotal = Int32.MaxValue,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("CAMERA TEST")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 13",
                             RoomMaxHoursTotal = 4,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 13 BRTF1435 & 3YR TV")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 15",
                             RoomMaxHoursTotal = 4,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 15 BRTF1435, TERM 5")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 6",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 6, 3RD YEAR ONLY")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 8 V204i",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 8 INSIDE NIAGARA")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 9",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 9, 10 AND 14, 2ND YEARS")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 10",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 9, 10 AND 14, 2ND YEARS")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 14",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 9, 10 AND 14, 2ND YEARS")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 1/2 Colour Suite",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDITS 1-5, 3RD YEAR FILM")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 3",
                             RoomMaxHoursTotal = 6,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDITS 1-5, 3RD YEAR FILM")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 4",
                             RoomMaxHoursTotal = 6,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDITS 1-5, 3RD YEAR FILM")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 5",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDITS 1-5, 3RD YEAR FILM")).ID
                         },
                         new Room()
                         {
                             RoomName = "Film Studio V001",
                             RoomMaxHoursTotal = Int32.MaxValue,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("FILM STUDIO V001")).ID
                         },
                         new Room()
                         {
                             RoomName = "Green Room",
                             RoomMaxHoursTotal = 12,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("GREEN ROOM")).ID
                         },
                         new Room()
                         {
                             RoomName = "Mixing Theatre V5",
                             RoomMaxHoursTotal = 8,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("MIXING THEATRE V105")).ID
                         },
                         new Room()
                         {
                             RoomName = "Studio & Talk A",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO RECORDING STUDIOS V109")).ID
                         },
                         new Room()
                         {
                             RoomName = "Studio B",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO RECORDING STUDIOS V109")).ID
                         },
                         new Room()
                         {
                             RoomName = "Studio C",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO RECORDING STUDIOS V109")).ID
                         },
                         new Room()
                         {
                             RoomName = "Studio D",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO RECORDING STUDIOS V109")).ID
                         },
                         new Room()
                         {
                             RoomName = "Annc. 2",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO RECORDING STUDIOS V109")).ID
                         },
                         new Room()
                         {
                             RoomName = "V2 TV Studio",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("TV STUDIO V002")).ID
                         },
                         new Room()
                         {
                             RoomName = "V2 GreenRoom",
                             RoomMaxHoursTotal = 6,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("TV STUDIO V002")).ID
                         },
                         new Room()
                         {
                             RoomName = "V1",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("TV STUDIO V002")).ID
                         },
                         new Room()
                         {
                             RoomName = "TV Studio Control Room",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("TV STUDIO V002")).ID
                         },
                         new Room()
                         {
                             RoomName = "V110",
                             RoomMaxHoursTotal = Int32.MaxValue,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V110")).ID
                         },
                         new Room()
                         {
                             RoomName = "Acting Lab V110",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V110 ACTING LAB")).ID
                         },
                         new Room()
                         {
                             RoomName = "V110g Acting Edit",
                             RoomMaxHoursTotal = 2,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V110 ACTING LAB")).ID
                         },
                         new Room()
                         {
                             RoomName = "V110f Acting Edit",
                             RoomMaxHoursTotal = Int32.MaxValue,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V110F ACTING EDIT")).ID
                         },
                         new Room()
                         {
                             RoomName = "V204p Production Planning",
                             RoomMaxHoursTotal = 1,
+                            Enabled = true,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V204P PRODUCTION PLANNING")).ID
                         },
                         new Room()
                         {
                             RoomName = "Edit 16 Avid/P2/DigLotPrt",
                             RoomMaxHoursTotal = 4,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("EDIT 16 BRTF1435, TERM 5 TV")).ID
                         },
                         new Room()
                         {
                             RoomName = "MultiTrack V1j",
                             RoomMaxHoursTotal = 2,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("MULTITRACK V1J")).ID
                         },
                         new Room()
                         {
                             RoomName = "V011 Assignment/Offload",
                             RoomMaxHoursTotal = Int32.MaxValue,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V011 ASSIGNMENT/OFFLOAD")).ID
                         },
                         new Room()
                         {
                             RoomName = "V2 Acting",
                             RoomMaxHoursTotal = 1,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V2 AND S339 ACTING")).ID
                         },
                         new Room()
                         {
                             RoomName = "S339",
                             RoomMaxHoursTotal = 1,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V2 AND S339 ACTING")).ID
                         },
                         new Room()
                         {
                             RoomName = "V3 Demonstration Lab",
                             RoomMaxHoursTotal = 6,
+                            Enabled = false,
                             RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V3 DEMONSTRATION LAB")).ID
                         }
                     };
@@ -747,6 +782,7 @@ namespace BRTF_Room_Booking_App.Data
                     {
                         RoomName = "Computer " + i.ToString(),
                         RoomMaxHoursTotal = Int32.MaxValue,
+                        Enabled = true,
                         RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("MAC LAB V106")).ID
                     };
                     rooms.Add(room);
@@ -759,6 +795,7 @@ namespace BRTF_Room_Booking_App.Data
                     {
                         RoomName = "Audio Edit #" + i.ToString(),
                         RoomMaxHoursTotal = 4,
+                        Enabled = true,
                         RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("RADIO EDIT SUITES V109")).ID
                     };
                     rooms.Add(room);
