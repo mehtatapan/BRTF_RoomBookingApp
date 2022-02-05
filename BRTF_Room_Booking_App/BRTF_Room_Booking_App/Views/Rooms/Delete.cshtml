@@ -25,13 +25,16 @@
             <input asp-for="RoomName" class="form-control" disabled />
             <span asp-validation-for="RoomName" class="text-danger"></span>
         </div>
-
         <div class="form-group">
             <label asp-for="RoomMaxHoursTotal" class="control-label"></label>
             <input asp-for="RoomMaxHoursTotal" class="form-control" disabled />
             <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
         </div>
-
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+            </label>
+        </div>
         <form asp-action="Delete">
             <input type="hidden" asp-for="ID" />
             <input type="submit" value="Delete" class="btn btn-danger mx-2" style="width:100px;" />

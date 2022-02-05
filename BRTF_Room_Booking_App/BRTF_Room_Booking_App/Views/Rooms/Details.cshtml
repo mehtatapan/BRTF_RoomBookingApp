@@ -38,11 +38,15 @@
             <input asp-for="RoomName" class="form-control" disabled />
             <span asp-validation-for="RoomName" class="text-danger"></span>
         </div>
-
         <div class="form-group">
             <label asp-for="RoomMaxHoursTotal" class="control-label"></label>
             <input asp-for="RoomMaxHoursTotal" class="form-control" disabled />
             <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+            </label>
         </div>
         <div>
             <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mx-2" style="width:100px;">Edit</a>

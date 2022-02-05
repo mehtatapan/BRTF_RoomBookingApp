@@ -16,15 +16,6 @@ namespace BRTF_Room_Booking_App.Models
 
         public int ID { get; set; }
 
-        [Display(Name = "Enabled")]
-        public string EnabledSummary
-        {
-            get
-            {
-                return (Enabled) ? "Enabled" : "Disabled";
-            }
-        }
-
         [Display(Name = "Area")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [StringLength(100, ErrorMessage = "Cannot be more than 100 characters long.")]
@@ -47,9 +38,6 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "Maximum Number of Separate Bookings in This Area")]
         public int? MaxNumberOfBookings { get; set; }
-
-        [Display(Name = "Area is Enabled")]
-        public bool Enabled { get; set; }
 
         [Display(Name = "Rooms")]
         public ICollection<Room> Rooms { get; set; }

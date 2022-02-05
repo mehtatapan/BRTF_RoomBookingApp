@@ -64,8 +64,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     BlackoutTime = table.Column<int>(nullable: false),
                     MaxHoursPerSingleBooking = table.Column<int>(nullable: true),
                     MaxHoursTotal = table.Column<int>(nullable: true),
-                    MaxNumberOfBookings = table.Column<int>(nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    MaxNumberOfBookings = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,6 +92,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     RoomName = table.Column<string>(maxLength: 50, nullable: false),
                     RoomMaxHoursTotal = table.Column<int>(nullable: true),
+                    Enabled = table.Column<bool>(nullable: false),
                     RoomGroupID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

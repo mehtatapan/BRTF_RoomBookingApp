@@ -71,7 +71,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,RoomName,RoomMaxHoursTotal,RoomGroupID")] Room room)
+        public async Task<IActionResult> Create([Bind("ID,RoomName,RoomMaxHoursTotal,RoomGroupID,Enabled")] Room room)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace BRTF_Room_Booking_App.Controllers
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<Room>(roomToUpdate, "",
                 p => p.RoomName, p => p.RoomMaxHoursTotal,
-                p => p.RoomGroupID))
+                p => p.RoomGroupID, p => p.Enabled))
             {
                 try
                 {

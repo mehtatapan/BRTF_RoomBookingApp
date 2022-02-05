@@ -93,6 +93,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("RoomGroupID")
                         .HasColumnType("INTEGER");
 
@@ -167,9 +170,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MaxHoursPerSingleBooking")
                         .HasColumnType("INTEGER");
