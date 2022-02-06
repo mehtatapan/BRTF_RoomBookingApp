@@ -21,14 +21,90 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(string? SearchRoom, int? RoomGroupID, int? page, int? pageSizeID,
+            string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
+            //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered initially
+
+            PopulateDropDownLists(); //data for Room Filter DDL
+
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
             var rooms = from t in _context.Rooms
                 .Include(t => t.RoomGroup)
-                        select t;
+                .AsNoTracking()
+                select t;
+
+            //  Filtering
+            if (RoomGroupID.HasValue)
+            {
+                rooms = rooms.Where(r => r.RoomGroupID == RoomGroupID);
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchRoom))
+            {
+                rooms = rooms.Where(r => r.RoomName.ToUpper().Contains(SearchRoom.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
+            {
+                if (actionButton != "Filter")//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+
+            //Now we know which field and direction to sort by
+            if (sortField == "Room")  //Sorting by Room Name
+            {
+                if (sortDirection == "asc")
+                {
+                    rooms = rooms
+                        .OrderByDescending(r => r.RoomName);
+                }
+                else
+                {
+                    rooms = rooms
+                        .OrderBy(r => r.RoomName);
+                }
+            }
+            else if (sortField == "Area") //Sorting by Area
+            {
+                if (sortDirection == "asc")
+                {
+                    rooms = rooms
+                        .OrderBy(r => r.RoomGroup);
+                }
+                else
+                {
+                    rooms = rooms
+                        .OrderByDescending(r => r.RoomGroup);
+                }
+            }
+            else //Sorting by Enabled
+            {
+                if (sortDirection == "asc")
+                {
+                    rooms = rooms
+                        .OrderBy(r => r.Enabled);
+                }
+                else
+                {
+                    rooms = rooms
+                        .OrderByDescending(r => r.Enabled);
+                }
+            }
+            //Set sort for next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

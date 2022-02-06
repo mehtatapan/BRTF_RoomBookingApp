@@ -10,19 +10,44 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
 <form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Filter by Room:</label>
+                        @Html.TextBox("SearchRoom", null, "All Rooms", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Filter by Area:</label>
+                        @Html.DropDownList("RoomGroupID", null, "All Areas", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.RoomName)
+                    <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RoomGroup)
+                    <input type="submit" name="actionButton" value="Area" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Enabled)
+                    <input type="submit" name="actionButton" value="Is Enabled" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -51,5 +76,4 @@
     </table>
     <partial name="_PagingNavBar" />
 </form>
-
 
