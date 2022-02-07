@@ -21,14 +21,109 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: TermAndPrograms
-        public async Task<IActionResult> Index(int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchProgCode, string SearchProgName, string SearchLevel,
+            string actionButton, string sortDirection = "asc", string sortField = "Program Code")
         {
+            //Toggle the open/closed state of the collapse depending on if something is being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered
+
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
-            var termAndPrograms = from t in _context.TermAndPrograms
+            var termAndPrograms = (from t in _context.TermAndPrograms
                 .Include(t => t.UserGroup)
-                select t;
+                select t).AsNoTracking();
+
+            //adding filters
+            if (!String.IsNullOrEmpty(SearchProgCode))
+            {
+                termAndPrograms = termAndPrograms.Where(u => u.ProgramCode.ToUpper().Contains(SearchProgCode.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchProgName))
+            {
+                termAndPrograms = termAndPrograms.Where(u => u.ProgramName.ToUpper().Contains(SearchProgName.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchLevel))
+            {
+                termAndPrograms = termAndPrograms.Where(u => u.ProgramLevel.Equals(Convert.ToInt32(SearchLevel)));
+                ViewData["Filtering"] = " show ";
+            }
+
+            //Before sorting, you need to check to see if there has been a change to of filter/sort
+            if (!String.IsNullOrEmpty(actionButton)) //the form has been submitted
+            {
+                if (actionButton != "Filter")
+                {
+                    if (actionButton == sortField) //reversing on the same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton; //sorting by the button that was clicked
+                }
+            }
+            //now the sort field and direction is known
+            if (sortField == "Program Code")
+            {
+                if (sortDirection == "asc")
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderBy(u => u.ProgramCode);
+                }
+                else
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderByDescending(u => u.ProgramCode);
+                }
+            }
+            if (sortField == "Program Name")//sorting by program name
+            {
+                if (sortDirection == "asc")
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderBy(u => u.ProgramName);
+                }
+                else
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderByDescending(u => u.ProgramName);
+                }
+            }
+            if (sortField == "Term")//sorting by program name
+            {
+                if (sortDirection == "asc")
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderBy(u => u.ProgramLevel)
+                        .ThenBy(u => u.ProgramCode);
+                }
+                else
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderByDescending(u => u.ProgramLevel)
+                        .ThenBy(u => u.ProgramCode);
+                }
+            }
+            else //sorting by User Group
+            {
+                if (sortDirection == "asc")
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderBy(u => u.UserGroup.UserGroupName)
+                        .ThenBy(u => u.ProgramCode);
+                }
+                else
+                {
+                    termAndPrograms = termAndPrograms
+                        .OrderByDescending(u => u.UserGroup.UserGroupName)
+                        .ThenBy(u => u.ProgramCode);
+                }
+            }
+            //now to set the sort for the next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
