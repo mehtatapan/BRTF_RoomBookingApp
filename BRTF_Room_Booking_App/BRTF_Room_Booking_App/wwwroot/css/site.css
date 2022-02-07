@@ -6,13 +6,29 @@ header {
     color: #E4E6E6;
 }
 
+.segment {
+    background-color: #FFF;
+    margin-bottom: 10px;
+    width:270px;
+    height: 270px;
+    padding-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 15px 25px rgba(0,0,50,0.2);
+}
+
+.image {
+    position: relative;
+    left: 3.5%;
+}
+
+
 .caption {
     background-color: #fff;
     opacity: 0.8;
     padding: 19%;
     position: absolute;
-    top: 24%;
-    left: 23%;
+    top: 57%;
+    left: 22%;
 }
 
 .caption-2 {

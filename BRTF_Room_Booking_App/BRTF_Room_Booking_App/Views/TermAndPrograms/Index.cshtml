@@ -14,7 +14,13 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.TermAndProgramSummary)
+                    @Html.DisplayNameFor(model => model.ProgramCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProgramName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProgramLevel)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.UserGroup)
@@ -27,7 +33,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TermAndProgramSummary)
+                        @Html.DisplayFor(modelItem => item.ProgramCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProgramName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProgramLevel)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserGroup.UserGroupName)

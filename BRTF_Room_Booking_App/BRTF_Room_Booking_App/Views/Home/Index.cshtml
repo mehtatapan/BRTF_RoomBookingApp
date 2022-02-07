@@ -1,9 +1,44 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<!--Font Awesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Niagara College BRTF</h1>  
-    <img src="~/img/HomePage.png" alt="Home Page Design" width=90% height=auto/>
-    <h2 class="caption">Launching Soon</h2>
+<h1 class="text-center">Welcome to Niagara College BRTF</h1>
+
+<div class="row justify-content-center">
+    <div class="flex-column m-4 p-4 text-center">
+        <div class="segment">
+            <i class="fab fa-buromobelexperte fa-5x" style="color:#2F7DBB;"></i>
+            <h2>Book a Room</h2>
+            <a asp-area="" asp-controller="RoomBookings" asp-action="Create" role="button" class="btn mx-2" style="width:100px; background:#2F7DBB; color:#E4E6E6;">Book a Room</a>
+        </div>
+    </div>
+    <div class="flex-column m-4 p-4 text-center">
+        <div class="segment">
+            <i class="fas fa-users fa-5x" style="color:#2F7DBB;"></i>
+            <h2>Register User</h2>
+            <a asp-area="" asp-controller="Users" asp-action="Create" role="button" class="btn mx-2" style="width:100px; background:#2F7DBB; color:#E4E6E6;">Register User</a>
+        </div>
+    </div>
 </div>
+
+<div class="row justify-content-center">
+    <div class="flex-column m-4 p-4 text-center">
+        <div class="segment">
+            <i class="fas fa-table fa-5x" style="color:#2F7DBB;"></i>
+            <h2>Admin Reports</h2>
+            <a asp-area="" asp-controller="Home" asp-action="Reports" role="button" class="btn mx-2" style="width:100px; background:#2F7DBB; color:#E4E6E6;">Admin Reports</a>
+        </div>
+    </div>
+    <div class="flex-column m-4 p-4 text-center">
+        <div class="segment">
+            <i class="fas fa-info-circle fa-5x" style="color:#2F7DBB;"></i>
+            <h2>Help</h2>
+            <a asp-area="" asp-controller="Home" asp-action="Help" role="button" class="btn mx-2" style="width:100px; background:#2F7DBB; color:#E4E6E6;">Help</a>
+        </div>
+    </div>
+</div>
+
+<img src="~/img/HomePage.png" alt="Home Page Design" class="image" width=90% height=auto />
+<h2 class="caption">Launching Soon</h2>
