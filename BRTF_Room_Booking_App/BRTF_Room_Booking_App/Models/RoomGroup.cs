@@ -39,6 +39,9 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Maximum Number of Separate Bookings in This Area")]
         public int? MaxNumberOfBookings { get; set; }
 
+        [Display(Name = "Area is Enabled")]
+        public bool Enabled { get; set; }
+
         [Display(Name = "Rooms")]
         public ICollection<Room> Rooms { get; set; }
 

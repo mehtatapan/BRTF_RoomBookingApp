@@ -132,7 +132,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var roomBooking = await _context.RoomBookings
                 .Include(r => r.EndTime)
-                .Include(r => r.Room)
+                .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.StartTime)
                 .Include(r => r.User)
                 .AsNoTracking()
@@ -407,7 +407,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var roomBooking = await _context.RoomBookings
                 .Include(r => r.EndTime)
-                .Include(r => r.Room)
+                .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.StartTime)
                 .Include(r => r.User)
                 .AsNoTracking()
@@ -428,7 +428,7 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var roomBooking = await _context.RoomBookings
-                .Include(r => r.Room)
+                .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.User)
                 .Include(r => r.StartTime)
                 .Include(r => r.EndTime)
@@ -546,7 +546,7 @@ namespace BRTF_Room_Booking_App.Controllers
         private void PopulateSelectedRoomData(int? RoomGroupID = null, string[] selectedOptions = null)
         {
             // Get all Rooms within this area
-            var allOptions = _context.Rooms.Where(r => r.RoomGroupID == RoomGroupID.GetValueOrDefault());
+            var allOptions = _context.Rooms.Where(r => r.RoomGroupID == RoomGroupID.GetValueOrDefault() && r.Enabled == true);
 
             // Remember which options were selected so we can re-select them
             int[] currentOptionsHS = new int[0];
@@ -618,12 +618,13 @@ namespace BRTF_Room_Booking_App.Controllers
         private SelectList RoomGroupSelectList(int? selectedId = null)
         {
             return new SelectList(_context.RoomGroups
+                .Where(d => d.Enabled == true)
                 .OrderBy(d => d.AreaName), "ID", "AreaName", selectedId);
         }
         private SelectList RoomSelectList(int? RoomGroupID = null, int? selectedId = null)
         {
             var query = from c in _context.Rooms.Include(c => c.RoomGroup)
-                        where c.RoomGroupID == RoomGroupID.GetValueOrDefault()
+                        where c.RoomGroupID == RoomGroupID.GetValueOrDefault() && c.Enabled == true
                         select c;
             return new SelectList(query.OrderBy(p => p.RoomName), "ID", "RoomName", selectedId);
         }

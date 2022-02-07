@@ -317,7 +317,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = 3
+                        MaxNumberOfBookings = 3,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -326,7 +327,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -335,7 +337,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = 2
+                        MaxNumberOfBookings = 2,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -344,7 +347,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -353,7 +357,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -362,7 +367,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = 3
+                        MaxNumberOfBookings = 3,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -371,7 +377,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = Int32.MaxValue,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -380,7 +387,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 12,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -389,7 +397,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -398,7 +407,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 8,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -407,7 +417,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -416,7 +427,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -425,7 +437,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 18,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -434,7 +447,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = Int32.MaxValue,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -443,7 +457,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -452,7 +467,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = Int32.MaxValue,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -461,7 +477,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 1,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = true
                     },
                     new RoomGroup()
                     {
@@ -470,7 +487,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = Int32.MaxValue,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     },
                     new RoomGroup()
                     {
@@ -479,7 +497,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     },
                     new RoomGroup()
                     {
@@ -488,7 +507,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     },
                     new RoomGroup()
                     {
@@ -497,7 +517,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = Int32.MaxValue,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     },
                     new RoomGroup()
                     {
@@ -506,7 +527,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 1,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     },
                     new RoomGroup()
                     {
@@ -515,7 +537,8 @@ namespace BRTF_Room_Booking_App.Data
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
-                        MaxNumberOfBookings = Int32.MaxValue
+                        MaxNumberOfBookings = Int32.MaxValue,
+                        Enabled = false
                     }
                     };
 
@@ -804,7 +827,7 @@ namespace BRTF_Room_Booking_App.Data
                     context.SaveChanges();
                 }
 
-                // Seed Room Bookings
+                // Seed many Room Bookings
                 //if (!context.RoomBookings.Any())
                 //{
                 //    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
@@ -837,6 +860,22 @@ namespace BRTF_Room_Booking_App.Data
                 //        }
                 //    }
                 //}
+
+                // Seed 1 single Room Bookings
+                if (!context.RoomBookings.Any())
+                {
+                    // Construct Room Booking details
+                    RoomBooking roomBooking = new RoomBooking()
+                    {
+                        StartDate = DateTime.Today.AddDays(-1),
+                        RoomID = context.Rooms.Where(r => r.RoomName.ToUpper().Contains("COMPUTER 10")).Select(r => r.ID).FirstOrDefault(),
+                        UserID = context.Users.Select(u => u.ID).FirstOrDefault(),
+                        StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12 && b.MilitaryTimeMinute == 30).ID,
+                        EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13 && b.MilitaryTimeMinute == 30).ID
+                    };
+                    context.RoomBookings.Add(roomBooking);
+                    context.SaveChanges();
+                }
 
                 // Seed Room User Group Permissions
                 if (!context.RoomUserGroupPermissions.Any())

@@ -58,18 +58,20 @@
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="Room.RoomGroupID" class="label">Area:</label>
+                    <label asp-for="Room.RoomGroup.AreaName" class="label">Area:</label>
                 </div>
                 <div class="col-10">
-                    <select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>
+                    @*<select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>*@
+                    <input asp-for="Room.RoomGroup.AreaName" class="form-control" disabled />
                 </div>
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label asp-for="RoomID" class="label">Room:</label>
+                    <label asp-for="Room.RoomName" class="label">Room:</label>
                 </div>
                 <div class="col-10">
-                    <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>
+                    @*<select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>*@
+                    <input asp-for="Room.RoomName" class="form-control" disabled />
                 </div>
             </div>
         </div>
