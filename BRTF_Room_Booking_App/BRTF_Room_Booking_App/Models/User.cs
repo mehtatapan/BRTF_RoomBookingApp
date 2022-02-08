@@ -28,7 +28,7 @@ namespace BRTF_Room_Booking_App.Models
         public string Username { get; set; }
 
         [Display(Name = "Password")]
-        [Required(ErrorMessage = "Cannot be blank.")]
+        [Required(ErrorMessage = "This field is required.")]
         [DataType(DataType.Password)]
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string Password { get; set; }

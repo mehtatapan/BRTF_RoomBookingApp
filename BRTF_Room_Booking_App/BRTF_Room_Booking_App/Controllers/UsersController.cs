@@ -170,6 +170,8 @@ namespace BRTF_Room_Booking_App.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
+            //Get the full TermAndProgram object for the User and then populate DDL
+            user.TermAndProgram = await _context.TermAndPrograms.FindAsync(user.TermAndProgramID);
             PopulateDropDownLists(user);
             return View(user);
         }
@@ -201,7 +203,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, string Password)
         {
             // Get the User to update
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(p => p.ID == id);
@@ -211,18 +213,23 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
-            
+
+            // Check if we should update password
+            if (String.IsNullOrEmpty(Password))
+            {
+                // Password is empty, do nothing
+            }
+            else
+            {
+                // Try updating password
+                await TryUpdateModelAsync<User>(userToUpdate, "", p => p.Password);
+            }
+
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<User>(userToUpdate, "",
                 p => p.Username, p => p.FirstName, p => p.MiddleName, p => p.LastName,
                 p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
                 p => p.TermAndProgramID, p => p.RoleID)
-                /* ||
-                await TryUpdateModelAsync<User>(userToUpdate, "",
-                p => p.Username,p =>p.Password, p => p.FirstName, p => p.MiddleName, p => p.LastName,
-                p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
-                p => p.TermAndProgramID, p => p.RoleID)*/
-
                 )
             {
                 try

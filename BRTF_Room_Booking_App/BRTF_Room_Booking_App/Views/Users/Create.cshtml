@@ -147,15 +147,17 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label asp-for="Password" class="label">Confirm Password *</label>
+                                            <label for="ConfirmPassword" class="label">Confirm Password *</label>
 
                                         </div>
                                     </div>
 
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <input data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" asp-for="Password" class="form-control" placeholder="*******" />
-                                            <span asp-validation-for="Password" lass="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+                                            <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="*******" type="password"
+                                                   data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password"
+                                                   required />
+                                            <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
 
                                         </div>
                                     </div>
