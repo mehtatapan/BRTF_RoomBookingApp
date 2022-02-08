@@ -8,256 +8,260 @@
 <h1>Register Users</h1>
 
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
+    <form asp-action="Create" asp-controller="Users" method="post" enctype="multipart/form-data">
+        <div class="container py-5 h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-lg-9 col-xl-7">
+                    <div class="card shadow-2-strong card-registration">
+                        <div class="card-body p-4 p-md-5">
 
-    <div class="container py-5 h-100">
-        <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
-                <div class="card shadow-2-strong card-registration">
-                    <div class="card-body p-4 p-md-5">
-
-                        <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-5">
-                                <h5>Individual User Entry</h5>
-                            </div>
-                            <div class="col-md-3"></div>
-                        </div>
-                        <br />
-                        <form>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="RoleID" class="control-label"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <select asp-for="RoleID" class="form-control" asp-items="ViewBag.RoleID"></select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="TermAndProgramID" class="control-label"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID"></select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Username" class="control-label">Student #</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="Username" class="form-control" placeholder="0123456" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="FirstName" class="control-label"></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <input asp-for="FirstName" class="form-control" placeholder="First" />
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="MiddleName" class="control-label"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <input asp-for="MiddleName" class="form-control" placeholder="Middle" />
-                                        <span asp-validation-for="MiddleName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="LastName" class="control-label"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="LastName" class="form-control" placeholder="Last" />
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Username" class="control-label"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="Username" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
-                                        <span asp-validation-for="Username" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Password" class="control-label"></label>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="Password" class="form-control" placeholder="*******" />
-                                        <span asp-validation-for="Password" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Password" class="control-label">Confirm Password</label>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input  data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" asp-for="Password" class="form-control" placeholder="*******" />
-                                        <span asp-validation-for="Password"lass="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
-                                       
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            Email Notification:
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10">
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-
-                            <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="submit" value="Create" class="btn btn-primary" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div>
-                                        <a asp-action="Index" class="btn btn-primary" style="background-color:#777677">Back</a>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container py-5 h-100">
-        <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-9 col-xl-7">
-                <div class="card shadow-2-strong card-registration">
-                    <div class="card-body p-4 p-md-5">
-
-                        <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-5">
-                                    <h5>Bulk User Entry</h5>
+                                    <h5>Individual User Entry</h5>
                                 </div>
                                 <div class="col-md-3"></div>
                             </div>
-
                             <br />
-
-                            <div class="row">
-                                <div class="col-md-2">
-                                </div>
-                                <div class="col-md-10">
-                                    <div class="form-group">
-                                        <label class="control-label">Upload CSV File:</label>
-                                        <input type="file" class="" name="theExcel" /><br />
+                           
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="RoleID" class="control-label">Role*</label>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <br />
-
-
-                            <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="submit" value="Create" class="btn btn-primary" />
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select asp-for="RoleID" class="form-control" asp-items="ViewBag.RoleID"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div>
-                                        <a asp-action="Index" class="btn btn-primary" style="background-color:#777677">Back</a>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="TermAndProgramID" class="control-label">Term and Program*</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID"></select>
+                                        </div>
                                     </div>
 
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="Username" class="control-label">Username*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="Username" class="form-control" placeholder="0123456" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        </form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="FirstName" class="control-label">First Name*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="FirstName" class="form-control" placeholder="First" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="MiddleName" class="control-label"></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
+                                            <span asp-validation-for="MiddleName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="LastName" class="control-label">Last Name*</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="LastName" class="form-control" placeholder="Last" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="Email" class="control-label">Email*</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="Email" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label">Password*</label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input asp-for="Password" class="form-control" placeholder="*******" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label">Confirm Password*</label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" asp-for="Password" class="form-control" placeholder="*******" />
+                                            <span asp-validation-for="Password" lass="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                Email Notification:
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="submit" value="Create" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div>
+                                            <a asp-action="Index" class="btn btn-primary" style="background-color:#777677">Back to Users</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        </form>
+
+        <div class="container py-5 h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-lg-9 col-xl-7">
+                    <div class="card shadow-2-strong card-registration">
+                        <div class="card-body p-4 p-md-5">
+
+                            <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-5">
+                                        <h5>Bulk User Entry</h5>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label class="control-label">Upload CSV File:</label>
+                                            <input type="file" class="" name="theExcel" /><br />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="submit" value="Create" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div>
+                                            <a asp-action="Index" class="btn btn-primary" style="background-color:#777677">Back to Users</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

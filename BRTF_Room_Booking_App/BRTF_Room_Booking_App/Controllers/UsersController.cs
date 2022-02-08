@@ -124,7 +124,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.TermAndProgram)
+                .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
@@ -155,6 +155,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     _context.Add(user);
                     await _context.SaveChangesAsync();
+                    TempData["AlertMessage"] = "User Created Successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -208,13 +209,21 @@ namespace BRTF_Room_Booking_App.Controllers
             
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<User>(userToUpdate, "",
-                p => p.Username, p => p.Password, p => p.FirstName, p => p.MiddleName, p => p.LastName,
+                p => p.Username, p => p.FirstName, p => p.MiddleName, p => p.LastName,
                 p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
-                p => p.TermAndProgramID, p => p.RoleID))
+                p => p.TermAndProgramID, p => p.RoleID, p => p.TermAndProgram.UserGroupID)
+                /* ||
+                await TryUpdateModelAsync<User>(userToUpdate, "",
+                p => p.Username,p =>p.Password, p => p.FirstName, p => p.MiddleName, p => p.LastName,
+                p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
+                p => p.TermAndProgramID, p => p.RoleID)*/
+
+                )
             {
                 try
                 {
                     await _context.SaveChangesAsync();
+                    TempData["AlertMessage"] = "User Edited Successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -254,7 +263,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.TermAndProgram)
+                .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
@@ -272,12 +281,13 @@ namespace BRTF_Room_Booking_App.Controllers
         {
             var user = await _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.TermAndProgram)
+                .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .FirstOrDefaultAsync(m => m.ID == id);
             try
             {
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
+                TempData["AlertMessage"] = "User Deleted Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
@@ -291,84 +301,114 @@ namespace BRTF_Room_Booking_App.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
-            //Note: This is a very basic example and has 
-            //no ERROR HANDLING.  It also assumes that
-            //duplicate values are allowed, both in the 
-            //uploaded data and the DbSet.
-            ExcelPackage excel;
-            using (var memoryStream = new MemoryStream())
+            
+            string uploadMessage = "";
+            int i = 0;//Counter for inserted records
+            int j = 0;//Counter for duplicates
+
+            try
             {
-                await theExcel.CopyToAsync(memoryStream);
-                excel = new ExcelPackage(memoryStream);
-            }
-            var workSheet = excel.Workbook.Worksheets[0];
-            var start = workSheet.Dimension.Start;
-            var end = workSheet.Dimension.End;
-
-            //Start a new list to hold imported objects
-            List<User> users = new List<User>();
-
-            for (int row = start.Row + 1; row <= end.Row; row++)
-            {
-                //Look for Term and Program or create it if it doesnt exist
-                //Query all Terms and Programs
-                var programs = from p in _context.TermAndPrograms
-                               select p;
-
-                //Check if we have the specific combination of Program Code and Level already
-                programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 5].Text.ToUpper())
-                                            && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 8].Text)));
-                int progID;
-
-
-                if (programs.Count() > 0)
+                ExcelPackage excel;
+                using (var memoryStream = new MemoryStream())
                 {
-                    //If we have matches, we grab the ID (FirstOrDefault as there should only be one result) so we can assign it on the User
-                    progID = programs.FirstOrDefault().ID;
+                    await theExcel.CopyToAsync(memoryStream);
+                    excel = new ExcelPackage(memoryStream);
                 }
-                else
+                var workSheet = excel.Workbook.Worksheets[0];
+                var start = workSheet.Dimension.Start;
+                var end = workSheet.Dimension.End;
+
+                //check for duplicates
+                var existingUsers = (_context.Users
+                    .Select(c => new { name = c.FirstName + c.MiddleName + c.LastName }))
+                    .ToList().Select(c => c.name).ToHashSet();
+
+
+                //Start a new list to hold imported objects
+                List<User> users = new List<User>();
+
+                for (int row = start.Row + 1; row <= end.Row; row++)
                 {
-                    //If there are no matches, we create a new TermAndProgram object from the CSV file and add it to the context
-                    TermAndProgram prog = new TermAndProgram
-                    {
-                        ProgramCode = workSheet.Cells[row, 5].Text,
-                        ProgramName = workSheet.Cells[row, 6].Text,
-                        ProgramLevel = int.Parse(workSheet.Cells[row, 8].Text),
-                        UserGroupID = 1
-                    };
-                    _context.TermAndPrograms.Add(prog);
-                    _context.SaveChanges();
+                    //Look for Term and Program or create it if it doesnt exist
+                    //Query all Terms and Programs
+                    var programs = from p in _context.TermAndPrograms
+                                   select p;
 
-                    //Re-query the programs the same way so we can get the ID of the newly added Term and Program
-                    programs = from p in _context.TermAndPrograms
-                               select p;
-
+                    //Check if we have the specific combination of Program Code and Level already
                     programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 5].Text.ToUpper())
                                                 && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 8].Text)));
+                    int progID;
 
-                    progID = programs.FirstOrDefault().ID;
+
+                    if (programs.Count() > 0)
+                    {
+                        //If we have matches, we grab the ID (FirstOrDefault as there should only be one result) so we can assign it on the User
+                        progID = programs.FirstOrDefault().ID;
+                    }
+                    else
+                    {
+                        //If there are no matches, we create a new TermAndProgram object from the CSV file and add it to the context
+                        TermAndProgram prog = new TermAndProgram
+                        {
+                            ProgramCode = workSheet.Cells[row, 5].Text,
+                            ProgramName = workSheet.Cells[row, 6].Text,
+                            ProgramLevel = int.Parse(workSheet.Cells[row, 8].Text),
+                            UserGroupID = 1
+                        };
+                        _context.TermAndPrograms.Add(prog);
+                        _context.SaveChanges();
+
+                        //Re-query the programs the same way so we can get the ID of the newly added Term and Program
+                        programs = from p in _context.TermAndPrograms
+                                   select p;
+
+                        programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 5].Text.ToUpper())
+                                                    && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 8].Text)));
+
+                        progID = programs.FirstOrDefault().ID;
+                    }
+
+                    // Row by row...
+                    User u = new User
+                    {
+                        //  ID = int.Parse(workSheet.Cells[row, 1].Text),
+                        FirstName = workSheet.Cells[row, 2].Text,
+                        MiddleName = workSheet.Cells[row, 3].Text,
+                        LastName = workSheet.Cells[row, 4].Text,
+                        TermAndProgramID = progID,
+                        Email = workSheet.Cells[row, 7].Text,
+                        EmailBookingNotifications = true,
+                        EmailCancelNotifications = true,
+                        RoleID = 2,
+                        Username = workSheet.Cells[row, 1].Text,
+                        Password = "password"
+                    };
+                     //count the duplicates
+                    if (existingUsers.Contains(u.FirstName + u.MiddleName + u.LastName))
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        users.Add(u);
+                        i++;
+                    }
+                    uploadMessage = "There were " + j + " duplicate(s). Total Users created: " + i;
+
+                    _context.Users.AddRange(users);
+                    _context.SaveChanges();
+
+
                 }
-
-                // Row by row...
-                User u = new User
-                {
-                    ID = int.Parse(workSheet.Cells[row, 1].Text),
-                    FirstName = workSheet.Cells[row, 2].Text,
-                    MiddleName = workSheet.Cells[row, 3].Text,
-                    LastName = workSheet.Cells[row, 4].Text,
-                    TermAndProgramID = progID,
-                    Email = workSheet.Cells[row, 7].Text,
-                    EmailBookingNotifications = true,
-                    EmailCancelNotifications = true,
-                    RoleID = 2,
-                    Username = workSheet.Cells[row, 1].Text,
-                    Password = "password"
-                };
-                users.Add(u);
             }
-            _context.Users.AddRange(users);
-            _context.SaveChanges();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.GetBaseException().Message);
+              //  uploadMessage = "Failed to import data.  Check that you selected the correct file in the correct format.";
+            }
+            TempData["Message"] = uploadMessage;
             return RedirectToAction("Index");
+
         }
 
         //This is a twist on the PopulateDropDownLists approach

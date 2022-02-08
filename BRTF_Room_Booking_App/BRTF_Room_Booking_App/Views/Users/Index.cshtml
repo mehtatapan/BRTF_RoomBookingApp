@@ -5,6 +5,23 @@
 }
 
 <h1>Users</h1>
+<br />
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert">
+        <strong>Success! </strong>@TempData["AlertMessage"]
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert">
+        <strong>@TempData["Message"]</strong>
+    </div>
+    <br />
+}
 
 <p>
     <a asp-action="Create">Create New</a>

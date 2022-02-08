@@ -49,6 +49,7 @@ namespace BRTF_Room_Booking_App.Models
         public string LastName { get; set; }
 
         [Display(Name = "Email")]
+        [Required(ErrorMessage = "Cannot leave blank.")]
         [StringLength(200, ErrorMessage = "Cannot be more than 200 characters long.")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
