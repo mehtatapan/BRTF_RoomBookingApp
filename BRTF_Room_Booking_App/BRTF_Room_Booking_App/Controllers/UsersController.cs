@@ -182,7 +182,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (user == null)
             {
                 return NotFound();
@@ -211,7 +216,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (await TryUpdateModelAsync<User>(userToUpdate, "",
                 p => p.Username, p => p.FirstName, p => p.MiddleName, p => p.LastName,
                 p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
-                p => p.TermAndProgramID, p => p.RoleID, p => p.TermAndProgram.UserGroupID)
+                p => p.TermAndProgramID, p => p.RoleID)
                 /* ||
                 await TryUpdateModelAsync<User>(userToUpdate, "",
                 p => p.Username,p =>p.Password, p => p.FirstName, p => p.MiddleName, p => p.LastName,
@@ -320,8 +325,8 @@ namespace BRTF_Room_Booking_App.Controllers
 
                 //check for duplicates
                 var existingUsers = (_context.Users
-                    .Select(c => new { name = c.FirstName + c.MiddleName + c.LastName }))
-                    .ToList().Select(c => c.name).ToHashSet();
+                    .Select(c => new { email = c.Email }))
+                    .ToList().Select(c => c.email).ToHashSet();
 
 
                 //Start a new list to hold imported objects
@@ -384,7 +389,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         Password = "password"
                     };
                      //count the duplicates
-                    if (existingUsers.Contains(u.FirstName + u.MiddleName + u.LastName))
+                    if (existingUsers.Contains(u.Email))
                     {
                         j++;
                     }
@@ -393,13 +398,10 @@ namespace BRTF_Room_Booking_App.Controllers
                         users.Add(u);
                         i++;
                     }
-                    uploadMessage = "There were " + j + " duplicate(s). Total Users created: " + i;
-
-                    _context.Users.AddRange(users);
-                    _context.SaveChanges();
-
-
                 }
+                uploadMessage = "There were " + j + " duplicate(s). Total Users created: " + i;
+                _context.Users.AddRange(users);
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
