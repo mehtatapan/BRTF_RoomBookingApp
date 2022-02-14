@@ -828,54 +828,57 @@ namespace BRTF_Room_Booking_App.Data
                 }
 
                 // Seed many Room Bookings
-                //if (!context.RoomBookings.Any())
-                //{
-                //    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
-                //    int[] roomIDs = context.Rooms.Select(r => r.ID).ToArray();
-                //    int userIDCount = userIDs.Count();
-                //    int roomIDCount = roomIDs.Count();
-
-                //    // Add a Room Booking in the afternoon for each Room
-                //    for (int i = 0; i < roomIDCount; i++)
-                //    {
-                //        // Construct Room Booking details
-                //        RoomBooking roomBooking = new RoomBooking()
-                //        {
-                //            StartDate = DateTime.Today.AddDays(i),
-                //            RoomID = roomIDs[i],
-                //            UserID = userIDs[random.Next(userIDCount)],
-                //            StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12).ID,
-                //            EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13).ID
-                //        };
-                //        context.RoomBookings.Add(roomBooking);
-                //        try
-                //        {
-                //            // Could be duplicates
-                //            context.SaveChanges();
-                //        }
-                //        catch (Exception e)
-                //        {
-                //            var m = e.Message;
-                //            // So skip it and go on to the next
-                //        }
-                //    }
-                //}
-
-                // Seed 1 single Room Bookings
                 if (!context.RoomBookings.Any())
                 {
-                    // Construct Room Booking details
-                    RoomBooking roomBooking = new RoomBooking()
+                    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
+                    int[] roomIDs = context.Rooms.Select(r => r.ID).ToArray();
+                    int userIDCount = userIDs.Count();
+                    int roomIDCount = roomIDs.Count();
+
+                    // Add a Room Booking in the afternoon for each Room
+                    for (int j = 0; j < 3; j++)
                     {
-                        StartDate = DateTime.Today.AddDays(-1),
-                        RoomID = context.Rooms.Where(r => r.RoomName.ToUpper().Contains("COMPUTER 10")).Select(r => r.ID).FirstOrDefault(),
-                        UserID = context.Users.Select(u => u.ID).FirstOrDefault(),
-                        StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12 && b.MilitaryTimeMinute == 30).ID,
-                        EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13 && b.MilitaryTimeMinute == 30).ID
-                    };
-                    context.RoomBookings.Add(roomBooking);
-                    context.SaveChanges();
+                        for (int i = 0; i < roomIDCount; i++)
+                        {
+                            // Construct Room Booking details
+                            RoomBooking roomBooking = new RoomBooking()
+                            {
+                                StartDate = DateTime.Today.AddDays((i + 1) * (j + 1)),
+                                RoomID = roomIDs[i],
+                                UserID = userIDs[random.Next(userIDCount)],
+                                StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12).ID,
+                                EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13).ID
+                            };
+                            context.RoomBookings.Add(roomBooking);
+                            try
+                            {
+                                // Could be duplicates
+                                context.SaveChanges();
+                            }
+                            catch (Exception e)
+                            {
+                                var m = e.Message;
+                                // So skip it and go on to the next
+                            }
+                        }
+                    }
                 }
+
+                // Seed 1 single Room Bookings
+                //if (!context.RoomBookings.Any())
+                //{
+                //    // Construct Room Booking details
+                //    RoomBooking roomBooking = new RoomBooking()
+                //    {
+                //        StartDate = DateTime.Today.AddDays(-1),
+                //        RoomID = context.Rooms.Where(r => r.RoomName.ToUpper().Contains("COMPUTER 10")).Select(r => r.ID).FirstOrDefault(),
+                //        UserID = context.Users.Select(u => u.ID).FirstOrDefault(),
+                //        StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12 && b.MilitaryTimeMinute == 30).ID,
+                //        EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13 && b.MilitaryTimeMinute == 30).ID
+                //    };
+                //    context.RoomBookings.Add(roomBooking);
+                //    context.SaveChanges();
+                //}
 
                 // Seed Room User Group Permissions
                 if (!context.RoomUserGroupPermissions.Any())
