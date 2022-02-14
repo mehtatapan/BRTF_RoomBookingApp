@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -314,200 +317,274 @@ namespace BRTF_Room_Booking_App.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
-            
-            string uploadMessage = "";
-            int i = 0;//Counter for inserted records
-            int j = 0;//Counter for duplicates
+            string uploadMessage = "";//Return status message for application
+            int insertedCount = 0;//Counter for inserted records
+            int duplicateCount = 0;//Counter for duplicate records
+            int skippedCount = 0;//Counter for skipped records (Example: non-BRTF students should be skipped)
+            HashSet<string> skippedPrograms = new HashSet<string>();
 
             try
             {
-                //ExcelPackage excel;
-                var csvExcel = new StringBuilder();
-                using (var reader = new StreamReader(theExcel.OpenReadStream()))
+                ExcelPackage excel = new ExcelPackage();
+
+                // Check the file extension of uploaded file
+                if (theExcel.FileName.ToLower().Contains(".xlsx"))
                 {
-                    while (reader.Peek() >= 0)
-                        csvExcel.AppendLine(reader.ReadLine());
-                }
-
-                string excel = csvExcel.ToString();
-                //var workSheet = excel.Workbook.Worksheets[0];
-                //var start = workSheet.Dimension.Start;
-                //var end = workSheet.Dimension.End;
-
-                //check for duplicates
-                var existingUsers = (_context.Users
-                    .Select(c => new { email = c.Email }))
-                    .ToList().Select(c => c.email).ToHashSet();
-
-
-                //Start a new list to hold imported objects
-                List<User> users = new List<User>();
-
-                //Read the contents of the CSV file
-                //string csvData = System.IO.File.ReadAllText(filePath);
-
-                int firow = 1;
-
-                //Execute a loop over the rows
-                foreach (string row in excel.Split("\r\n"))
-                {
-                    if (firow == 1)
+                    // If it is an Excel file, read it directly via memory stream
+                    using (var memoryStream = new MemoryStream())
                     {
-                        firow++;
-                        continue;
+                        await theExcel.CopyToAsync(memoryStream);
+                        excel = new ExcelPackage(memoryStream);
                     }
-                    if (!string.IsNullOrEmpty(row))
+                }
+                else if (theExcel.FileName.ToLower().Contains(".csv"))
+                {
+                    // If it is a .CSV, convert contents to a string, then load it into a new Worksheet
+
+                    // Create StringBuilder to convert .CSV contents to string
+                    var readResult = new StringBuilder();
+                    using (var streamReader = new StreamReader(theExcel.OpenReadStream()))
                     {
+                        while (streamReader.Peek() >= 0)
                         {
-                            //Look for Term and Program or create it if it doesnt exist
-                            //Query all Terms and Programs
-                            var programs = from p in _context.TermAndPrograms
-                                           select p;
+                            string currentLine = await streamReader.ReadLineAsync();// Read each row from .CSV line-by-line
 
-                            string progCode = row.Split("\t")[5].ToUpper();
-                            int progLevel = Convert.ToInt32(row.Split("\t")[8]);
-
-                            //Check if we have the specific combination of Program Code and Level already
-                            programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(progCode)
-                                                        && p.ProgramLevel.Equals(progLevel));
-                            int progID;
-
-
-                            if (programs.Count() > 0)
+                            // Check currentLine for the character " (quotation)
+                            while (currentLine.Contains("\""))
                             {
-                                //If we have matches, we grab the ID (FirstOrDefault as there should only be one result) so we can assign it on the User
-                                progID = programs.FirstOrDefault().ID;
-                            }
-                            else
-                            {
-                                //If there are no matches, we create a new TermAndProgram object from the CSV file and add it to the context
-                                TermAndProgram prog = new TermAndProgram
-                                {
-                                    ProgramCode = row.Split("\t")[5],
-                                    ProgramName = row.Split("\t")[6],
-                                    ProgramLevel = int.Parse(row.Split("\t")[8]),
-                                    UserGroupID = 1
-                                };
-                                _context.TermAndPrograms.Add(prog);
-                                _context.SaveChanges();
+                                // The character " (quotation) denotes a value that contains a , (comma)
+                                // This is dangerous because the delimiter of a .CSV (comma-separated values) is a , (comma)
+                                // EPPlus reading .CSV values is primitive, so the safest thing to do is replace the , (comma) with a ⸴ (comma symbol)
 
-                                //Re-query the programs the same way so we can get the ID of the newly added Term and Program
-                                programs = from p in _context.TermAndPrograms
-                                           select p;
+                                // Use Regex to find pattern that begins and ends with " (quotation)
+                                var match = Regex.Match(currentLine, "\".*?\"");
 
-                                programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(progCode)
-                                                            && p.ProgramLevel.Equals(progLevel));
+                                // Pull only the value from the Regex match by removing the " (quotation)
+                                // Then replace the , (comma) with a ⸴ (comma symbol)
+                                string value = match.Value.Replace("\"", "").Replace(",", "٬");
 
-                                progID = programs.FirstOrDefault().ID;
+                                // Inside the original line, replace the value with the same value where the , (comma) is replaced with a ٬ (comma symbol)
+                                currentLine = currentLine.Replace(match.Value, value);
                             }
 
-                            //Row by row...
-                            User u = new User
-                            {
-                                FirstName = row.Split("\t")[2],
-                                MiddleName = row.Split("\t")[3],
-                                LastName = row.Split("\t")[4],
-                                TermAndProgramID = progID,
-                                Email = row.Split("\t")[7],
-                                EmailBookingNotifications = true,
-                                EmailCancelNotifications = true,
-                                RoleID = 2,
-                                Username = row.Split("\t")[1],
-                                Password = "password"
-                            };
-                            //count the duplicates
-                            if (existingUsers.Contains(u.Email))
-                            {
-                                j++;
-                            }
-                            else
-                            {
-                                users.Add(u);
-                                i++;
-                            }
+                            readResult.AppendLine(currentLine);
                         }
                     }
+                    string theContents = readResult.ToString(); // Store StringBuilder's reading of .CSV contents into string
 
-                    //for (int row = start.Row + 1; row <= end.Row; row++)
-                    //{
-                    //    //Look for Term and Program or create it if it doesnt exist
-                    //    //Query all Terms and Programs
-                    //    var programs = from p in _context.TermAndPrograms
-                    //                   select p;
+                    // Create a new WorkSheet
+                    ExcelWorksheet worksheet = excel.Workbook.Worksheets.Add("Sheet 1");
 
-                    //    //Check if we have the specific combination of Program Code and Level already
-                    //    programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 5].Text.ToUpper())
-                    //                                && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 8].Text)));
-                    //    int progID;
-
-
-                    //    if (programs.Count() > 0)
-                    //    {
-                    //        //If we have matches, we grab the ID (FirstOrDefault as there should only be one result) so we can assign it on the User
-                    //        progID = programs.FirstOrDefault().ID;
-                    //    }
-                    //    else
-                    //    {
-                    //        //If there are no matches, we create a new TermAndProgram object from the CSV file and add it to the context
-                    //        TermAndProgram prog = new TermAndProgram
-                    //        {
-                    //            ProgramCode = workSheet.Cells[row, 5].Text,
-                    //            ProgramName = workSheet.Cells[row, 6].Text,
-                    //            ProgramLevel = int.Parse(workSheet.Cells[row, 8].Text),
-                    //            UserGroupID = 1
-                    //        };
-                    //        _context.TermAndPrograms.Add(prog);
-                    //        _context.SaveChanges();
-
-                    //        //Re-query the programs the same way so we can get the ID of the newly added Term and Program
-                    //        programs = from p in _context.TermAndPrograms
-                    //                   select p;
-
-                    //        programs = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 5].Text.ToUpper())
-                    //                                    && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 8].Text)));
-
-                    //        progID = programs.FirstOrDefault().ID;
-                    //    }
-
-                    //    // Row by row...
-                    //    User u = new User
-                    //    {
-                    //        //  ID = int.Parse(workSheet.Cells[row, 1].Text),
-                    //        FirstName = workSheet.Cells[row, 2].Text,
-                    //        MiddleName = workSheet.Cells[row, 3].Text,
-                    //        LastName = workSheet.Cells[row, 4].Text,
-                    //        TermAndProgramID = progID,
-                    //        Email = workSheet.Cells[row, 7].Text,
-                    //        EmailBookingNotifications = true,
-                    //        EmailCancelNotifications = true,
-                    //        RoleID = 2,
-                    //        Username = workSheet.Cells[row, 1].Text,
-                    //        Password = "password"
-                    //    };
-                    //     //count the duplicates
-                    //    if (existingUsers.Contains(u.Email))
-                    //    {
-                    //        j++;
-                    //    }
-                    //    else
-                    //    {
-                    //        users.Add(u);
-                    //        i++;
-                    //    }
-                    //}
-                    uploadMessage = "There were " + j + " duplicate(s). Total Users created: " + i;
-                    _context.Users.AddRange(users);
-                    _context.SaveChanges();
+                    // Load the CSV data into cell A1
+                    worksheet.Cells["A1"].LoadFromText(theContents);
                 }
+                else
+                {
+                    // The uploaded file is neither an Excel file nor a .CSV file
+                    // so throw an error
+                    throw new Exception("Uploaded file is incorrect type.");
+                }
+
+                // Set the Worksheet that EPPlus will read values from
+                var workSheet = excel.Workbook.Worksheets[0];
+                var start = workSheet.Dimension.Start;
+                var end = workSheet.Dimension.End;
+
+                // Get existing Usernames to check for duplicates
+                var existingUsers = (_context.Users
+                    .Select(c => new { Username = c.Username }))
+                    .ToList().Select(c => c.Username).ToHashSet();
+
+                // Get an IQueryable all Terms and Programs
+                var programs = from p in _context.TermAndPrograms
+                               select p;
+
+                // Get ID for Role = user
+                int userRoleID = _context.Roles.Where(r => r.RoleName.ToUpper() == "USER").Select(r => r.ID).FirstOrDefault();
+
+                // Loop to read values row-by-row starting from the 2nd row (We skip the 1st row which is only column headings)
+                for (int row = start.Row + 1; row <= end.Row; row++)
+                {
+                    // Skip blank rows
+                    if (String.IsNullOrEmpty(workSheet.Cells[row, 1].Text) || !Int32.TryParse(workSheet.Cells[row, 1].Text, out int testStuID)) continue;
+
+                    // Look up student's Term and Program, or skip this student if their program is not found (Their program is not part of BRTF)
+
+                    // Check if we have the specific combination of Program Code and Level already
+                    var newUserProgram = programs.Where(p => p.ProgramCode.ToUpper().Equals(workSheet.Cells[row, 7].Text.ToUpper())
+                                                && p.ProgramLevel.Equals(int.Parse(workSheet.Cells[row, 9].Text)));
+                    int newUserProgID;
+
+                    if (newUserProgram.Count() > 0)
+                    {
+                        //If we have matches, we grab the ID (FirstOrDefault as there should only be one result) so we can assign it on the User
+                        newUserProgID = newUserProgram.FirstOrDefault().ID;
+                    }
+                    else
+                    {
+                        skippedCount++; // Skip this row if their program is not found (Their program is not part of BRTF)
+                        skippedPrograms.Add(workSheet.Cells[row, 7].Text + " Level " + workSheet.Cells[row, 9].Text + (!string.IsNullOrEmpty(workSheet.Cells[row, 8].Text) ? " - " + workSheet.Cells[row, 8].Text : ""));
+                        continue;
+                    }
+
+                    // Row by row...
+
+                    // Check if Username already exists
+                    string newUsername = workSheet.Cells[row, 1].Text;
+
+                    if (existingUsers.Contains(newUsername))
+                    {
+                        // Update existing Users
+
+                        // Get the User to update
+                        var userToUpdate = await _context.Users.FirstOrDefaultAsync(p => p.Username == newUsername);
+
+                        userToUpdate.FirstName = workSheet.Cells[row, 2].Text;
+                        userToUpdate.MiddleName = workSheet.Cells[row, 3].Text;
+                        userToUpdate.LastName = workSheet.Cells[row, 4].Text;
+                        userToUpdate.TermAndProgramID = newUserProgID;
+                        userToUpdate.Email = workSheet.Cells[row, 6].Text;
+                        userToUpdate.Username = newUsername;
+
+                        // Update the model in the database (Note: We don't Save Changes here. All changes will be saved at once at the end)
+                        await TryUpdateModelAsync(userToUpdate);
+
+                        duplicateCount++;
+                    }
+                    else
+                    {
+                        // Insert new Users
+
+                        // For new Users, we set their password using their birthdate
+                        // Excel stores dates in multiple ways, which are not easily parsed with a single method
+                        // As such, we will first attempt to parse the date as a string, then if that fails, as a number
+                        string dobCell = workSheet.Cells[row, 5].Text.Replace("٬", ",");    // In case the date is supposed to have a comma in it, turn the comma symbol back into a comma
+                        DateTime dob = new DateTime();
+                        if (!DateTime.TryParse(dobCell, out dob))//Attempt to parse cell contents as string
+                        {
+                            // It failed, so try parsing the cell contents as a number
+                            if (Double.TryParse(dobCell, out double dobCellAsDouble))
+                            {
+                                dob = DateTime.FromOADate(dobCellAsDouble);
+                            }
+                            else
+                            {
+                                // DOB failed to be parsed as a string and as a number
+                                // so throw an error
+                                throw new Exception("DOB on row " + row.ToString() + " is not a readable format.");
+                            }
+                        }
+
+                        // Using the student's DOB, we generate a password in the format of YEAR, MONTH, then DAY
+                        // Example: October 1, 1990 would be "19901001"
+                        string newPassword = dob.ToString("yyyyMMdd");
+
+                        // Build User
+                        User newUser = new User
+                        {
+                            FirstName = workSheet.Cells[row, 2].Text,
+                            MiddleName = workSheet.Cells[row, 3].Text,
+                            LastName = workSheet.Cells[row, 4].Text,
+                            TermAndProgramID = newUserProgID,
+                            Email = workSheet.Cells[row, 6].Text,
+                            EmailBookingNotifications = true,
+                            EmailCancelNotifications = true,
+                            RoleID = userRoleID,
+                            Username = newUsername,
+                            Password = newPassword
+                        };
+
+                        // Insert User (Note: We don't Save Changes here. All changes will be saved at once at the end)
+                        _context.Users.Add(newUser);
+
+                        insertedCount++;
+                    }
+                }
+                // Generate status message to return and save changes
+                uploadMessage = insertedCount + " new Users were created.<br />"
+                                + ((duplicateCount > 0) ? duplicateCount + " existing Users were updated.<br />" : "")
+                                + ((skippedCount > 0) ? skippedCount + " student datas were skipped (Students whose Term and Program are not in the database get skipped).<br />The following Terms and Programs were skipped:<ul>" : "");
+                foreach (string s in skippedPrograms)
+                {
+                    uploadMessage += "<li>" + s + "</li>";
+                }
+                uploadMessage += ((skippedCount > 0) ? "</ul>Please add these Terms and Programs if you wish to include them." : "");
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.GetBaseException().Message);
-                //  uploadMessage = "Failed to import data.  Check that you selected the correct file in the correct format.";
+                uploadMessage = "Failed to import data. Check that your selected file is in the correct format.";
             }
             TempData["Message"] = uploadMessage;
             return RedirectToAction("Index");
+        }
 
+        public IActionResult DownloadExampleExcel()
+        {
+            //Create a new spreadsheet from scratch.
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                var workSheet = excel.Workbook.Worksheets.Add("ImportStudent");
+
+                // Manually write contents as plain string
+                var excelContents = new StringBuilder();
+                excelContents.AppendLine("ID,First Name,Middle Name,Last Name,DOB,CAMP Email,Acad Plan,Description,Strt Level");
+                excelContents.AppendLine("4362670,Cat,Sun,Al-Bahrani,10/1/1990,cstevens@ncstudents.niagaracollege.ca,P0122,Broadcasting: Radio٬ TV & Film,01");
+                excelContents.AppendLine("9311011,Sterling,,Archer,8/22/2011,sarcher4@ncstudents.niagaracollege.ca,P0163,Presentation / Radio,01");
+                excelContents.AppendLine("9508725,Matt,Elmi Johanna,Parker,2/23/2011,maparker1@ncstudents.niagaracollege.ca,P0164,TV Production,03");
+                excelContents.AppendLine("4407393,James,Bullough,Lansing,5/22/2011,jblansing@ncstudents.niagaracollege.ca,P0165,Film Production,05");
+                excelContents.AppendLine("4105233,Judy,Ugonna,Garland,8/22/2011,jgarland@ncstudents.niagaracollege.ca,P0198,Acting for TV & Film,02");
+                excelContents.AppendLine("4242885,Marge,,Simpson,2/23/2011,masimpson@ncstudents.niagaracollege.ca,P0795,Digital Photography,01");
+                excelContents.AppendLine("4035763,Sarah,Wing-Hay,Slean,5/22/2011,sslean13@ncstudents.niagaracollege.ca,P6801,Joint BSc Game Programming,04");
+                excelContents.AppendLine("4444312,Morag,Leah-Grace,Smith,8/22/2011,msmith11@ncstudents.niagaracollege.ca,P6800,Join BA Game Design,06");
+                excelContents.AppendLine("4398123,Akira,Kaur,Kurosawa,2/23/2011,akurosawa@ncstudents.niagaracollege.ca,P0441,Game Development,03");
+                excelContents.AppendLine("9470695,Zhuo Chang,,Wu,2/23/2011,zcwu@ncstudents.niagaracollege.ca,P0474,CST – Network and Cloud Tech,03");
+
+                // Load Excel contents into Worksheet starting at first cell of Worksheet
+                workSheet.Cells["A1"].LoadFromText(excelContents.ToString());
+
+                // Format the DOB column as date
+                workSheet.Cells[1, 5, 11, 5].Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
+
+                //Autofit columns
+                workSheet.Cells.AutoFitColumns();
+
+                //Download the Excel
+
+                //I usually stream the response back to avoid possible
+                //out of memory errors on the server if you have a large spreadsheet.
+                //NOTE: Since .NET Core 3 most Web Servers disallow sync IO so we
+                //need to temporarily change the setting for the server.
+                //If we can't then we will try to build the file and return a FileContentResult
+                var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                if (syncIOFeature != null)
+                {
+                    syncIOFeature.AllowSynchronousIO = true;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.Headers["content-disposition"] = "attachment;  filename=ImportStudent.xlsx";
+                        excel.SaveAs(memoryStream);
+                        memoryStream.WriteTo(Response.Body);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        Byte[] theData = excel.GetAsByteArray();
+                        string filename = "ImportStudent.xlsx";
+                        string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        return File(theData, mimeType, filename);
+                    }
+                    catch (Exception)
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+            return NotFound();
         }
 
         //This is a twist on the PopulateDropDownLists approach
