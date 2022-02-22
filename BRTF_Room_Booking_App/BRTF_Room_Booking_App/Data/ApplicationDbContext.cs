@@ -12,5 +12,10 @@ namespace BRTF_Room_Booking_App.Data
             : base(options)
         {
         }
+
+        internal object GetOwinContext()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

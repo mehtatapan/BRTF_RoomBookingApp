@@ -1,22 +1,41 @@
 ﻿using BRTF_Room_Booking_App.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BRTF_Room_Booking_App.Data
 {
     public class BTRFRoomBookingContext : DbContext
     {
+        //To give access to IHttpContextAccessor for Audit Data with IAuditable
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        //Property to hold the UserName value
+        public string UserName
+        {
+            get; private set;
+        }
+
+        public BTRFRoomBookingContext(DbContextOptions<BTRFRoomBookingContext> options, IHttpContextAccessor httpContextAccessor)
+            : base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            UserName = _httpContextAccessor.HttpContext?.User.Identity.Name;
+            UserName ??= "Unknown";
+        }
+
         public BTRFRoomBookingContext(DbContextOptions<BTRFRoomBookingContext> options)
             : base(options)
         {
+            UserName = "SeedData";
         }
 
         public DbSet<BookingTime> BookingTimes { get; set; }
         public DbSet<GlobalSetting> GlobalSettings { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomBooking> RoomBookings { get; set; }
         public DbSet<RoomGroup> RoomGroups { get; set; }
@@ -28,15 +47,6 @@ namespace BRTF_Room_Booking_App.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.HasDefaultSchema("BT");
-
-            //Prevent Cascade Delete from Role to User
-            //so we are prevented from deleting a Role with
-            //Users assigned
-            modelBuilder.Entity<Role>()
-                .HasMany<User>(d => d.Users)
-                .WithOne(p => p.Role)
-                .HasForeignKey(p => p.RoleID)
-                .OnDelete(DeleteBehavior.Restrict);
 
             //Prevent Cascade Delete from TermAndProgram to User
             //so we are prevented from deleting a TermAndProgram with
@@ -88,11 +98,6 @@ namespace BRTF_Room_Booking_App.Data
                 .HasForeignKey(p => p.EndTimeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Add a unique index to the Role Name
-            modelBuilder.Entity<Role>()
-                .HasIndex(p => p.RoleName)
-                .IsUnique();
-
             //Add a unique index to the UserGroup Name
             modelBuilder.Entity<UserGroup>()
                 .HasIndex(p => p.UserGroupName)
@@ -127,6 +132,44 @@ namespace BRTF_Room_Booking_App.Data
             modelBuilder.Entity<BookingTime>()
                 .HasIndex(p => new { p.MilitaryTimeHour, p.MilitaryTimeMinute })
                 .IsUnique();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            OnBeforeSaving();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            OnBeforeSaving();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void OnBeforeSaving()
+        {
+            var entries = ChangeTracker.Entries();
+            foreach (var entry in entries)
+            {
+                if (entry.Entity is IAuditable trackable)
+                {
+                    var now = DateTime.UtcNow;
+                    switch (entry.State)
+                    {
+                        case EntityState.Modified:
+                            trackable.UpdatedOn = now;
+                            trackable.UpdatedBy = UserName;
+                            break;
+
+                        case EntityState.Added:
+                            trackable.CreatedOn = now;
+                            trackable.CreatedBy = UserName;
+                            trackable.UpdatedOn = now;
+                            trackable.UpdatedBy = UserName;
+                            break;
+                    }
+                }
+            }
         }
     }
 }

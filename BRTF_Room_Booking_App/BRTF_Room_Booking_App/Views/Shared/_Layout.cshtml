@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <style>
+        /* Change hover-over colour for Bootstrap dropdown-menu list items. */
+        .dropdown-menu > li > a:hover, .dropdown-menu > li > form > button:hover {
+            background-image: none;
+            background-color: dodgerblue;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -37,19 +43,19 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
                                 Lists<b class="caret"></b>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
-                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link " asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a>
-                                <div class="dropdown-divider"></div>
-                                 <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a>
-                                 <div class="dropdown-divider"></div>
-                                <a class="nav-link" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6">Rooms</a>
-                            </div>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6">Rooms</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

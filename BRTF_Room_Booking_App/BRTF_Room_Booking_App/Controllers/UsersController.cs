@@ -15,16 +15,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
     public class UsersController : Controller
     {
         private readonly BTRFRoomBookingContext _context;
+        private readonly ApplicationDbContext _identityContext;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UsersController(BTRFRoomBookingContext context)
+        public UsersController(BTRFRoomBookingContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _identityContext = identityContext;
+            _userManager = userManager;
         }
 
         // GET: Users
@@ -40,7 +45,6 @@ namespace BRTF_Room_Booking_App.Controllers
             // IQueryable<> so we can add filter and sort 
             // options later.
             var users = from u in _context.Users
-                .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 select u;
@@ -127,21 +131,23 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var user = await _context.Users
-                .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (user == null)
+            var identityUser = await _identityContext.Users.Where(u => u.UserName == user.Username).FirstOrDefaultAsync();
+
+            if (user == null || identityUser == null)
             {
                 return NotFound();
             }
-
+            ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
         }
 
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["Role"] = RoleSelectList("User");
             PopulateDropDownLists();
             return View();
         }
@@ -151,13 +157,40 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Username,Password,FirstName,MiddleName,LastName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user)
+        public async Task<IActionResult> Create(
+            [Bind("ID,Username,FirstName,MiddleName,LastName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user,
+            string Password, string Role)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     _context.Add(user);
+                    
+                    IdentityUser identityUser = new IdentityUser
+                    {
+                        UserName = user.Username,
+                        Email = user.Email
+                    };
+
+                    IdentityResult result = _userManager.CreateAsync(identityUser, Password).Result;
+
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        throw new Exception("Error creating User in Identity.");
+                    }
+                    else
+                    {
+                        IdentityResult addRoleResult = await _userManager.AddToRoleAsync(identityUser, Role);
+
+                        if (!addRoleResult.Succeeded)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            throw new Exception("Error adding User to new Role.");
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                     TempData["AlertMessage"] = "User Created Successfully!";
                     return RedirectToAction(nameof(Index));
@@ -175,6 +208,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
             //Get the full TermAndProgram object for the User and then populate DDL
+            ViewData["Role"] = RoleSelectList(Role);
             user.TermAndProgram = await _context.TermAndPrograms.FindAsync(user.TermAndProgramID);
             PopulateDropDownLists(user);
             return View(user);
@@ -189,15 +223,16 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var user = await _context.Users
-                .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+            var identityUser = await _identityContext.Users.Where(u => u.UserName == user.Username).FirstOrDefaultAsync();
 
             if (user == null)
             {
                 return NotFound();
             }
+            ViewData["Role"] = RoleSelectList(_userManager.GetRolesAsync(identityUser).Result.FirstOrDefault());
             PopulateDropDownLists(user);
             return View(user);
         }
@@ -207,37 +242,69 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, string Password)
+        public async Task<IActionResult> Edit(int id, string Password, string Role)
         {
             // Get the User to update
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(p => p.ID == id);
+            var identityUserToUpdate = await _identityContext.Users.Where(u => u.UserName == userToUpdate.Username).FirstOrDefaultAsync();
+            string identityUserRole = _userManager.GetRolesAsync(identityUserToUpdate).Result.FirstOrDefault();
 
             // Check that you got it or exit with a not found error
-            if (userToUpdate == null)
+            if (userToUpdate == null || identityUserToUpdate == null)
             {
                 return NotFound();
             }
 
-            // Check if we should update password
-            if (String.IsNullOrEmpty(Password))
-            {
-                // Password is empty, do nothing
-            }
-            else
-            {
-                // Try updating password
-                await TryUpdateModelAsync<User>(userToUpdate, "", p => p.Password);
-            }
-
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<User>(userToUpdate, "",
-                p => p.Username, p => p.FirstName, p => p.MiddleName, p => p.LastName,
+                p => p.FirstName, p => p.MiddleName, p => p.LastName,
                 p => p.Email, p => p.EmailBookingNotifications, p => p.EmailCancelNotifications,
-                p => p.TermAndProgramID, p => p.RoleID)
+                p => p.TermAndProgramID)
                 )
             {
                 try
                 {
+                    // Check if we should update password
+                    if (!String.IsNullOrEmpty(Password))
+                    {
+                        // Try updating password
+                        string resetToken = await _userManager.GeneratePasswordResetTokenAsync(identityUserToUpdate);
+                        IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(identityUserToUpdate, resetToken, Password);
+                        if (!passwordChangeResult.Succeeded)
+                        {
+                            ModelState.AddModelError("", "Unable to save Password. " + passwordChangeResult.Errors.FirstOrDefault().Description);
+                            throw new Exception("Error updating User password in Identity.");
+                        }
+                    }
+
+                    // Update User email in Identity
+                    if (!await TryUpdateModelAsync<IdentityUser>(identityUserToUpdate, "", p => p.Email))
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        throw new Exception("Error updating User email in Identity.");
+                    }
+
+                    // Update User role
+                    if (Role != identityUserRole)
+                    {
+                        IdentityResult removeRoleResult = await _userManager.RemoveFromRoleAsync(identityUserToUpdate, identityUserRole);
+
+                        if (!removeRoleResult.Succeeded)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            throw new Exception("Error removing User from previous Role.");
+                        }
+
+                        IdentityResult addRoleResult = await _userManager.AddToRoleAsync(identityUserToUpdate, Role);
+
+                        if (!addRoleResult.Succeeded)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            throw new Exception("Error adding User to new Role.");
+                        }
+                    }
+
+                    await _identityContext.SaveChangesAsync();
                     await _context.SaveChangesAsync();
                     TempData["AlertMessage"] = "User Edited Successfully!";
                     return RedirectToAction(nameof(Index));
@@ -265,7 +332,8 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                 }
             }
-            PopulateDropDownLists(userToUpdate);
+            ViewData["Role"] = RoleSelectList(Role);
+            ViewData["TermAndProgramID"] = TermAndProgramSelectList(userToUpdate.TermAndProgramID);
             return View(userToUpdate);
         }
 
@@ -278,15 +346,16 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var user = await _context.Users
-                .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+            var identityUser = await _identityContext.Users.Where(u => u.UserName == user.Username).FirstOrDefaultAsync();
+
             if (user == null)
             {
                 return NotFound();
             }
-
+            ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
         }
 
@@ -296,12 +365,13 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users
-                .Include(u => u.Role)
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .FirstOrDefaultAsync(m => m.ID == id);
+            var identityUser = await _identityContext.Users.Where(u => u.UserName == user.Username).FirstOrDefaultAsync();
             try
             {
                 _context.Users.Remove(user);
+                await DeleteIdentityUser(user.Username);
                 await _context.SaveChangesAsync();
                 TempData["AlertMessage"] = "User Deleted Successfully!";
                 return RedirectToAction(nameof(Index));
@@ -311,9 +381,28 @@ namespace BRTF_Room_Booking_App.Controllers
                 //Note: there is really no reason a delete should fail if you can "talk" to the database.
                 ModelState.AddModelError("", "Unable to delete. Try again, and if the problem persists, see your system administrator.");
             }
+            ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
         }
 
+        /// <summary>
+        /// Deletes a User from Identity database.
+        /// </summary>
+        /// <param name="userName">Username of User to delete.</param>
+        private async Task DeleteIdentityUser(string userName)
+        {
+            var userToDelete = await _identityContext.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
+            if (userToDelete != null)
+            {
+                _identityContext.Users.Remove(userToDelete);
+                await _identityContext.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Creates or updates a batch of Users using a .XLSX or .CSV file.
+        /// </summary>
+        /// <param name="theExcel">The .XLSX or .CSV file containing User data.</param>
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
@@ -399,9 +488,6 @@ namespace BRTF_Room_Booking_App.Controllers
                 var programs = from p in _context.TermAndPrograms
                                select p;
 
-                // Get ID for Role = user
-                int userRoleID = _context.Roles.Where(r => r.RoleName.ToUpper() == "USER").Select(r => r.ID).FirstOrDefault();
-
                 // Loop to read values row-by-row starting from the 2nd row (We skip the 1st row which is only column headings)
                 for (int row = start.Row + 1; row <= end.Row; row++)
                 {
@@ -438,6 +524,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
                         // Get the User to update
                         var userToUpdate = await _context.Users.FirstOrDefaultAsync(p => p.Username == newUsername);
+                        var identityUserToUpdate = await _identityContext.Users.FirstOrDefaultAsync(p => p.UserName == newUsername);
 
                         userToUpdate.FirstName = workSheet.Cells[row, 2].Text;
                         userToUpdate.MiddleName = workSheet.Cells[row, 3].Text;
@@ -446,8 +533,11 @@ namespace BRTF_Room_Booking_App.Controllers
                         userToUpdate.Email = workSheet.Cells[row, 6].Text;
                         userToUpdate.Username = newUsername;
 
+                        identityUserToUpdate.Email = workSheet.Cells[row, 6].Text;
+
                         // Update the model in the database (Note: We don't Save Changes here. All changes will be saved at once at the end)
                         await TryUpdateModelAsync(userToUpdate);
+                        await TryUpdateModelAsync(identityUserToUpdate);
 
                         duplicateCount++;
                     }
@@ -489,13 +579,21 @@ namespace BRTF_Room_Booking_App.Controllers
                             Email = workSheet.Cells[row, 6].Text,
                             EmailBookingNotifications = true,
                             EmailCancelNotifications = true,
-                            RoleID = userRoleID,
-                            Username = newUsername,
-                            Password = newPassword
+                            Username = newUsername
+                        };
+
+                        IdentityUser newIdentityUser = new IdentityUser
+                        {
+                            UserName = newUsername,
+                            Email = workSheet.Cells[row, 6].Text
                         };
 
                         // Insert User (Note: We don't Save Changes here. All changes will be saved at once at the end)
                         _context.Users.Add(newUser);
+                        await _userManager.CreateAsync(newIdentityUser, newPassword);
+
+                        // Set inserted User's role as "User"
+                        _userManager.AddToRoleAsync(newIdentityUser, "User").Wait();
 
                         insertedCount++;
                     }
@@ -510,6 +608,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
                 uploadMessage += ((skippedCount > 0) ? "</ul>Please add these Terms and Programs if you wish to include them." : "");
                 _context.SaveChanges();
+                _identityContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -537,7 +636,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 excelContents.AppendLine("4105233,Judy,Ugonna,Garland,8/22/2011,jgarland@ncstudents.niagaracollege.ca,P0198,Acting for TV & Film,02");
                 excelContents.AppendLine("4242885,Marge,,Simpson,2/23/2011,masimpson@ncstudents.niagaracollege.ca,P0795,Digital Photography,01");
                 excelContents.AppendLine("4035763,Sarah,Wing-Hay,Slean,5/22/2011,sslean13@ncstudents.niagaracollege.ca,P6801,Joint BSc Game Programming,04");
-                excelContents.AppendLine("4444312,Morag,Leah-Grace,Smith,8/22/2011,msmith11@ncstudents.niagaracollege.ca,P6800,Join BA Game Design,06");
+                excelContents.AppendLine("4444312,Morag,Leah-Grace,Smith,8/22/2011,msmith11@ncstudents.niagaracollege.ca,P6800,Joint BA Game Design,06");
                 excelContents.AppendLine("4398123,Akira,Kaur,Kurosawa,2/23/2011,akurosawa@ncstudents.niagaracollege.ca,P0441,Game Development,03");
                 excelContents.AppendLine("9470695,Zhuo Chang,,Wu,2/23/2011,zcwu@ncstudents.niagaracollege.ca,P0474,CST – Network and Cloud Tech,03");
 
@@ -592,15 +691,15 @@ namespace BRTF_Room_Booking_App.Controllers
         //  and one method to put them all into ViewData.
         //This approach allows for AJAX requests to refresh
         //DDL Data at a later date.
+        private SelectList RoleSelectList(string selectedId = null)
+        {
+            return new SelectList(_identityContext.Roles
+                .OrderBy(r => r.Name), "Name", "Name", selectedId);
+        }
         private SelectList UserGroupsSelectList(int? selectedId)
         {
             return new SelectList(_context.UserGroups
                 .OrderBy(g => g.UserGroupName), "ID", "UserGroupName", selectedId);
-        }
-        private SelectList RoleSelectList(int? selectedId)
-        {
-            return new SelectList(_context.Roles
-                .OrderBy(r => r.RoleName), "ID", "RoleName", selectedId);
         }
         private SelectList TermAndProgramSelectList(int? selectedId)
         {
@@ -609,7 +708,6 @@ namespace BRTF_Room_Booking_App.Controllers
         }
         private void PopulateDropDownLists(User user = null)
         {
-            ViewData["RoleID"] = RoleSelectList(user?.RoleID);
             ViewData["TermAndProgramID"] = TermAndProgramSelectList(user?.TermAndProgramID);
             ViewData["UserGroupID"] = UserGroupsSelectList(user?.TermAndProgram.UserGroupID);
         }

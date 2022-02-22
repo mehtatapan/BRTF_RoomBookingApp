@@ -1,26 +1,38 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@*For Cookies*@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="color: #E4E6E6">Hello @User.Identity.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" style="color: #E4E6E6">
-            <button  type="submit" class="nav-link btn btn-link">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        @*<a class="nav-link" asp-area="Identity" asp-page="/Account/Register" style="color: #E4E6E6">Register</a>*@
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login" style="color: #E4E6E6">Login</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var userName = HttpContextAccessor.HttpContext.Request.Cookies["userName"] ?? UserManager.GetUserName(User);
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarIDDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
+                Hello&nbsp;@userName!&nbsp;<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarIDDropdown">
+                @if (!String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Request.Cookies["userID"]))
+                {
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@HttpContextAccessor.HttpContext.Request.Cookies["userID"]" style="color: #E4E6E6">Manage Account</a></li>
+                    <li class="dropdown-divider"></li>
+                }
+                <li>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item" style="color: #E4E6E6">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        @*<li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>*@
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login" style="color: #E4E6E6">Login</a>
+        </li>
+    }
 </ul>

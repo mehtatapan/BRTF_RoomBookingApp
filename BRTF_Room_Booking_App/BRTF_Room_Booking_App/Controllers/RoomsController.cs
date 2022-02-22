@@ -21,7 +21,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(string? SearchRoom, int? RoomGroupID, int? page, int? pageSizeID,
+        public async Task<IActionResult> Index(string SearchRoom, int? RoomGroupID, int? page, int? pageSizeID,
             string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered

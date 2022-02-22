@@ -86,9 +86,6 @@
                 <th>
                     <input type="submit" name="actionButton" value="User Group" class="btn btn-link" />
                 </th>
-                <th>
-                    <input type="submit" name="actionButton" disabled="disabled" value="Role" class="btn btn-link" />
-                </th>
                 <th></th>
             </tr>
         </thead>
@@ -107,9 +104,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.TermAndProgram.UserGroup.UserGroupName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Role.RoleName)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

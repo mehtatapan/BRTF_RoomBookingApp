@@ -28,12 +28,12 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label asp-for="RoleID" class="label">Role *</label>
+                                            <label for="Role" class="label">Role *</label>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <select asp-for="RoleID" class="form-control" asp-items="ViewBag.RoleID"></select>
+                                            <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -46,7 +46,10 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID"></select>
+                                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID">
+                                                <option value="">- Select a Term and Program -</option>
+                                            </select>
+                                            <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -130,15 +133,15 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label asp-for="Password" class="label">Password *</label>
+                                            <label for="Password" class="label">Password *</label>
 
                                         </div>
                                     </div>
 
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <input asp-for="Password" class="form-control" placeholder="*******" />
-                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                            <input id="Password" name="Password" class="form-control" type="password" placeholder="*******" required />
+                                            <span for="Password" class="field-validation-valid error" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red"></span>
                                         </div>
                                     </div>
 

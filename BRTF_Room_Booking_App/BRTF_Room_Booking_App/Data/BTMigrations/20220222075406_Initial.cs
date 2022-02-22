@@ -41,19 +41,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoleName = table.Column<string>(maxLength: 20, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RoomGroups",
                 columns: table => new
                 {
@@ -162,25 +149,17 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(maxLength: 50, nullable: false),
-                    Password = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     MiddleName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    Email = table.Column<string>(maxLength: 200, nullable: true),
+                    Email = table.Column<string>(maxLength: 200, nullable: false),
                     EmailBookingNotifications = table.Column<bool>(nullable: false),
                     EmailCancelNotifications = table.Column<bool>(nullable: false),
-                    TermAndProgramID = table.Column<int>(nullable: false),
-                    RoleID = table.Column<int>(nullable: false)
+                    TermAndProgramID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Users_Roles_RoleID",
-                        column: x => x.RoleID,
-                        principalTable: "Roles",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Users_TermAndPrograms_TermAndProgramID",
                         column: x => x.TermAndProgramID,
@@ -235,12 +214,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 name: "IX_BookingTimes_MilitaryTimeHour_MilitaryTimeMinute",
                 table: "BookingTimes",
                 columns: new[] { "MilitaryTimeHour", "MilitaryTimeMinute" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Roles_RoleName",
-                table: "Roles",
-                column: "RoleName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -304,11 +277,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleID",
-                table: "Users",
-                column: "RoleID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_TermAndProgramID",
                 table: "Users",
                 column: "TermAndProgramID");
@@ -342,9 +310,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             migrationBuilder.DropTable(
                 name: "RoomGroups");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "TermAndPrograms");

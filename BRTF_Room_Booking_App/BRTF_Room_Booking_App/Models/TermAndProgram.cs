@@ -22,7 +22,7 @@ namespace BRTF_Room_Booking_App.Models
             {
                 // Generate return string.
                 // Example output: "P0164 - Level 1, TV Production"
-                return ProgramCode + " - Level " + ProgramLevel.ToString() + ", " + ProgramName;
+                return (!ProgramName.ToUpper().Contains("ADMIN") ? ProgramCode + " - Level " + ProgramLevel.ToString() + ", " : "") + ProgramName;
             }
         }
 

@@ -23,34 +23,29 @@ namespace BRTF_Room_Booking_App.Models
         }
 
         [Display(Name = "Username")]
-        [Required(ErrorMessage = "Cannot be blank.")]
-        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        [Required(ErrorMessage = "Username is required.")]
+        [StringLength(50, ErrorMessage = "Username cannot be more than 50 characters long.")]
         public string Username { get; set; }
-
-        [Display(Name = "Password")]
-        [Required(ErrorMessage = "This field is required.")]
-        [DataType(DataType.Password)]
-        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
-        public string Password { get; set; }
 
 
         [Display(Name = "First Name")]
-        [Required(ErrorMessage = "Cannot be blank.")]
-        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        [Required(ErrorMessage = "First Name is required.")]
+        [StringLength(50, ErrorMessage = "First Name cannot be more than 50 characters long.")]
         public string FirstName { get; set; }
 
         [Display(Name = "Middle Name")]
-        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        [StringLength(50, ErrorMessage = "Middle Name cannot be more than 50 characters long.")]
         public string MiddleName { get; set; }
 
         [Display(Name = "Last Name")]
-        [Required(ErrorMessage = "Cannot be blank.")]
-        [StringLength(100, ErrorMessage = "Cannot be more than 100 characters long.")]
+        [Required(ErrorMessage = "Last name is required.")]
+        [StringLength(100, ErrorMessage = "Last Name cannot be more than 100 characters long.")]
         public string LastName { get; set; }
 
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "Cannot leave blank.")]
-        [StringLength(200, ErrorMessage = "Cannot be more than 200 characters long.")]
+        [Required(ErrorMessage = "Email is required.")]
+        [StringLength(200, ErrorMessage = "Email cannot be more than 200 characters long.")]
+        [RegularExpression("^[a-zA-Z]+?[a-zA-Z0-9]*?@[a-zA-Z.]*?niagaracollege\\.ca$", ErrorMessage = "Email must be a Niagara College email address.")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
@@ -66,12 +61,5 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "Term and Program")]
         public TermAndProgram TermAndProgram { get; set; }
-
-        [Display(Name = "Role")]
-        [Required(ErrorMessage = "You must assign a Role.")]
-        public int RoleID { get; set; }
-
-        [Display(Name = "Role")]
-        public Role Role { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BRTF_Room_Booking_App.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,290 +20,6 @@ namespace BRTF_Room_Booking_App.Data
                 serviceProvider.GetRequiredService<DbContextOptions<BTRFRoomBookingContext>>()))
             {
                 Random random = new Random();   // To randomly generate data
-
-                // Seed Roles
-                if (!context.Roles.Any())
-                {
-                    var roles = new List<Role>
-                    {
-                        new Role { RoleName = "admin" },
-                        new Role { RoleName = "user" }
-                    };
-                    context.Roles.AddRange(roles);
-                    context.SaveChanges();
-                }
-
-                // Seed User Groups
-                if (!context.UserGroups.Any())
-                {
-                    var userGroups = new List<UserGroup>
-                    {
-                        new UserGroup { UserGroupName = "admin" },
-                        new UserGroup { UserGroupName = "combo1" },
-                        new UserGroup { UserGroupName = "combo2" },
-                        new UserGroup { UserGroupName = "tv3" },
-                        new UserGroup { UserGroupName = "tv4" },
-                        new UserGroup { UserGroupName = "tv5" },
-                        new UserGroup { UserGroupName = "tv6" },
-                        new UserGroup { UserGroupName = "film3" },
-                        new UserGroup { UserGroupName = "film4" },
-                        new UserGroup { UserGroupName = "film5" },
-                        new UserGroup { UserGroupName = "film6" },
-                        new UserGroup { UserGroupName = "pres2" },
-                        new UserGroup { UserGroupName = "pres3" },
-                        new UserGroup { UserGroupName = "pres4" },
-                        new UserGroup { UserGroupName = "pres5" },
-                        new UserGroup { UserGroupName = "pres6" },
-                        new UserGroup { UserGroupName = "acting" },
-                        new UserGroup { UserGroupName = "acting3" },
-                        new UserGroup { UserGroupName = "acting4" },
-                        };
-                    context.UserGroups.AddRange(userGroups);
-                    context.SaveChanges();
-                }
-
-                // Seed Term and Programs
-                if (!context.TermAndPrograms.Any())
-                {
-                    var termAndPrograms = new List<TermAndProgram>
-                    {
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 2,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO2").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 3,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV3").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 4,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV4").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 5,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV5").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "TV Production",
-                            ProgramCode = "P0164",
-                            ProgramLevel = 6,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV6").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 2,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO2").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 3,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM3").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 4,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM4").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 5,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM5").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Film Production",
-                            ProgramCode = "P0165",
-                            ProgramLevel = 6,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM6").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Broadcasting: Radio, TV & Film",
-                            ProgramCode = "P0122",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 2,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES2").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 3,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES3").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 4,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES4").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 5,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES5").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Presentation / Radio",
-                            ProgramCode = "P0163",
-                            ProgramLevel = 6,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES6").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Acting for TV & Film",
-                            ProgramCode = "P0198",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "ACTING").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Acting for TV & Film",
-                            ProgramCode = "P0198",
-                            ProgramLevel = 2,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "ACTING").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Digital Photography",
-                            ProgramCode = "P0795",
-                            ProgramLevel = 1,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Joint BSc Game Programming",
-                            ProgramCode = "P6801",
-                            ProgramLevel = 4,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Joint BA Game Design",
-                            ProgramCode = "P6800",
-                            ProgramLevel = 6,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "Game Development",
-                            ProgramCode = "P0441",
-                            ProgramLevel = 3,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        },
-                        new TermAndProgram {
-                            ProgramName = "CST - Network and Cloud Tech",
-                            ProgramCode = "P0474",
-                            ProgramLevel = 3,
-                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
-                        }
-                    };
-                    context.TermAndPrograms.AddRange(termAndPrograms);
-                    context.SaveChanges();
-                }
-
-                // Seed many Users
-                //if (!context.Users.Any())
-                //{
-                //    int[] roleIDs = context.Roles.Where(r => !r.RoleName.ToUpper().Contains("ADMIN")).Select(r => r.ID).ToArray();  // DON'T SEED ANY ADMINS
-                //    int[] termAndProgramIDs = context.TermAndPrograms.Select(u => u.ID).ToArray();   // DON'T SEED ANY ADMINS
-                //    int roleIDCount = roleIDs.Count();
-                //    int termAndProgramIDCount = termAndProgramIDs.Count();
-
-                //    string[] firstNames = new string[] { "Lyric", "Antoinette", "Kendal", "Vivian", "Ruth", "Jamison", "Emilia", "Natalee", "Yadiel", "Jakayla", "Lukas", "Moses", "Kyler", "Karla", "Chanel", "Tyler", "Camilla", "Quintin", "Braden", "Clarence" };
-                //    string[] lastNames = new string[] { "Watts", "Randall", "Arias", "Weber", "Stone", "Carlson", "Robles", "Frederick", "Parker", "Morris", "Soto", "Bruce", "Orozco", "Boyer", "Burns", "Cobb", "Blankenship", "Houston", "Estes", "Atkins", "Miranda", "Zuniga", "Ward", "Mayo", "Costa", "Reeves", "Anthony", "Cook", "Krueger", "Crane", "Watts", "Little", "Henderson", "Bishop" };
-                //    int firstNameCount = firstNames.Count();
-
-                //    foreach (string lastName in lastNames)
-                //    {
-                //        // Choose a random HashSet of 2 (unique) first names
-                //        HashSet<string> selectedFirstNames = new HashSet<string>();
-                //        while (selectedFirstNames.Count() < 2)
-                //        {
-                //            selectedFirstNames.Add(firstNames[random.Next(firstNameCount)]);
-                //        }
-
-                //        foreach (string firstName in selectedFirstNames)
-                //        {
-                //            // Construct User details
-                //            User user = new User()
-                //            {
-                //                Username = random.Next(4000000, 5000000).ToString(),
-                //                Password = "password",
-                //                FirstName = firstName,
-                //                LastName = lastName,
-                //                Email = firstName[1].ToString().ToLower() + lastName.ToLower() + random.Next(1, 10).ToString() + "@ncstudents.niagaracollege.ca",
-                //                EmailBookingNotifications = true,
-                //                EmailCancelNotifications = true,
-                //                TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
-                //                RoleID = roleIDs[random.Next(roleIDCount)]
-                //            };
-                //            context.Users.Add(user);
-                //            try
-                //            {
-                //                // Could be duplicates
-                //                context.SaveChanges();
-                //            }
-                //            catch (Exception e)
-                //            {
-                //                var m = e.Message;
-                //                // So skip it and go on to the next
-                //            }
-                //        }
-                //    }
-                //}
-
-                // Seed 1 single User
-                if (!context.Users.Any())
-                {
-                    int[] roleIDs = context.Roles.Where(r => !r.RoleName.ToUpper().Contains("ADMIN")).Select(r => r.ID).ToArray();  // DON'T SEED ANY ADMINS
-                    int[] termAndProgramIDs = context.TermAndPrograms.Select(u => u.ID).ToArray();   // DON'T SEED ANY ADMINS
-                    int roleIDCount = roleIDs.Count();
-                    int termAndProgramIDCount = termAndProgramIDs.Count();
-
-                    // Construct User details
-                    User user = new User()
-                    {
-                        Username = random.Next(3000000, 4000000).ToString(),
-                        Password = "password",
-                        FirstName = "Dogs",
-                        MiddleName = "Sun",
-                        LastName = "Al-Bahran",
-                        Email = "dalbahran@ncstudents.niagaracollege.ca",
-                        EmailBookingNotifications = true,
-                        EmailCancelNotifications = true,
-                        TermAndProgramID = termAndProgramIDs[random.Next(termAndProgramIDCount)],
-                        RoleID = roleIDs[random.Next(roleIDCount)]
-                    };
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                }
 
                 // Seed Room Groups
                 if (!context.RoomGroups.Any())
@@ -898,15 +615,13 @@ namespace BRTF_Room_Booking_App.Data
                         context.SaveChanges();
                     }
                 }
-
-
             }
         }
 
         /// <summary>
         /// This method is for MANDATORY data only. ONLY write data in this method if it is NEEDED to run the application.
         /// </summary>
-        public static void SeedMandatoryData(IServiceProvider serviceProvider)
+        public static void SeedMandatoryData(ApplicationDbContext identityContext, IServiceProvider serviceProvider)
         {
             using (var context = new BTRFRoomBookingContext(
                 serviceProvider.GetRequiredService<DbContextOptions<BTRFRoomBookingContext>>()))
@@ -927,6 +642,308 @@ namespace BRTF_Room_Booking_App.Data
                     };
                     context.GlobalSettings.Add(globalSettings);
                     context.SaveChanges();
+                }
+
+                // Seed User Groups
+                if (!context.UserGroups.Any())
+                {
+                    var userGroups = new List<UserGroup>
+                    {
+                        new UserGroup { UserGroupName = "top-level admin" },
+                        new UserGroup { UserGroupName = "admin" },
+                        new UserGroup { UserGroupName = "combo1" },
+                        new UserGroup { UserGroupName = "combo2" },
+                        new UserGroup { UserGroupName = "tv3" },
+                        new UserGroup { UserGroupName = "tv4" },
+                        new UserGroup { UserGroupName = "tv5" },
+                        new UserGroup { UserGroupName = "tv6" },
+                        new UserGroup { UserGroupName = "film3" },
+                        new UserGroup { UserGroupName = "film4" },
+                        new UserGroup { UserGroupName = "film5" },
+                        new UserGroup { UserGroupName = "film6" },
+                        new UserGroup { UserGroupName = "pres2" },
+                        new UserGroup { UserGroupName = "pres3" },
+                        new UserGroup { UserGroupName = "pres4" },
+                        new UserGroup { UserGroupName = "pres5" },
+                        new UserGroup { UserGroupName = "pres6" },
+                        new UserGroup { UserGroupName = "acting" },
+                        new UserGroup { UserGroupName = "acting3" },
+                        new UserGroup { UserGroupName = "acting4" },
+                    };
+                    context.UserGroups.AddRange(userGroups);
+                    context.SaveChanges();
+                }
+
+                // Seed Term and Programs
+                if (!context.TermAndPrograms.Any())
+                {
+                    var termAndPrograms = new List<TermAndProgram>
+                    {
+                        new TermAndProgram {
+                            ProgramName = "Top-level Admin",
+                            ProgramCode = "P0000",
+                            ProgramLevel = 2,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TOP-LEVEL ADMIN").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Admin",
+                            ProgramCode = "P0000",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "ADMIN").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 2,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO2").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 3,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV3").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 4,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV4").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 5,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV5").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "TV Production",
+                            ProgramCode = "P0164",
+                            ProgramLevel = 6,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "TV6").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 2,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO2").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 3,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM3").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 4,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM4").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 5,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM5").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Film Production",
+                            ProgramCode = "P0165",
+                            ProgramLevel = 6,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "FILM6").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Broadcasting: Radio, TV & Film",
+                            ProgramCode = "P0122",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 2,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES2").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 3,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES3").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 4,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES4").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 5,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES5").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Presentation / Radio",
+                            ProgramCode = "P0163",
+                            ProgramLevel = 6,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "PRES6").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Acting for TV & Film",
+                            ProgramCode = "P0198",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "ACTING").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Acting for TV & Film",
+                            ProgramCode = "P0198",
+                            ProgramLevel = 2,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "ACTING").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Digital Photography",
+                            ProgramCode = "P0795",
+                            ProgramLevel = 1,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Joint BSc Game Programming",
+                            ProgramCode = "P6801",
+                            ProgramLevel = 4,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Joint BA Game Design",
+                            ProgramCode = "P6800",
+                            ProgramLevel = 6,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "Game Development",
+                            ProgramCode = "P0441",
+                            ProgramLevel = 3,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        },
+                        new TermAndProgram {
+                            ProgramName = "CST - Network and Cloud Tech",
+                            ProgramCode = "P0474",
+                            ProgramLevel = 3,
+                            UserGroupID = context.UserGroups.FirstOrDefault(u => u.UserGroupName.ToUpper() == "COMBO1").ID
+                        }
+                    };
+                    context.TermAndPrograms.AddRange(termAndPrograms);
+                    context.SaveChanges();
+                }
+
+                // Seed Users
+                if (!context.Users.Any())
+                {
+                    //Create Users
+                    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                    if (userManager.FindByNameAsync("topadmin").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "topadmin",
+                            Email = "topadmin@niagaracollege.ca"
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Top-level Admin").Wait();
+
+                            // Construct User details
+                            User userDetails = new User()
+                            {
+                                Username = "topadmin",
+                                FirstName = "Top-level Admin",
+                                LastName = "Top-level Admin",
+                                Email = "topadmin@niagaracollege.ca",
+                                EmailBookingNotifications = true,
+                                EmailCancelNotifications = true,
+                                TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => b.ProgramName.ToUpper() == "TOP-LEVEL ADMIN").ID
+                            };
+                            context.Users.Add(userDetails);
+                            context.SaveChanges();
+                        }
+                    }
+                    if (userManager.FindByNameAsync("admin").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "admin",
+                            Email = "admin@niagaracollege.ca"
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Admin").Wait();
+
+                            // Construct User details
+                            User userDetails = new User()
+                            {
+                                Username = "admin",
+                                FirstName = "Admin",
+                                LastName = "Admin",
+                                Email = "admin@niagaracollege.ca",
+                                EmailBookingNotifications = true,
+                                EmailCancelNotifications = true,
+                                TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => b.ProgramName.ToUpper() == "ADMIN").ID
+                            };
+                            context.Users.Add(userDetails);
+                            context.SaveChanges();
+                        }
+                    }
+                    if (userManager.FindByNameAsync("user").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "user",
+                            Email = "user@ncstudents.niagaracollege.ca"
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "User").Wait();
+
+                            // Construct User details
+                            User userDetails = new User()
+                            {
+                                Username = "user",
+                                FirstName = "User",
+                                LastName = "User",
+                                Email = "user@ncstudents.niagaracollege.ca",
+                                EmailBookingNotifications = true,
+                                EmailCancelNotifications = true,
+                                TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => !b.ProgramName.ToUpper().Contains("ADMIN")).ID
+                            };
+                            context.Users.Add(userDetails);
+                            context.SaveChanges();
+                        }
+                    }
                 }
 
                 // Seed Booking Times

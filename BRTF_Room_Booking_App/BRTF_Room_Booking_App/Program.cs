@@ -24,10 +24,14 @@ namespace BRTF_Room_Booking_App
 
                 try
                 {
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    identityContext.Database.Migrate();
+                    ApplicationSeedData.SeedMandatoryData(identityContext, services).Wait();  // Seeds necessary data for ApplicationDbContext. Always seed this data the first time you create the database
+
                     var context = services.GetRequiredService<BTRFRoomBookingContext>();
                     context.Database.Migrate();
-                    BTSeedData.SeedMandatoryData(services); // This data is necessary to run. Always seed this data the first time you create the database
-                    BTSeedData.SeedTestData(services);  // This data is for testing-only. Do not seed this data in final production
+                    BTSeedData.SeedMandatoryData(identityContext, services);  // Seeds necessary data for BTRFRoomBookingContext. Always seed this data the first time you create the database
+                    BTSeedData.SeedTestData(services);  // This data is for testing-only. Do not seed this data in the final production
                 }
                 catch (Exception ex)
                 {

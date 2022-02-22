@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Room_Booking_App.Data.BTMigrations
 {
     [DbContext(typeof(BTRFRoomBookingContext))]
-    [Migration("20220207213546_Initial")]
+    [Migration("20220222075406_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,25 +68,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.HasKey("ID");
 
                     b.ToTable("GlobalSettings");
-                });
-
-            modelBuilder.Entity("BRTF_Room_Booking_App.Models.Role", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("RoleName")
-                        .IsUnique();
-
-                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.Room", b =>
@@ -254,6 +235,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
@@ -277,14 +259,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("RoleID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("TermAndProgramID")
                         .HasColumnType("INTEGER");
 
@@ -294,8 +268,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasMaxLength(50);
 
                     b.HasKey("ID");
-
-                    b.HasIndex("RoleID");
 
                     b.HasIndex("TermAndProgramID");
 
@@ -386,12 +358,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.User", b =>
                 {
-                    b.HasOne("BRTF_Room_Booking_App.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("BRTF_Room_Booking_App.Models.TermAndProgram", "TermAndProgram")
                         .WithMany("Users")
                         .HasForeignKey("TermAndProgramID")
