@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using BRTF_Room_Booking_App.ViewModels;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -364,17 +365,29 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Get the User to delete from BTRF Context and Identity
             var user = await _context.Users
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .FirstOrDefaultAsync(m => m.ID == id);
             var identityUser = await _identityContext.Users.Where(u => u.UserName == user.Username).FirstOrDefaultAsync();
+
+            // Check if the User being deleted is the currently logged-in User
+            if (User.Identity.Name == user.Username)
+            {
+                // Do not allow logged-in User to delete themself
+                ModelState.AddModelError("", "Unable to delete. You cannot delete your own account.");
+            }
+
             try
             {
-                _context.Users.Remove(user);
-                await DeleteIdentityUser(user.Username);
-                await _context.SaveChangesAsync();
-                TempData["AlertMessage"] = "User Deleted Successfully!";
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Users.Remove(user);
+                    await DeleteIdentityUser(user.Username);
+                    await _context.SaveChangesAsync();
+                    TempData["AlertMessage"] = "<strong>Success!</strong> User deleted successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch (DbUpdateException)
             {
@@ -397,6 +410,110 @@ namespace BRTF_Room_Booking_App.Controllers
                 _identityContext.Users.Remove(userToDelete);
                 await _identityContext.SaveChangesAsync();
             }
+        }
+
+        // GET: Users/DeleteBulk
+        public IActionResult DeleteBulk()
+        {
+            PopulateSelectedRoleData(new string[0]);
+            PopulateSelectedGroupData(new string[0]);
+            return View();
+        }
+
+        // POST: Users/DeleteBulk
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBulk(string[] selectedRoles, int[] selectedGroups)
+        {
+            // Track counts to output message at the end
+            int deletedUserCount = 0;
+            bool skippedLoggedInUser = false;
+
+            // Check if we should delete Users from Roles
+            if (selectedRoles.Count() > 0)
+            {
+                var identityUsers = from u in _identityContext.Users select u;
+
+                // Delete Users within selected Roles
+                foreach (var identityUser in identityUsers)
+                {
+                    // Check if the User is in the Role
+                    string identityUserRole = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
+                    if (selectedRoles.Contains(identityUserRole))
+                    {
+                        // Check if the User being deleted is the currently logged-in User
+                        if (identityUser.UserName == User.Identity.Name)
+                        {
+                            // Don't delete logged-in User
+                            skippedLoggedInUser = true;
+                        }
+                        else
+                        {
+                            var user = await _context.Users
+                                .Where(u => u.Username == identityUser.UserName)
+                                .FirstOrDefaultAsync();
+
+                            // Delete the User from both Db Contexts
+                            _identityContext.Users.Remove(identityUser);
+                            _context.Users.Remove(user);
+                            deletedUserCount++;
+                        }
+                    }
+                }
+            }
+
+            // Save changes before beginning second pass
+            await _identityContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            // Check if we should delete Users from User Groups
+            if (selectedGroups.Count() > 0)
+            {
+                // Get Terms and Programs corresponding to the selected User Groups
+                var selectedTermsAndPrograms = from t in _context.TermAndPrograms
+                    .Where(t => selectedGroups.Contains(t.UserGroupID))
+                    select t.ID;
+
+                var users = from u in _context.Users select u;
+
+                // Delete Users whose Term and Programs is in a selected User Group
+                foreach(var user in users)
+                {
+                    if (selectedTermsAndPrograms.Contains(user.TermAndProgramID))
+                    {
+                        // Check if the User being deleted is the currently logged-in User
+                        if (user.Username == User.Identity.Name)
+                        {
+                            // Don't delete logged-in User
+                            skippedLoggedInUser = true;
+                        }
+                        else
+                        {
+                            var identityUser = await _identityContext.Users
+                            .Where(u => u.UserName == user.Username)
+                            .FirstOrDefaultAsync();
+
+                            // Delete the User from both Db Contexts
+                            _identityContext.Users.Remove(identityUser);
+                            _context.Users.Remove(user);
+                            deletedUserCount++;
+                        }
+                    }
+                }
+            }
+
+            // Save changes and return to Index
+            await _identityContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            string alertMessage = "<strong>Success!</strong><ul><li>" + deletedUserCount.ToString() + " Users deleted.</li>";
+            if (skippedLoggedInUser)
+            {
+                // Add extra comment when logged-in User was skipped
+                alertMessage += "<li>1 User skipped. You cannot delete your own account.</li>";
+            }
+            alertMessage += "</ul>";
+            TempData["AlertMessage"] = alertMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         /// <summary>
@@ -684,6 +801,47 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
             return NotFound();
+        }
+
+        /// <summary>
+        /// Generates check boxes for User Roles and stores them in ViewData["RoleOptions"]. Roles passed in "selectedRoles" are checked "On" by default.
+        /// </summary>
+        /// <param name="selectedRoles">Roles to check "On" by default.</param>
+        private void PopulateSelectedRoleData(string[] selectedRoles)
+        {
+            var allOptions = _identityContext.Roles.OrderBy(r => r.Name);
+            var currentOptions = selectedRoles.ToHashSet<string>();
+            var checkBoxes = new List<CheckOptionVM>();
+            foreach (var option in allOptions)
+            {
+                checkBoxes.Add(new CheckOptionVM
+                {
+                    DisplayText = option.Name,
+                    Assigned = currentOptions.Contains(option.Name)
+                });
+            }
+            ViewData["RoleOptions"] = checkBoxes;
+        }
+
+        /// <summary>
+        /// Generates check boxes for User Groups and stores them in ViewData["GroupOptions"]. Groups passed in "selectedGroups" are checked "On" by default.
+        /// </summary>
+        /// <param name="selectedGroups">Groups to check "On" by default.</param>
+        private void PopulateSelectedGroupData(string[] selectedGroups)
+        {
+            var allOptions = _context.UserGroups.OrderBy(g => g.UserGroupName);
+            var currentOptions = selectedGroups.ToHashSet<string>();
+            var checkBoxes = new List<CheckOptionVM>();
+            foreach (var option in allOptions)
+            {
+                checkBoxes.Add(new CheckOptionVM
+                {
+                    ID = option.ID,
+                    DisplayText = option.UserGroupName,
+                    Assigned = currentOptions.Contains(option.UserGroupName)
+                });
+            }
+            ViewData["GroupOptions"] = checkBoxes;
         }
 
         //This is a twist on the PopulateDropDownLists approach
