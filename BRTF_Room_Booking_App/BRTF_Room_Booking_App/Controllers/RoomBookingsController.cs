@@ -10,6 +10,8 @@ using BRTF_Room_Booking_App.Models;
 using BRTF_Room_Booking_App.Utilities;
 using BRTF_Room_Booking_App.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -35,14 +37,14 @@ namespace BRTF_Room_Booking_App.Controllers
 
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
             ViewData["RoomID"] = RoomSelectList(RoomGroupID, RoomID);
+            GetRoomsJSON();
+            GetBookingsJSON();
 
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
             var roombookings = from r in _context.RoomBookings
-                               .Include(r => r.EndTime)
                                .Include(r => r.Room)
-                               .Include(r => r.StartTime)
                                .Include(r => r.User)
                                select r;
 
@@ -97,16 +99,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 if (sortDirection == "asc")
                 {
                     roombookings = roombookings
-                        .OrderBy(p => p.StartDate)
-                        .ThenBy(p => p.StartTime.MilitaryTimeHour)
-                        .ThenBy(p => p.StartTime.MilitaryTimeMinute);
+                        .OrderBy(p => p.StartDate);
                 }
                 else
                 {
                     roombookings = roombookings
-                        .OrderByDescending(p => p.StartDate)
-                        .ThenByDescending(p => p.StartTime.MilitaryTimeHour)
-                        .ThenByDescending(p => p.StartTime.MilitaryTimeMinute);
+                        .OrderByDescending(p => p.StartDate);
                 }
             }
             //Set sort for next time
@@ -131,9 +129,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomBooking = await _context.RoomBookings
-                .Include(r => r.EndTime)
                 .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
-                .Include(r => r.StartTime)
                 .Include(r => r.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -163,7 +159,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,SpecialNotes,StartDate,StartTimeID,EndTimeID")] RoomBooking roomBooking,
+        public async Task<IActionResult> Create([Bind("ID,UserID,SpecialNotes,StartDate,EndDate")] RoomBooking roomBooking,
             string[] selectedOptions, int RoomGroupID, string chkRepeat, string RepeatInterval, string RepeatType,
             string Monday, string Tuesday, string Wednesday, string Thursday, string Friday, string Saturday, string Sunday,
             string RepeatEndDate)
@@ -183,14 +179,17 @@ namespace BRTF_Room_Booking_App.Controllers
             ViewData["Sunday"] = "";
             ViewData["RepeatEndDate"] = "";
 
-            // Check that End Time is after Start Time
-            BookingTime startTime = _context.BookingTimes.Where(t => t.ID == roomBooking.StartTimeID).FirstOrDefault();
-            BookingTime endTime = _context.BookingTimes.Where(t => t.ID == roomBooking.EndTimeID).FirstOrDefault();
-            // Add an error if End Time is lower than Start Time
-            if ((endTime.MilitaryTimeHour < startTime.MilitaryTimeHour)
-                || (endTime.MilitaryTimeHour == startTime.MilitaryTimeHour && endTime.MilitaryTimeMinute <= startTime.MilitaryTimeMinute))
+            // Check that Start Time is not in the past
+            if (roomBooking.StartDate < DateTime.Now)
             {
-                ModelState.AddModelError("EndTimeID", "End Time must be later than Start Time.");
+                ModelState.AddModelError("StartDate", "Start Date can not be in the past.");
+            }
+
+            // Check that End Time is after Start Time
+            // Add an error if End Time is lower than Start Time
+            if (roomBooking.EndDate < roomBooking.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "End Time must be later than Start Time.");
             }
 
             // Add model error if selected options is empty or cannot be cast as Int
@@ -262,7 +261,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             if (RepeatType == "Days")
                             {
                                 List<RoomBooking> bookings = GenerateBookingsForRepeatTypeDays(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
-                                    roomBooking.StartTimeID, roomBooking.EndTimeID, roomBooking.StartDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
+                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
                                     Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
                                 _context.RoomBookings.AddRange(bookings);
@@ -270,7 +269,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             else if (RepeatType == "Weeks")
                             {
                                 List<RoomBooking> bookings = GenerateBookingsForRepeatTypeWeeks(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
-                                    roomBooking.StartTimeID, roomBooking.EndTimeID, roomBooking.StartDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
+                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
                                     Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
                                 _context.RoomBookings.AddRange(bookings);
@@ -287,10 +286,17 @@ namespace BRTF_Room_Booking_App.Controllers
                                 UserID = roomBooking.UserID,
                                 SpecialNotes = roomBooking.SpecialNotes,
                                 StartDate = roomBooking.StartDate,
-                                StartTimeID = roomBooking.StartTimeID,
-                                EndTimeID = roomBooking.EndTimeID,
+                                EndDate = roomBooking.EndDate,
                                 RoomID = Convert.ToInt32(roomID)
                             };
+
+                            TimeSpan duration = booking.EndDate - booking.StartDate;
+
+                            while (!RoomIsAvailable(booking, out RoomBooking conflict))
+                            {
+                                booking.StartDate = conflict.EndDate.AddSeconds(1);
+                                booking.EndDate = booking.StartDate + duration;
+                            }
 
                             _context.RoomBookings.Add(booking);
                         }
@@ -342,17 +348,17 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int StartTimeID, int EndTimeID, int RoomGroupID)
+        public async Task<IActionResult> Edit(int id, int RoomGroupID)
         {
             // Check that End Time is after Start Time
-            BookingTime startTime = _context.BookingTimes.Where(t => t.ID == StartTimeID).FirstOrDefault();
-            BookingTime endTime = _context.BookingTimes.Where(t => t.ID == EndTimeID).FirstOrDefault();
+            //BookingTime startTime = _context.BookingTimes.Where(t => t.ID == StartTimeID).FirstOrDefault();
+            //BookingTime endTime = _context.BookingTimes.Where(t => t.ID == EndTimeID).FirstOrDefault();
             // Add an error if End Time is lower than Start Time
-            if ((endTime.MilitaryTimeHour < startTime.MilitaryTimeHour)
-                || (endTime.MilitaryTimeHour == startTime.MilitaryTimeHour && endTime.MilitaryTimeMinute <= startTime.MilitaryTimeMinute))
-            {
-                ModelState.AddModelError("EndTimeID", "End Time must be later than Start Time.");
-            }
+            //if ((endTime.MilitaryTimeHour < startTime.MilitaryTimeHour)
+            //    || (endTime.MilitaryTimeHour == startTime.MilitaryTimeHour && endTime.MilitaryTimeMinute <= startTime.MilitaryTimeMinute))
+            //{
+            //    ModelState.AddModelError("EndTimeID", "End Time must be later than Start Time.");
+            //}
 
             // Get the RoomBooking to update
             var roomBookingToUpdate = await _context.RoomBookings
@@ -364,11 +370,10 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
-            
+
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<RoomBooking>(roomBookingToUpdate, "",
-                p => p.SpecialNotes, p => p.StartDate, p => p.RoomID, p => p.UserID,
-                p => p.StartTimeID, p => p.EndTimeID))
+                p => p.SpecialNotes, p => p.StartDate, p => p.EndDate, p => p.RoomID, p => p.UserID))
             {
                 try
                 {
@@ -406,9 +411,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var roomBooking = await _context.RoomBookings
-                .Include(r => r.EndTime)
                 .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
-                .Include(r => r.StartTime)
                 .Include(r => r.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -430,8 +433,6 @@ namespace BRTF_Room_Booking_App.Controllers
             var roomBooking = await _context.RoomBookings
                 .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.User)
-                .Include(r => r.StartTime)
-                .Include(r => r.EndTime)
                 .FirstOrDefaultAsync(m => m.ID == id);
             try
             {
@@ -472,13 +473,15 @@ namespace BRTF_Room_Booking_App.Controllers
         /// </summary>
         /// <returns>List of Room Bookings to add.</returns>
         private List<RoomBooking> GenerateBookingsForRepeatTypeWeeks(string SpecialNotes, int UserID, int RoomID,
-            int StartTimeID, int EndTimeID, DateTime StartDate, DateTime RepeatEndDate, int RepeatInterval,
+            DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval,
             bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
         {
             List<RoomBooking> bookings = new List<RoomBooking>();
 
             for (DateTime day = StartDate; day <= RepeatEndDate; day = day.AddDays(1))
             {
+                TimeSpan duration = EndDate - StartDate;
+
                 // Check that this day of the week is checked On before adding booking
                 if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)
                     || (day.DayOfWeek == DayOfWeek.Tuesday && IncludeTuesday)
@@ -488,15 +491,22 @@ namespace BRTF_Room_Booking_App.Controllers
                     || (day.DayOfWeek == DayOfWeek.Saturday && IncludeSaturday)
                     || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday))
                 {
-                    bookings.Add(new RoomBooking
+                    RoomBooking booking = new RoomBooking
                     {
                         SpecialNotes = SpecialNotes,
                         StartDate = day,
+                        EndDate = day + duration,
                         RoomID = RoomID,
-                        UserID = UserID,
-                        StartTimeID = StartTimeID,
-                        EndTimeID = EndTimeID
-                    });
+                        UserID = UserID
+                    };
+
+                    while (!RoomIsAvailable(booking, out RoomBooking conflict))
+                    {
+                        booking.StartDate = conflict.EndDate.AddSeconds(1);
+                        booking.EndDate = booking.StartDate + duration;
+                    }
+
+                    bookings.Add(booking);
                 }
 
                 if (day.DayOfWeek == DayOfWeek.Saturday)
@@ -512,13 +522,15 @@ namespace BRTF_Room_Booking_App.Controllers
         /// </summary>
         /// <returns>List of Room Bookings to add.</returns>
         private List<RoomBooking> GenerateBookingsForRepeatTypeDays(string SpecialNotes, int UserID, int RoomID,
-            int StartTimeID, int EndTimeID, DateTime StartDate, DateTime RepeatEndDate, int RepeatInterval,
+            DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval,
             bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
         {
             List<RoomBooking> bookings = new List<RoomBooking>();
 
             for (DateTime day = StartDate; day <= RepeatEndDate; day = day.AddDays(RepeatInterval))
             {
+                TimeSpan duration = EndDate - StartDate;
+
                 // Check that this day of the week is checked On before adding booking
                 if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)
                     || (day.DayOfWeek == DayOfWeek.Tuesday && IncludeTuesday)
@@ -528,18 +540,26 @@ namespace BRTF_Room_Booking_App.Controllers
                     || (day.DayOfWeek == DayOfWeek.Saturday && IncludeSaturday)
                     || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday))
                 {
-                    bookings.Add(new RoomBooking
+
+                    RoomBooking booking = new RoomBooking
                     {
                         SpecialNotes = SpecialNotes,
                         StartDate = day,
+                        EndDate = day + duration,
                         RoomID = RoomID,
-                        UserID = UserID,
-                        StartTimeID = StartTimeID,
-                        EndTimeID = EndTimeID
-                    });
+                        UserID = UserID
+                    };
+
+                    while (!RoomIsAvailable(booking, out RoomBooking conflict))
+                    {
+                        booking.StartDate = conflict.EndDate.AddSeconds(1);
+                        booking.EndDate = booking.StartDate + duration;
+                    }                        
+                    
+                    bookings.Add(booking);
+
                 }
             }
-
             return bookings;
         }
 
@@ -633,23 +653,67 @@ namespace BRTF_Room_Booking_App.Controllers
             return new SelectList(_context.Users
                 .OrderBy(u => u.Username), "ID", "FullName", selectedId);
         }
-        private SelectList StartTimeSelectList(int? selectedId)
-        {
-            return new SelectList(_context.BookingTimes
-                .OrderBy(t => t.MilitaryTimeHour)
-                .ThenBy(t => t.MilitaryTimeMinute), "ID", "TwelveHourTimeSummary", selectedId);
-        }
-        private SelectList EndTimeSelectList(int? selectedId)
-        {
-            return new SelectList(_context.BookingTimes
-                .OrderBy(t => t.MilitaryTimeHour)
-                .ThenBy(t => t.MilitaryTimeMinute), "ID", "TwelveHourTimeSummary", selectedId);
-        }
+
         private void PopulateDropDownLists(RoomBooking roomBooking = null)
         {
             ViewData["UserID"] = UserSelectList(roomBooking?.UserID);
-            ViewData["StartTimeID"] = StartTimeSelectList(roomBooking?.StartTimeID);
-            ViewData["EndTimeID"] = EndTimeSelectList(roomBooking?.EndTimeID);
+        }
+
+        
+        // Get a list of all rooms and return them as a JSON array
+        public void GetRoomsJSON()
+        {
+            var rooms = from r in _context.Rooms
+                        .Include(r => r.RoomGroup)
+                               select r;
+
+            List<RoomJSON> roomList = new List<RoomJSON>();
+
+            foreach (Room r in rooms)
+            {
+                roomList.Add(new RoomJSON { id = r.ID, building = r.RoomGroup.AreaName, title = r.RoomName });
+            }
+
+            ViewData["RoomList"] = JsonConvert.SerializeObject(roomList);
+        }
+
+        // Get a list of all bookings and return them as a JSON array
+        public void GetBookingsJSON()
+        {
+            var bookings = from r in _context.RoomBookings
+                        .Include(r => r.Room)
+                        .Include(r => r.User)
+                        select r;
+
+            List<BookingJSON> bookingList = new List<BookingJSON>();
+
+            foreach (RoomBooking r in bookings)
+            {
+                bookingList.Add(new BookingJSON { id = r.ID, resourceId = r.RoomID, title = r.User.FullName, start = r.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"), end = r.EndDate.ToString("yyyy-MM-ddTHH:mm:ss") });
+            }
+
+            ViewData["BookingList"] = JsonConvert.SerializeObject(bookingList);
+        }
+
+        //Check if room is already booked for the selected time period
+        public bool RoomIsAvailable(RoomBooking newBooking, out RoomBooking conflict)
+        {
+            List<RoomBooking> existingBookings = new List<RoomBooking>(_context.RoomBookings.Where(b => b.RoomID == newBooking.RoomID));
+
+            foreach (RoomBooking r in existingBookings)
+            {
+                if ((newBooking.StartDate > r.StartDate && newBooking.StartDate < r.EndDate)
+                    || (newBooking.EndDate > r.StartDate && newBooking.EndDate < r.EndDate)
+                    || (newBooking.StartDate < r.StartDate && newBooking.EndDate > r.EndDate))
+                {
+                    conflict = r;
+                    return false;
+                }
+            }
+            conflict = null;
+            return true;
         }
     }
+
+
 }

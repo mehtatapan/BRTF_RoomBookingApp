@@ -34,7 +34,6 @@ namespace BRTF_Room_Booking_App.Data
             UserName = "SeedData";
         }
 
-        public DbSet<BookingTime> BookingTimes { get; set; }
         public DbSet<GlobalSetting> GlobalSettings { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomBooking> RoomBookings { get; set; }
@@ -84,20 +83,6 @@ namespace BRTF_Room_Booking_App.Data
                 .HasForeignKey(p => p.RoomID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete from BookingTime to RoomBooking
-            //so we are prevented from deleting a BookingTime with
-            //RoomBookings assigned
-            modelBuilder.Entity<BookingTime>()
-                .HasMany<RoomBooking>(d => d.BookingsStartingWithThisTime)
-                .WithOne(p => p.StartTime)
-                .HasForeignKey(p => p.StartTimeID)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BookingTime>()
-                .HasMany<RoomBooking>(d => d.BookingsEndingWithThisTime)
-                .WithOne(p => p.EndTime)
-                .HasForeignKey(p => p.EndTimeID)
-                .OnDelete(DeleteBehavior.Restrict);
-
             //Add a unique index to the UserGroup Name
             modelBuilder.Entity<UserGroup>()
                 .HasIndex(p => p.UserGroupName)
@@ -128,10 +113,6 @@ namespace BRTF_Room_Booking_App.Data
                 .HasIndex(p => new { p.RoomGroupID, p.RoomName })
                 .IsUnique();
 
-            //Add a unique index to the combined Houre and Minute
-            modelBuilder.Entity<BookingTime>()
-                .HasIndex(p => new { p.MilitaryTimeHour, p.MilitaryTimeMinute })
-                .IsUnique();
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -10,9 +10,9 @@
 
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
 
-    <h3>Details</h3>
+    <h1 class="mb-4">Details</h1>
 
-    <section style="background-color: rgb(250, 250, 250);display: block;" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
             <h4>Your Booking</h4>
         </div>
@@ -41,19 +41,13 @@
                 <div class="col-5">
                     <input asp-for="StartDate" class="form-control" disabled />
                 </div>
-                <div class="col-5">
-                    <select asp-for="StartTimeID" class="form-control" asp-items="ViewBag.StartTimeID" disabled></select>
-                </div>
             </div>
             <div class="row">
                 <div class="col-2 text-right pt-2">
-                    <label for="EndDate" class="label">End:</label>
+                    <label asp-for="EndDate" class="label">End:</label>
                 </div>
                 <div class="col-5">
-                    <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />
-                </div>
-                <div class="col-5">
-                    <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID" disabled></select>
+                    <input asp-for="EndDate" class="form-control" disabled />
                 </div>
             </div>
             <div class="row">
@@ -85,12 +79,6 @@
     <script type="text/javascript">
         // Reload certain input fields when page loads
         $(document).ready(function () {
-            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
-            var date = $('#StartDate')[0].valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-
             // Write "None." if there are no Special Notes
             var specialNotes = $.trim($("#SpecialNotes").val());
             if (specialNotes == "") {

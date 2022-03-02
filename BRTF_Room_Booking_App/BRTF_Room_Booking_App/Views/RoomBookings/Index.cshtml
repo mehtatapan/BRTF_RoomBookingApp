@@ -1,28 +1,30 @@
 ﻿@model IEnumerable<BRTF_Room_Booking_App.Models.RoomBooking>
 
-@{
-    ViewData["Title"] = "Room Bookings";
-}
+@{ ViewData["Title"] = "Room Bookings"; }
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href='~/fullcalendar/main.css' rel='stylesheet' />
+
 
 </head>
 <body class="align-items-center text-center justify-content-center">
 
+    <h1 class="mb-4">Room Bookings</h1>
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
 
-    <h3>Room Bookings</h3>
-    <section style="background-color: rgb(250, 250, 250);display: block;" class="px-5 py-2 my-3">
-
-        <h4>
-            <a asp-action="Create">Book a Room</a>
+        <h4 class="text-left">
+            <a asp-action="Create" class="btn btn-primary">Book a Room</a>
         </h4>
         <form asp-action="Index" method="get">
+
+            <div id='calendar'></div>
+
             <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
             <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-            <div class="form-horizontal align-items-start text-left justify-content-start">
+            <div class="form-horizontal align-items-start text-left justify-content-start mt-3">
                 <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                     Filter/Search
                 </button>
@@ -75,12 +77,6 @@
                         <th>
                             <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
                         </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Start Time</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>End Time</b></button>
-                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -89,19 +85,13 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.StartDate)
+                                @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Room.RoomName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.User.FullName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StartTime.TwelveHourTimeSummary)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EndTime.TwelveHourTimeSummary)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
@@ -119,11 +109,66 @@
 @section Scripts {
     <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
-       // Refresh DDL of available rooms when Area is changed
+        // Refresh DDL of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
             var selectedRoomGroup = $("#RoomGroupID").val();
             var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
             refreshDDL('RoomID', URL, true, "All Rooms", true, "All Rooms", true);
         });
     </script>
+    <script src='~/fullcalendar/main.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var rooms = @Html.Raw(ViewBag.RoomList);
+            var bookings = @Html.Raw(ViewBag.BookingList);
+
+            console.log(bookings);
+
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                initialDate: new Date(),
+                editable: false,
+                selectable: false,
+                nowIndicator: true,
+                aspectRatio: 1.8,
+                scrollTime: '00:00',
+                headerToolbar: {
+                    left: 'today prev,next',
+                    center: 'title',
+                    right: 'resourceTimelineDay,resourceTimelineThreeDays,timeGridWeek,dayGridMonth'
+                },
+                initialView: 'resourceTimelineDay',
+                views: {
+                    resourceTimelineThreeDays: {
+                        type: 'resourceTimeline',
+                        duration: { days: 3 },
+                        buttonText: '3 days'
+                    }
+                },
+                resourceAreaWidth: '40%',
+                resourceAreaColumns: [
+                    {
+                        group: true,
+                        headerContent: 'Area',
+                        field: 'building'
+                    },
+                    {
+                        headerContent: 'Room',
+                        field: 'title'
+                    },
+                ],
+                resources: rooms,
+                events: bookings
+            });
+
+            calendar.render();
+        });
+
+
+    </script>
+
 }

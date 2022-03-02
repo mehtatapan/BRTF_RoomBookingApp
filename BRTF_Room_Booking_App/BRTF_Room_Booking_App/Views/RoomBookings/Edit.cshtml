@@ -1,8 +1,6 @@
 ﻿@model BRTF_Room_Booking_App.Models.RoomBooking
 
-@{
-    ViewData["Title"] = "Edit Booking";
-}
+@{ ViewData["Title"] = "Edit Booking"; }
 
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
@@ -10,9 +8,9 @@
 
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
 
-    <h3>Edit</h3>
+    <h1 class="mb-4">Edit</h1>
 
-    <section style="background-color: rgb(250, 250, 250);display: block;" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
             <h4>Edit your Booking</h4>
         </div>
@@ -23,7 +21,7 @@
                     <div class="row form-group">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="UserID" class="label">Full Name:</label>
+                            <label asp-for="UserID" class="label">Full Name: *</label>
                         </div>
                         <div class="col-10">
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
@@ -40,32 +38,36 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="StartDate" class="label">Start:</label>
+                            <label asp-for="StartDate" class="label">Start: *</label>
                         </div>
                         <div class="col-5">
                             <input asp-for="StartDate" class="form-control" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
-                        <div class="col-5">
-                            <select asp-for="StartTimeID" class="form-control" asp-items="ViewBag.StartTimeID"></select>
-                            <span asp-validation-for="StartTimeID" class="text-danger"></span>
-                        </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="EndDate" class="label">End:</label>
+                            <label asp-for="EndDate" class="label">End: *</label>
                         </div>
                         <div class="col-5">
-                            <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />@* Note: This end date is only used as a display. It does not save data *@
-                        </div>
-                        <div class="col-5">
-                            <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID"></select>
-                            <span asp-validation-for="EndTimeID" class="text-danger"></span>
+                            <input asp-for="EndDate" class="form-control" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
+                        <div class="col-1 text-right" style="padding:0px">
+                            <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="To add a Room to your Booking, first select the Area. You will then be able to select the desired Room in that Area from the Dropdown below.">
+                                <img src="~/img/questionmark.png" width="30" height="30" />
+                            </button>
+                        </div>
+                        <div class="col-11 text-left" style="padding-top:5px">
+                            <h5>Select a Room:</h5>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="RoomGroupID" class="label">Area:</label>
+                            <label for="RoomGroupID" class="label"><strong>Area: *</strong></label>
                         </div>
                         <div class="col-10">
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
@@ -73,7 +75,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="RoomID" class="label">Room:</label>
+                            <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
                         </div>
                         <div class="col-10">
                             <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
@@ -97,35 +99,18 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
-        // Reload certain input fields when page loads
-        $(document).ready(function () {
-            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
-            var date = $('#StartDate')[0].valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-        });
         // Refresh DDL of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
             var selectedRoomGroup = $("#RoomGroupID").val();
             var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
             refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
         });
-        // Update non-repeat end date display when Start Date is changed
-        // (Note: This end date is only used as a display. It does not save data)
-        $('#StartDate').change(function () {
-            var date = this.valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-        });
-        // Update non-repeat end date display when End Time is changed
-        // (Note: This end date is only used as a display. It does not save data)
-        $('#EndTimeID').change(function () {
-            var date = $('#StartDate')[0].valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-        });
+
     </script>
+    <script tye="text/javascript">
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+
 }

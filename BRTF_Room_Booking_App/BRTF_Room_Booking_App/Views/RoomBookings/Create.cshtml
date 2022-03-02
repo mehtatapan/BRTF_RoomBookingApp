@@ -14,7 +14,7 @@
                 <form asp-action="Create">
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="UserID" class="control-label">Full Name:</label>
+                            <label asp-for="UserID" class="control-label"><strong>Full Name: *</strong></label>
                         </div>
                         <div class="col-10">
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
@@ -23,7 +23,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="SpecialNotes" class="control-label">Special Notes:</label>
+                            <label asp-for="SpecialNotes" class="control-label"><strong>Special Notes:</strong></label>
                         </div>
                         <div class="col-10">
                             <textarea asp-for="SpecialNotes" class="form-control"></textarea>
@@ -32,62 +32,84 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="StartDate" class="control-label">Start:</label>
+                            <label asp-for="StartDate" class="control-label"><strong>Start: *</strong></label>
                         </div>
                         <div class="col-5">
-                            <input asp-for="StartDate" class="form-control" />
+                            <input textmode="DateTime" asp-for="StartDate" class="form-control" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
-                        <div class="col-5">
-                            <select asp-for="StartTimeID" class="form-control" asp-items="ViewBag.StartTimeID"></select>
-                            <span asp-validation-for="StartTimeID" class="text-danger"></span>
-                        </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="EndDate" class="control-label">End:</label>
+                            <label asp-for="EndDate" class="control-label"><strong>End: *</strong></label>
                         </div>
                         <div class="col-5">
-                            <input type="date" id="EndDate" name="EndDate" class="form-control" disabled />@* Note: This end date is only used as a display. It does not save data *@
-                        </div>
-                        <div class="col-5">
-                            <select asp-for="EndTimeID" class="form-control" asp-items="ViewBag.EndTimeID"></select>
-                            <span asp-validation-for="EndTimeID" class="text-danger"></span>
+                            <input textmode="DateTime" asp-for="EndDate" class="form-control" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
+                        <div class="col-1 text-right" style="padding:0px">
+                            <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="To add a Room to your Booking, first select the Area. You will then be able to select the desired Room in that Area from the Dropdown below.">
+                                <img src="~/img/questionmark.png" width="30" height="30" />
+                            </button>
+                        </div>
+                        <div class="col-11 text-left" style="padding-top:5px">
+                            <h5>Select a Room:</h5>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="RoomGroupID" class="control-label">Area:</label>
+                            <label for="RoomGroupID" class="label"><strong>Area: *</strong></label>
                         </div>
                         <div class="col-10">
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-6">
-                            <label for="selectedOptions" class="control-label"> Current Rooms to Book</label> <button type="button" title="Remove Rooms from Booking" id="btnRight" class="btn btn-danger btn-sm">
-                                <strong>➖</strong>
-                            </button>
-                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
-                            <span asp-validation-for="RoomID" class="text-danger"></span>
+                        <div class="col-2 text-right pt-2">
+                            <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
                         </div>
-                        <div class="col-md-6">
-                            <label for="availOptions" class="control-label"> Add Rooms to Booking</label> <button type="button" title="Add Rooms to Booking" id="btnLeft" class="btn btn-success btn-sm">
-                                <strong>➕</strong>
-                            </button>
-                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                        <div class="col-10">
+                            <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                            <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
                     </div>
 
-                    <div>
-                        <label for="chkRepeat" class="control-label">Repeat?</label>
-                        <input type="checkbox" id="chkRepeat" name="chkRepeat" class="control-label" @Html.Raw(ViewBag.chkRepeat) data-toggle="collapse" data-target="#collapseRepeat" aria-expanded="false" aria-controls="collapseRepeat" />
+                    <!-- Once Identity is implemented, only show this section if the user is an Admin -->
+                    @*<div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="selectedOptions" class="control-label"><strong>Current Rooms to Book</strong></label> <button type="button" title="Remove Rooms from Booking" id="btnRight" class="btn btn-danger btn-sm">
+                                    <strong>➖</strong>
+                                </button>
+                                @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                                <span asp-validation-for="RoomID" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="availOptions" class="control-label"><strong>Add Rooms to Booking</strong></label> <button type="button" title="Add Rooms to Booking" id="btnLeft" class="btn btn-success btn-sm">
+                                    <strong>➕</strong>
+                                </button>
+                                @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                            </div>
+                        </div>*@
+
+                    <div class="row form-group">
+                        <div class="col-1 text-right" style="padding:0px">
+                            <button type="button" title="Repeating Bookings Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="If you want your Booking to be repeated regularly, click this checkbox. You can then select how frequently you would like the Booking to occur. You may choose to repeat bookings every x Days or Weeks until your chosen Repeat End Date, and specify the days of the week on which it should be booked.">
+                                <img src="~/img/questionmark.png" width="30" height="30" />
+                            </button>
+                        </div>
+                        <div class="col-11 text-left" style="padding-top:5px">
+                            <label for="chkRepeat" class="control-label" style="font-size: 1.25rem; font-weight: 500;"><strong>Repeat?</strong></label>
+                            <input type="checkbox" id="chkRepeat" name="chkRepeat" class="control-label" @Html.Raw(ViewBag.chkRepeat) data-toggle="collapse" data-target="#collapseRepeat" aria-expanded="false" aria-controls="collapseRepeat" />
+                        </div>
                     </div>
                     <div class="collapse @(ViewData["RepeatContainer"])" id="collapseRepeat">
                         <div class="container">
                             <div class="row">
                                 <div class="col-2 text-right">
-                                    <label for="RepeatInterval" class="control-label">Every:</label>
+                                    <label for="RepeatInterval" class="control-label"><strong>Every:</strong></label>
                                 </div>
                                 <div class="col-5">
                                     <input type="number" id="RepeatInterval" name="RepeatInterval" step="1" min="1" value="@(ViewData["RepeatInterval"])" class="form-control" />
@@ -148,7 +170,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-2 text-right pt-2">
-                                        <label for="RepeatEndDate" class="control-label">Repeat End Date:</label>
+                                        <label for="RepeatEndDate" class="control-label"><strong>Repeat End Date:</strong></label>
                                     </div>
                                     <div class="col-5">
                                         <input type="date" id="RepeatEndDate" name="RepeatEndDate" value="@(ViewData["RepeatEndDate"])" class="form-control" />
@@ -171,15 +193,30 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/multiselect.js"></script>
     <script src="~/js/refreshListbox.js"></script>
+    <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
-        // Reload certain input fields when page loads
-        $(document).ready(function () {
-            // Fill end date display field. (Note: This end date is only used as a display. It does not save data)
-            var date = $('#StartDate')[0].valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
+        // Refresh DDL of available rooms when Area is changed
+        $('#RoomGroupID').change(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
+            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
         });
+    </script>
+    <script>
+        $('document').ready(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
+            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
+        });
+
+    </script>
+    <script tye="text/javascript">
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+    <script type="text/javascript">
+
         // Refresh Listbox of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
             var selectedRoomGroup = $("#RoomGroupID").val();
@@ -187,21 +224,6 @@
             $("#selectedOptions").empty();  // Empty previously selected rooms because the area changed
             refreshListbox('availOptions', URL, true, 'There are no Rooms available in this Area.', true);
         });
-        // Update non-repeat end date display when Start Date is changed
-        // (Note: This end date is only used as a display. It does not save data)
-        $('#StartDate').change(function () {
-            var date = this.valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-        });
-        // Update non-repeat end date display when End Time is changed
-        // (Note: This end date is only used as a display. It does not save data)
-        $('#EndTimeID').change(function () {
-            var date = $('#StartDate')[0].valueAsDate;
-            if ($("#EndTimeID option:selected").text().toLowerCase().includes("end"))
-                date.setDate(date.getDate() + 1);
-            $('#EndDate')[0].valueAsDate = date;
-        });
+
     </script>
 }

@@ -560,11 +560,10 @@ namespace BRTF_Room_Booking_App.Data
                             // Construct Room Booking details
                             RoomBooking roomBooking = new RoomBooking()
                             {
-                                StartDate = DateTime.Today.AddDays((i + 1) * (j + 1)),
+                                StartDate = DateTime.Now.AddDays((i + 1) * (j + 1)),
+                                EndDate = DateTime.Now.AddDays((i + 1) * (j + 1)).AddHours(random.Next(1, 3)),
                                 RoomID = roomIDs[i],
                                 UserID = userIDs[random.Next(userIDCount)],
-                                StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12).ID,
-                                EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13).ID
                             };
                             context.RoomBookings.Add(roomBooking);
                             try
@@ -944,65 +943,6 @@ namespace BRTF_Room_Booking_App.Data
                             context.SaveChanges();
                         }
                     }
-                }
-
-                // Seed Booking Times
-                if (!context.BookingTimes.Any())
-                {
-                    var bookingTimes = new List<BookingTime>
-                    {
-                        new BookingTime { MilitaryTimeHour = 0, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 0, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 1, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 1, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 2, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 2, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 3, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 3, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 4, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 4, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 5, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 5, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 6, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 6, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 7, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 7, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 8, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 8, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 9, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 9, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 10, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 10, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 11, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 11, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 12, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 12, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 13, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 13, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 14, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 14, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 15, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 15, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 16, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 16, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 17, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 17, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 18, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 18, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 19, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 19, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 20, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 20, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 21, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 21, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 22, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 22, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 23, MilitaryTimeMinute = 0 },
-                        new BookingTime { MilitaryTimeHour = 23, MilitaryTimeMinute = 30 },
-                        new BookingTime { MilitaryTimeHour = 24, MilitaryTimeMinute = 0 }
-                    };
-                    context.BookingTimes.AddRange(bookingTimes);
-                    context.SaveChanges();
                 }
             }
         }
