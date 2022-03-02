@@ -8,20 +8,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BookingTimes",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    MilitaryTimeHour = table.Column<int>(nullable: false),
-                    MilitaryTimeMinute = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookingTimes", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GlobalSettings",
                 columns: table => new
                 {
@@ -176,30 +162,17 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     SpecialNotes = table.Column<string>(maxLength: 1000, nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
                     RoomID = table.Column<int>(nullable: false),
-                    UserID = table.Column<int>(nullable: false),
-                    StartTimeID = table.Column<int>(nullable: false),
-                    EndTimeID = table.Column<int>(nullable: false)
+                    UserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RoomBookings", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_RoomBookings_BookingTimes_EndTimeID",
-                        column: x => x.EndTimeID,
-                        principalTable: "BookingTimes",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_RoomBookings_Rooms_RoomID",
                         column: x => x.RoomID,
                         principalTable: "Rooms",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RoomBookings_BookingTimes_StartTimeID",
-                        column: x => x.StartTimeID,
-                        principalTable: "BookingTimes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -211,25 +184,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingTimes_MilitaryTimeHour_MilitaryTimeMinute",
-                table: "BookingTimes",
-                columns: new[] { "MilitaryTimeHour", "MilitaryTimeMinute" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomBookings_EndTimeID",
-                table: "RoomBookings",
-                column: "EndTimeID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoomBookings_RoomID",
                 table: "RoomBookings",
                 column: "RoomID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomBookings_StartTimeID",
-                table: "RoomBookings",
-                column: "StartTimeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoomBookings_UserID",
@@ -298,9 +255,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             migrationBuilder.DropTable(
                 name: "RoomUserGroupPermissions");
-
-            migrationBuilder.DropTable(
-                name: "BookingTimes");
 
             migrationBuilder.DropTable(
                 name: "Rooms");

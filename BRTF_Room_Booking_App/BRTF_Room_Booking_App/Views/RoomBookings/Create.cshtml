@@ -67,6 +67,8 @@
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                         </div>
                     </div>
+                    @if (User.IsInRole("User"))
+                    {
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
                             <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
@@ -76,24 +78,27 @@
                             <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
                     </div>
+                    }
 
                     <!-- Once Identity is implemented, only show this section if the user is an Admin -->
-                    @*<div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="selectedOptions" class="control-label"><strong>Current Rooms to Book</strong></label> <button type="button" title="Remove Rooms from Booking" id="btnRight" class="btn btn-danger btn-sm">
-                                    <strong>➖</strong>
-                                </button>
-                                @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
-                                <span asp-validation-for="RoomID" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="availOptions" class="control-label"><strong>Add Rooms to Booking</strong></label> <button type="button" title="Add Rooms to Booking" id="btnLeft" class="btn btn-success btn-sm">
-                                    <strong>➕</strong>
-                                </button>
-                                @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
-                            </div>
-                        </div>*@
-
+                    @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                    {
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label for="selectedOptions" class="control-label"><strong>Current Rooms to Book</strong></label> <button type="button" title="Remove Rooms from Booking" id="btnRight" class="btn btn-danger btn-sm">
+                                <strong>➖</strong>
+                            </button>
+                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                            <span asp-validation-for="RoomID" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="availOptions" class="control-label"><strong>Add Rooms to Booking</strong></label> <button type="button" title="Add Rooms to Booking" id="btnLeft" class="btn btn-success btn-sm">
+                                <strong>➕</strong>
+                            </button>
+                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                        </div>
+                    </div>
+                    }
                     <div class="row form-group">
                         <div class="col-1 text-right" style="padding:0px">
                             <button type="button" title="Repeating Bookings Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="If you want your Booking to be repeated regularly, click this checkbox. You can then select how frequently you would like the Booking to occur. You may choose to repeat bookings every x Days or Weeks until your chosen Repeat End Date, and specify the days of the week on which it should be booked.">

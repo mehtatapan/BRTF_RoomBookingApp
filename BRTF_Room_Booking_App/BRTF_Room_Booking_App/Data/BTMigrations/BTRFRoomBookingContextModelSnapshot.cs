@@ -16,26 +16,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.22");
 
-            modelBuilder.Entity("BRTF_Room_Booking_App.Models.BookingTime", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MilitaryTimeHour")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MilitaryTimeMinute")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("MilitaryTimeHour", "MilitaryTimeMinute")
-                        .IsUnique();
-
-                    b.ToTable("BookingTimes");
-                });
-
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.GlobalSetting", b =>
                 {
                     b.Property<int>("ID")
@@ -102,8 +82,8 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EndTimeID")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
@@ -115,19 +95,12 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StartTimeID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("UserID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EndTimeID");
-
                     b.HasIndex("RoomID");
-
-                    b.HasIndex("StartTimeID");
 
                     b.HasIndex("UserID");
 
@@ -305,21 +278,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.RoomBooking", b =>
                 {
-                    b.HasOne("BRTF_Room_Booking_App.Models.BookingTime", "EndTime")
-                        .WithMany("BookingsEndingWithThisTime")
-                        .HasForeignKey("EndTimeID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("BRTF_Room_Booking_App.Models.Room", "Room")
                         .WithMany("RoomBookings")
                         .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BRTF_Room_Booking_App.Models.BookingTime", "StartTime")
-                        .WithMany("BookingsStartingWithThisTime")
-                        .HasForeignKey("StartTimeID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

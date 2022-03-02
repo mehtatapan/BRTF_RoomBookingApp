@@ -2460,3 +2460,4 @@ C:\Users\DT\Desktop\Working\BulkDeletion\PROG1440-Prototype_2\BRTF_Room_Booking_
 C:\Users\DT\Desktop\Working\BulkDeletion\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\DT\Desktop\Working\BulkDeletion\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
 C:\Users\DT\Desktop\Working\BulkDeletion\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Users\DeleteBulk.cshtml.g.cs
+C:\Users\DT\Desktop\Working\New folder\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Users\DeleteBulk.cshtml.g.cs
