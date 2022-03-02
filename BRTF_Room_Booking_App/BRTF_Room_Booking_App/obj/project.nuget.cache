@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5GBILEsw/8xm2HnVhjMZrkfbRkuUFCsYf7OHTq7XD+7VXdfmCJopKQ+ucmK145TVM/1Q+RYaoT9QOPAnDpv8pg==",
+  "dgSpecHash": "I4H7cYU0mGwXLX2xBpHdZPNSLCuL1D5bDoO8Q2Gh+dqoCAZOjYwdsV9q7fjONaw61+Ef60jESEozsQoZogmqsA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\DT\\Desktop\\Working\\New folder (5)\\PROG1440-Prototype_2\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App.csproj",
+  "projectFilePath": "C:\\Users\\DT\\Desktop\\Working\\BulkDeletion\\PROG1440-Prototype_2\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DT\\.nuget\\packages\\epplus\\4.5.3.3\\epplus.4.5.3.3.nupkg.sha512",
     "C:\\Users\\DT\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.21\\microsoft.aspnetcore.cryptography.internal.3.1.21.nupkg.sha512",

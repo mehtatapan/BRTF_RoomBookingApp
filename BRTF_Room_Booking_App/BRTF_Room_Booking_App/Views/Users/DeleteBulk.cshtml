@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Bulk Delete Users";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
+<h1>Bulk Delete Users</h1>
+
+<div>
+    <h4>Select Roles and User Groups to delete Users from:</h4>
+    <hr />
+    <form asp-action="DeleteBulk">
+        <div class="container-white">
+            <div class="form-group">
+                <label class="control-label"><b>Select Roles to delete Users from:</b></label>
+                <div class="col-md-offset-1">
+                    <table>
+                        <tr>
+                            @{
+                                int rCount = 0;
+                                List<BRTF_Room_Booking_App.ViewModels.CheckOptionVM> rCheckboxes = ViewBag.RoleOptions;
+                                foreach (var checkbox in rCheckboxes)
+                                {
+                                    if (rCount++ % 3 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedRoles"
+                                               value="@checkbox.DisplayText"
+                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
+                                        @checkbox.DisplayText @:&nbsp;&nbsp;
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"><b>Select Groups to delete Users from:</b></label>
+                    <div class="col-md-offset-1">
+                        <table>
+                            <tr>
+                                @{
+                                    int gCount = 0;
+                                    List<BRTF_Room_Booking_App.ViewModels.CheckOptionVM> gCheckboxes = ViewBag.GroupOptions;
+                                    foreach (var checkbox in gCheckboxes)
+                                    {
+                                        if (gCount++ % 3 == 0)
+                                        {
+                                        @:</tr><tr>
+                                        }
+                                        @:<td>
+                                            <input type="checkbox"
+                                                   name="selectedGroups"
+                                                   value="@checkbox.ID"
+                                                   @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
+                                            @checkbox.DisplayText @:&nbsp;&nbsp;
+                                        @:</td>
+                                    }
+                                @:</tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <input type="checkbox"
+                           name="selectAll"
+                           value="Select All"
+                           onClick="selectAllCheckboxes(this)" />
+                    <b>Select All&nbsp;&nbsp;</b>
+                </div>
+        <input type="submit" value="Delete Selected" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        function selectAllCheckboxes(source) {
+            checkboxesRoles = document.getElementsByName('selectedRoles');
+            for (var i = 0, n = checkboxesRoles.length; i < n; i++) {
+                checkboxesRoles[i].checked = source.checked;
+            }
+            checkboxesGroups = document.getElementsByName('selectedGroups');
+            for (var i = 0, n = checkboxesGroups.length; i < n; i++) {
+                checkboxesGroups[i].checked = source.checked;
+            }
+        }
+    </script>
+}

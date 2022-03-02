@@ -10,7 +10,7 @@
 {
     <br />
     <div class="alert">
-        <strong>Success! </strong>@TempData["AlertMessage"]
+        @Html.Raw(TempData["AlertMessage"])
     </div>
     <br />
 }
@@ -23,23 +23,45 @@
     <br />
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label class="control-label">Upload XLSX/CSV File:</label>
-        <input type="file" class="" name="theExcel" /><br />
-        <a asp-action="DownloadExampleExcel">Download Example Spreadsheet</a><br />
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New User</a>
+        </p>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="submit" value="Upload Data" class="btn btn-primary" />
+    <div class="col-md-6">
+        <button class="btn btn-outline-primary" type="button" data-toggle="collapse" id="bulkToggle" data-target="#collapseBulk" aria-expanded="false" aria-controls="collapseBulk">
+            Bulk Actions
+        </button>
+    </div>
+</div>
+<div class="collapse" id="collapseBulk">
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <h4>Update Users from XLSX/CSV File:</h4>
+                        <label class="control-label">Upload XLSX/CSV File:</label>
+                        <input type="file" class="" name="theExcel" /><br />
+                        <a asp-action="DownloadExampleExcel">(Download Example File)</a><br />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" value="Upload File" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h4>Bulk Delete Users:</h4><br />
+                <a asp-action="DeleteBulk" class="btn btn-danger">Select Groups to Delete</a>
             </div>
         </div>
     </div>
-</form>
+</div>
 <hr />
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
