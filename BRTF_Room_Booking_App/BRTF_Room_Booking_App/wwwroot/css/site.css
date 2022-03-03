@@ -21,25 +21,6 @@ header {
     left: 3.5%;
 }
 
-
-.caption {
-    background-color: #fff;
-    opacity: 0.8;
-    padding: 19%;
-    position: absolute;
-    top: 57%;
-    left: 22%;
-}
-
-.caption-2 {
-    background-color: #fff;
-    opacity: 0.8;
-    padding: 27% 19%;
-    position: absolute;
-    top: 17%;
-    left: 23%;
-}
-
 .navbar{
     padding-left:0px
 }
