@@ -5,10 +5,10 @@
 }
 
 <h1>Room Groups</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary m-4">Add New Room Group</a>
 </p>
+<section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
 <form asp-action="Index" method="get">
     <table class="table">
         <thead>
@@ -39,9 +39,9 @@
                         @Html.DisplayFor(modelItem => item.Enabled)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Delete</a>
                     </td>
                 </tr>
             }
@@ -49,3 +49,4 @@
     </table>
     <partial name="_PagingNavBar" />
 </form>
+</section>

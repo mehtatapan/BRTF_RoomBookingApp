@@ -26,7 +26,7 @@
 <div class="row">
     <div class="col-md-6">
         <p>
-            <a asp-action="Create" class="btn btn-primary">Create New User</a>
+            <a asp-action="Create" class="btn btn-primary">Add New User</a>
         </p>
     </div>
     <div class="col-md-6">
@@ -35,6 +35,7 @@
         </button>
     </div>
 </div>
+
 <div class="collapse" id="collapseBulk">
     <div class="card card-body bg-light">
         <div class="row">
@@ -43,14 +44,15 @@
                     <div class="form-group">
                         <h4>Update Users from XLSX/CSV File:</h4>
                         <label class="control-label">Upload XLSX/CSV File:</label>
-                        <input type="file" class="" name="theExcel" /><br />
-                        <a asp-action="DownloadExampleExcel">(Download Example File)</a><br />
+                        <input type="file" class="" name="theExcel"/><br />
+                        <div class="form-group">
+                                <input type="submit" value="Upload File" class="btn btn-primary my-2" />
+                            </div>
+                        <a asp-action="DownloadExampleExcel" class="btn btn-primary my-2">Download Example File</a><br/>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="submit" value="Upload File" class="btn btn-primary" />
-                            </div>
+                            
                         </div>
                     </div>
                 </form>
@@ -62,12 +64,12 @@
         </div>
     </div>
 </div>
-<hr />
+<section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
-        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+        <button class="btn btn-outline-secondary mb-3 mt-2" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
         </button>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
@@ -128,9 +130,9 @@
                         @Html.DisplayFor(modelItem => item.TermAndProgram.UserGroup.UserGroupName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn btn-primary mx-2" style="width:75px;">Delete</a>
                     </td>
                 </tr>
             }
@@ -138,3 +140,4 @@
     </table>
     <partial name="_PagingNavBar" />
 </form>
+</section>
