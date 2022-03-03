@@ -10,11 +10,15 @@
 
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
 
+    <br />
     <h1 class="mb-4">Details</h1>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
+            <br />
             <h4>Your Booking</h4>
+            <br />
         </div>
         <div class="container">
 
@@ -69,10 +73,12 @@
                 </div>
             </div>
         </div>
+        <br />
         <div class="form-group mt-3">
             <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
             <a asp-action="Index" role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
         </div>
+        <br />
     </section>
 </body>
 @section Scripts {
