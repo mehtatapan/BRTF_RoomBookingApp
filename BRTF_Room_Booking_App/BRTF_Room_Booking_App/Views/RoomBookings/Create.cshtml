@@ -8,7 +8,9 @@
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
+            <br />
             <h4>Create New Booking</h4>
+            <br />
         </div>
         <div>
             <div class="container">
@@ -50,6 +52,7 @@
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
+                    <br />
                     <div class="row form-group">
                         <div class="col-1 text-right" style="padding:0px">
                             <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="To add a Room to your Booking, first select the Area. You will then be able to select the desired Room in that Area from the Dropdown below.">
@@ -101,6 +104,7 @@
                             </div>
                         </div>
                     }
+                    <br />
                     <div class="row form-group">
                         <div class="col-1 text-right" style="padding:0px">
                             <button type="button" title="Repeating Bookings Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="If you want your Booking to be repeated regularly, click this checkbox. You can then select how frequently you would like the Booking to occur. You may choose to repeat bookings every x Days or Weeks until your chosen Repeat End Date, and specify the days of the week on which it should be booked.">
@@ -187,10 +191,12 @@
                         </div>
                     </div>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <br />
                     <div class="form-group mt-3">
                         <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
                         <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
                     </div>
+                    <br />
                 </form>
             </div>
         </div>
