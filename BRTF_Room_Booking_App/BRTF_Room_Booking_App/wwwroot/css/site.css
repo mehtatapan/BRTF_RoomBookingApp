@@ -52,8 +52,9 @@ a.navbar-brand {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #2A6BA0;
+    background: #2F7DBB;
+    color: #E4E6E6;
+    font-weight: 400;
     border-color: #1861ac;
 }
 
