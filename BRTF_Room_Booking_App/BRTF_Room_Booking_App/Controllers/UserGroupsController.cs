@@ -27,6 +27,7 @@ namespace BRTF_Room_Booking_App.Controllers
             // IQueryable<> so we can add filter and sort 
             // options later.
             var userGroups = from u in _context.UserGroups
+                             .Include(r => r.RoomUserGroupPermissions).ThenInclude(r => r.RoomGroup)
                              select u;
 
             //Handle Paging
@@ -47,6 +48,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var userGroup = await _context.UserGroups
+                .Include(r => r.RoomUserGroupPermissions).ThenInclude(r => r.RoomGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (userGroup == null)
@@ -169,6 +171,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             var userGroup = await _context.UserGroups
+                .Include(r => r.RoomUserGroupPermissions).ThenInclude(r => r.RoomGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (userGroup == null)
@@ -184,7 +187,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userGroup = await _context.UserGroups.FindAsync(id);
+            var userGroup = await _context.UserGroups
+                .Include(r => r.RoomUserGroupPermissions).ThenInclude(r => r.RoomGroup)
+                .FirstOrDefaultAsync(m => m.ID == id);
             try
             {
                 _context.UserGroups.Remove(userGroup);

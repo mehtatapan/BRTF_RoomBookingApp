@@ -97,7 +97,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         column: x => x.RoomGroupID,
                         principalTable: "RoomGroups",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RoomUserGroupPermissions_UserGroups_UserGroupID",
                         column: x => x.UserGroupID,

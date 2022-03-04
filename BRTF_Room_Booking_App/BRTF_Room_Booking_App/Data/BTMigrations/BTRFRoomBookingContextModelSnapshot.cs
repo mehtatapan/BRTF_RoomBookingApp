@@ -296,7 +296,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.HasOne("BRTF_Room_Booking_App.Models.RoomGroup", "RoomGroup")
                         .WithMany("RoomUserGroupPermissions")
                         .HasForeignKey("RoomGroupID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BRTF_Room_Booking_App.Models.UserGroup", "UserGroup")
