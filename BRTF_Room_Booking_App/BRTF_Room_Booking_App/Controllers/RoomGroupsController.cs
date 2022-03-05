@@ -21,10 +21,37 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: RoomGroups
-        public async Task<IActionResult> Index(int? page, int? pageSizeID)
+        public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID,
+            string actionButton, string sortDirection = "asc", string sortField = "Area Name", string EnabledFilterString = "True")
         {
-            var roomGroups = from u in _context.RoomGroups
+            var roomGroups = from u in _context.RoomGroups.Where(u=> 
+            (u.Enabled == true && EnabledFilterString == "True")||(u.Enabled == false && EnabledFilterString == "False")||(EnabledFilterString == "All"))
                              select u;
+
+            //  Filtering
+            if (EnabledFilterString != "")
+            {
+                ViewData["Filtering"] = " show ";
+            }
+            if (!String.IsNullOrEmpty(SearchName))
+            {
+                roomGroups = roomGroups.Where(r => r.AreaName.ToUpper().Contains(SearchName.ToUpper()));
+                ViewData["Filtering"] = " show ";
+            }
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
+            {
+                if (actionButton != "Filter")//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+            }
+
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
@@ -200,6 +227,16 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
             return View(roomGroup);
+        }
+        private SelectList EnabledSelectList(int? selectedId)
+        {
+            return new SelectList(_context.RoomGroups
+                .OrderBy(u => u.Enabled), "ID", "Enabled", selectedId);
+        }
+
+        private void PopulateDropDownLists(RoomGroup roomGroup = null)
+        {
+            ViewData["Enabled"] = EnabledSelectList(roomGroup?.ID);
         }
 
         private string ControllerName()

@@ -22,7 +22,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: Rooms
         public async Task<IActionResult> Index(string SearchRoom, int? RoomGroupID, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Room")
+            string actionButton, string sortDirection = "asc", string sortField = "Room", string EnabledFilterString = "True")
         {
             //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered initially
@@ -33,11 +33,16 @@ namespace BRTF_Room_Booking_App.Controllers
             // IQueryable<> so we can add filter and sort 
             // options later.
             var rooms = from t in _context.Rooms
-                .Include(t => t.RoomGroup)
+                .Include(t => t.RoomGroup).Where(t =>
+            (t.Enabled == true && EnabledFilterString == "True") || (t.Enabled == false && EnabledFilterString == "False") || (EnabledFilterString == "All"))
                 .AsNoTracking()
-                select t;
+                        select t;
 
             //  Filtering
+            if (EnabledFilterString != "")
+            {
+                ViewData["Filtering"] = " show ";
+            }
             if (RoomGroupID.HasValue)
             {
                 rooms = rooms.Where(r => r.RoomGroupID == RoomGroupID);
@@ -303,9 +308,18 @@ namespace BRTF_Room_Booking_App.Controllers
             return new SelectList(_context.RoomGroups
                 .OrderBy(u => u.AreaName), "ID", "AreaName", selectedId);
         }
+
+        private SelectList EnabledSelectList(int? selectedId)
+        {
+            return new SelectList(_context.RoomGroups
+                .OrderBy(u => u.Enabled), "ID", "Enabled", selectedId);
+        }
+
         private void PopulateDropDownLists(Room room = null)
         {
             ViewData["RoomGroupID"] = RoomGroupSelectList(room?.RoomGroupID);
+            ViewData["Enabled"] = EnabledSelectList(room?.RoomGroup.ID);
+
         }
 
         private string ControllerName()
