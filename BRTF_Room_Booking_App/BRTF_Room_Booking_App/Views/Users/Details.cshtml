@@ -5,74 +5,80 @@
 }
 
 <head>
-    <link rel="stylesheet" href="~/css/style.css"/>
+    <link rel="stylesheet" href="~/css/style.css" />
 </head>
 
-<h1>Details</h1>
+<body style="background-color:#E4E6E6" class="justify-content-left">
+    <h1 class="mb-4">User Details</h1>
 
-<div>
-    <h4>User</h4>
-    <hr />
-    <div class="container-white">
-        <dl class="row">
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.Username)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.Username)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.FirstName)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.FirstName)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.MiddleName)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.MiddleName)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.LastName)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.LastName)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.EmailBookingNotifications)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.EmailCancelNotifications)
-            </dd>
-            <dt class="col-sm-5">
-                @Html.DisplayNameFor(model => model.TermAndProgram)
-            </dt>
-            <dd class="col-sm-7">
-                @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
-            </dd>
-            <dt class="col-sm-5">
-                Role
-            </dt>
-            <dd class="col-sm-7">
-                @ViewBag.Role
-            </dd>
-        </dl>
-    </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        <div>
+            <br />
+            <h4>User Details</h4>
+            <br />
+        </div>
+        <div>
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Username)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Username)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.MiddleName)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.MiddleName)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.EmailBookingNotifications)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.EmailCancelNotifications)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.TermAndProgram)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
+                </dd>
+                <dt class="col-sm-6">
+                    Role
+                </dt>
+                <dd class="col-sm-6">
+                    @ViewBag.Role
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
+            <a asp-action="Index" role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
+        </div>
+    </section>
+</body>
+

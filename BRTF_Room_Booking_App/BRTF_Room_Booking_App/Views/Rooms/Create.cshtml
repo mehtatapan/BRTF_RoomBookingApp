@@ -3,43 +3,52 @@
 
 @{ ViewData["Title"] = "Create Room"; }
 
-<h1>Create</h1>
+<body style="background-color:#E4E6E6" class="justify-content-left">
+    <h1 class="mb-4">Create Room</h1>
 
-<h4>Room</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <div class="colform-group">
-                    <label asp-for="RoomGroupID" class="control-label">Area:</label>
-                    <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
-                </div>
-                <label asp-for="RoomName" class="control-label"></label>
-                <input asp-for="RoomName" class="form-control" />
-                <span asp-validation-for="RoomName" class="text-danger"></span>
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        <div>
+            <br />
+            <h4>Create New Room</h4>
+            <br />
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="colform-group">
+                            <strong><label asp-for="RoomGroupID" class="control-label">Area:</label></strong>
+                            <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
+                            </div>
+                        <div>
+                            <strong><label asp-for="RoomName" class="control-label"></label></strong>
+                            <input asp-for="RoomName" class="form-control" />
+                            <span asp-validation-for="RoomName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="RoomMaxHoursTotal" class="control-label"></label></strong>
+                        <textarea asp-for="RoomMaxHoursTotal" class="form-control"></textarea>
+                        <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <strong>
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
+                        </label>
+                        </strong>
+                    </div>
+                    <div>
+                        <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
+                        <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="RoomMaxHoursTotal" class="control-label"></label>
-                <textarea asp-for="RoomMaxHoursTotal" class="form-control"></textarea>
-                <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    </section>
+</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

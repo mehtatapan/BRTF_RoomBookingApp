@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label class="control-label">Filter by Room:</label>
-                            @Html.DropDownList("EnabledFilterString", new List<SelectListItem> 
+                            @Html.DropDownList("EnabledFilterString", new List<SelectListItem>
                        {   new SelectListItem { Text="Show All", Value="All"},
                            new SelectListItem { Text="Show Enabled", Value="True", Selected= true},
                            new SelectListItem { Text="Show Disabled", Value="False"}
@@ -80,3 +80,10 @@
         <partial name="_PagingNavBar" />
     </form>
 </section>
+@section Scripts{
+    <script>
+        $('document').ready(function () {
+            $('#collapseFilter').collapse("hide")
+        });
+    </script>
+}

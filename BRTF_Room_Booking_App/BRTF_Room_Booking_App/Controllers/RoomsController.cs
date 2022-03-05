@@ -318,7 +318,7 @@ namespace BRTF_Room_Booking_App.Controllers
         private void PopulateDropDownLists(Room room = null)
         {
             ViewData["RoomGroupID"] = RoomGroupSelectList(room?.RoomGroupID);
-            ViewData["Enabled"] = EnabledSelectList(room?.RoomGroup.ID);
+            ViewData["Enabled"] = EnabledSelectList(room?.RoomGroupID);
 
         }
 

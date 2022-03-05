@@ -9,7 +9,7 @@
 @if (TempData["AlertMessage"] != null)
 {
     <br />
-    <div class="alert">
+    <div class="alert alert-success">
         @Html.Raw(TempData["AlertMessage"])
     </div>
     <br />
@@ -17,7 +17,7 @@
 @if (TempData["Message"] != null)
 {
     <br />
-    <div class="alert">
+    <div class="alert alert-success">
         <strong>@Html.Raw(TempData["Message"])</strong>
     </div>
     <br />

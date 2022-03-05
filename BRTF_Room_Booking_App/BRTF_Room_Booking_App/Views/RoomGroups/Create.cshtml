@@ -1,62 +1,71 @@
 ﻿@model BRTF_Room_Booking_App.Models.RoomGroup
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Room Group";
 }
+<body style="background-color:#E4E6E6" class="justify-content-left">
+    <h1 class="mb-4">Create Room Group</h1>
 
-<h1>Create</h1>
-
-<h4>RoomGroup</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        <div>
+            <br />
+            <h4>Create New Room Group</h4>
+            <br />
+        </div>
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AreaName" class="control-label"></label>
-                <input asp-for="AreaName" class="form-control" />
-                <span asp-validation-for="AreaName" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <strong><label asp-for="AreaName" class="control-label"></label></strong>
+                        <input asp-for="AreaName" class="form-control" />
+                        <span asp-validation-for="AreaName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="Description" class="control-label"></label></strong>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="BlackoutTime" class="control-label"></label></strong>
+                        <input asp-for="BlackoutTime" class="form-control" />
+                        <span asp-validation-for="BlackoutTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong><label asp-for="MaxHoursPerSingleBooking" class="control-label"></label></strong>
+                        <input asp-for="MaxHoursPerSingleBooking" class="form-control" />
+                        <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
+                        <input asp-for="MaxHoursTotal" class="form-control" />
+                        <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="MaxNumberOfBookings" class="control-label"></label></strong>
+                        <input asp-for="MaxNumberOfBookings" class="form-control" />
+                        <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <strong>
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
+                            </label>
+                        </strong>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BlackoutTime" class="control-label"></label>
-                <input asp-for="BlackoutTime" class="form-control" />
-                <span asp-validation-for="BlackoutTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxHoursPerSingleBooking" class="control-label"></label>
-                <input asp-for="MaxHoursPerSingleBooking" class="form-control" />
-                <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxHoursTotal" class="control-label"></label>
-                <input asp-for="MaxHoursTotal" class="form-control" />
-                <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxNumberOfBookings" class="control-label"></label>
-                <input asp-for="MaxNumberOfBookings" class="form-control" />
-                <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div>
+                <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
+                <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
             </div>
         </form>
-    </div>
-</div>
+    </section>
+</body>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

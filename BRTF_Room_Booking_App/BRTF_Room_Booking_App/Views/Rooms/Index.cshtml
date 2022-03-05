@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <br />
 <h1 style="text-align: center;">Rooms</h1>
 <br />
@@ -88,3 +87,10 @@
         <partial name="_PagingNavBar" />
     </form>
 </section>
+@section Scripts{
+    <script>
+        $('document').ready(function () {
+            $('#collapseFilter').collapse("hide")
+        });
+    </script>
+}

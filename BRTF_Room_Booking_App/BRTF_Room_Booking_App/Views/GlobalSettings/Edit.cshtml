@@ -1,0 +1,89 @@
+﻿@model BRTF_Room_Booking_App.Models.GlobalSetting
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["AlertMessage"])</strong>
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["Message"])</strong>
+    </div>
+    <br />
+}
+<body style="background-color:#E4E6E6" class="justify-content-left">
+
+    <h1>Edit</h1>
+    <h4>Edit Global Settings</h4>
+    <hr />
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+
+        <div class="row">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <strong><label asp-for="StartOfTermDate" class="control-label"></label></strong>
+                            <input asp-for="StartOfTermDate" class="form-control" />
+                            <span asp-validation-for="StartOfTermDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <strong><label asp-for="EndOfTermDate" class="control-label"></label></strong>
+                            <input asp-for="EndOfTermDate" class="form-control" />
+                            <span asp-validation-for="EndOfTermDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <strong><label asp-for="LatestAllowableFutureBookingDay" class="control-label"></label></strong>
+                            <input asp-for="LatestAllowableFutureBookingDay" class="form-control" />
+                            <span asp-validation-for="LatestAllowableFutureBookingDay" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong><h5>Email Settings</h5></strong>
+                        <div class="form-group form-check">
+                            <strong>
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="EmailBookingNotificationsOverride" /> @Html.DisplayNameFor(model => model.EmailBookingNotificationsOverride)
+                                </label>
+                            </strong>
+                        </div>
+                        <div class="form-group form-check">
+                            <strong>
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="PreventBookingNotificationsOverride" /> @Html.DisplayNameFor(model => model.PreventBookingNotificationsOverride)
+                                </label>
+                            </strong>
+                        </div>
+                        <div class="form-group form-check">
+                            <strong>
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="EmailCancelNotificationsOverride" /> @Html.DisplayNameFor(model => model.EmailCancelNotificationsOverride)
+                                </label>
+                            </strong>
+                        </div>
+                        <div class="form-group form-check">
+                            <strong>
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="PreventCancelNotificationsOverride" /> @Html.DisplayNameFor(model => model.PreventCancelNotificationsOverride)
+                                </label>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
