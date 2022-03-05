@@ -31,34 +31,46 @@
                             <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Create" style="color: #E4E6E6">Book a Room</a>
                         </li>
                         <li class="nav-item2">
-                            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a>
                         </li>
-                        <li class="nav-item3">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Reports" style="color: #E4E6E6">Admin Reports</a>
-                        </li>
-                        <li class="nav-item4">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a>
-                        </li>
-                        <li class="nav-item5 dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
-                                Lists<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6">Rooms</a></li>
-                                <li class="dropdown-divider"></li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                        {
+                            <li class="nav-item3">
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
+                            </li>
+                            <li class="nav-item4">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Reports" style="color: #E4E6E6">Admin Reports</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item5">
+                                <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                        {
+                            <li class="nav-item5 dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
+                                    Lists<b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6">Rooms</a></li>
+                                    <li class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="GlobalSettings" asp-action="Edit" asp-route-id="1" style="color: #E4E6E6">Global Settings</a></li>
-                            </ul>
-                        </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
