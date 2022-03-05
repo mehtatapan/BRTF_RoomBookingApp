@@ -24,10 +24,14 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: RoomGroups
         public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Area Name", string EnabledFilterString = "True")
+            string actionButton, string sortDirection = "asc", string sortField = "Area", string EnabledFilterString = "True")
         {
-            var roomGroups = from u in _context.RoomGroups.Where(u=> 
-            (u.Enabled == true && EnabledFilterString == "True")||(u.Enabled == false && EnabledFilterString == "False")||(EnabledFilterString == "All"))
+            ViewData["Filtering"] = "";
+
+            PopulateDropDownLists(); //data for User Filter DDL
+
+            var roomGroups = from u in _context.RoomGroups.Where(u =>
+            (u.Enabled == true && EnabledFilterString == "True") || (u.Enabled == false && EnabledFilterString == "False") || (EnabledFilterString == "All"))
                              select u;
 
             //  Filtering
@@ -54,7 +58,35 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
 
+            if (sortField == "Area") //Sorting by Area
+            {
+                if (sortDirection == "asc")
+                {
+                    roomGroups = roomGroups
+                        .OrderBy(r => r.AreaName);
+                }
+                else
+                {
+                    roomGroups = roomGroups
+                        .OrderByDescending(r => r.AreaName);
+                }
+            }
+            else //Sorting by Enabled
+            {
+                if (sortDirection == "asc")
+                {
+                    roomGroups = roomGroups
+                        .OrderBy(r => r.Enabled);
+                }
+                else
+                {
+                    roomGroups = roomGroups
+                        .OrderByDescending(r => r.Enabled);
+                }
+            }
 
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
