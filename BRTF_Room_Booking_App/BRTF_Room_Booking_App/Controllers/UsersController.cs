@@ -35,6 +35,7 @@ namespace BRTF_Room_Booking_App.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Top-level Admin, Admin")]
         // GET: Users
         public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID, 
             string actionButton, string sortDirection = "asc", string sortField = "Full Name")
@@ -143,11 +144,23 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            //User can only view thier own data
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != user.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
         }
 
         // GET: Users/Create
+        [Authorize(Roles = "Top-level Admin, Admin")]
         public IActionResult Create()
         {
             ViewData["Role"] = RoleSelectList("User");
@@ -160,6 +173,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Top-level Admin, Admin")]
         public async Task<IActionResult> Create(
             [Bind("ID,Username,FirstName,MiddleName,LastName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user,
             string Password, string Role)
@@ -235,6 +249,16 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != user.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["Role"] = RoleSelectList(_userManager.GetRolesAsync(identityUser).Result.FirstOrDefault());
             PopulateDropDownLists(user);
             return View(user);
@@ -256,6 +280,15 @@ namespace BRTF_Room_Booking_App.Controllers
             if (userToUpdate == null || identityUserToUpdate == null)
             {
                 return NotFound();
+            }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != userToUpdate.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
             }
 
             // Try updating it with the values posted
@@ -358,6 +391,16 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != user.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
         }
@@ -378,6 +421,15 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 // Do not allow logged-in User to delete themself
                 ModelState.AddModelError("", "Unable to delete. You cannot delete your own account.");
+            }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != user.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
             }
 
             try
