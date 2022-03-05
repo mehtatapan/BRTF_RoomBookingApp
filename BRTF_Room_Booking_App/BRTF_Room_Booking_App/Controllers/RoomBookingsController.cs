@@ -139,6 +139,16 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != roomBooking.User.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    //return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
@@ -339,6 +349,16 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != roomBooking.User.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    //return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
@@ -371,6 +391,15 @@ namespace BRTF_Room_Booking_App.Controllers
             if (id != roomBookingToUpdate.ID)
             {
                 return NotFound();
+            }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != roomBookingToUpdate.User.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    //return Redirect(ViewData["returnURL"].ToString());
+                }
             }
 
             // Try updating it with the values posted
@@ -421,6 +450,16 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != roomBooking.User.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    //return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
@@ -436,12 +475,23 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (User.IsInRole("User"))
+            {
+                if (User.Identity.Name != roomBooking.User.Username)
+                {
+                    TempData["Message"] = "You are not authorized to view other users details.";
+                    //return Redirect(ViewData["returnURL"].ToString());
+                }
+            }
+
             try
             {
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             catch (DbUpdateException)
             {
                 //Note: there is really no reason a delete should fail if you can "talk" to the database.

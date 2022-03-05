@@ -396,7 +396,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
