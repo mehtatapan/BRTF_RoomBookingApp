@@ -17,9 +17,11 @@ using System.Globalization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using BRTF_Room_Booking_App.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly BTRFRoomBookingContext _context;

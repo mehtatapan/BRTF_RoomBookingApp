@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using BRTF_Room_Booking_App.Data;
 using BRTF_Room_Booking_App.Models;
 using BRTF_Room_Booking_App.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
+    [Authorize(Roles = "Top-level Admin, Admin")]
     public class RoomGroupsController : Controller
     {
         private readonly BTRFRoomBookingContext _context;

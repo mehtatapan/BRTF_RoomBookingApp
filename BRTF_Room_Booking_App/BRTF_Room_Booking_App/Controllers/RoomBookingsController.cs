@@ -12,9 +12,11 @@ using BRTF_Room_Booking_App.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
+    [Authorize]
     public class RoomBookingsController : Controller
     {
         private readonly BTRFRoomBookingContext _context;
