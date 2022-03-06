@@ -137,7 +137,8 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     _context.Add(userGroup);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { userGroup.ID });
+                    TempData["Message"] = "User Group created successfully!";
+                    return RedirectToAction("Index");
                 }
             }
             catch (RetryLimitExceededException)
@@ -155,7 +156,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            PopulateAssignedSpecialtyData(userGroup);
+            PopulateAssignedSpecialtyData(userGroup);            
             return View(userGroup);
         }
 
@@ -216,7 +217,8 @@ namespace BRTF_Room_Booking_App.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { userGroupToUpdate.ID });
+                    TempData["Message"] = "User Group edited successfully!";
+                    return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException)
                 {
@@ -288,6 +290,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 _context.UserGroups.Remove(userGroup);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Success! User Group deleted successfully!";
                 return Redirect(ViewData["returnURL"].ToString());
             }
             catch (DbUpdateException dex)

@@ -3,10 +3,25 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        @Html.Raw(TempData["AlertMessage"])
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["Message"])</strong>
+    </div>
+    <br />
+}
 <br />
 <h1 style="text-align: center;">Terms and Programs</h1>
-<br/>
+<br />
 
 <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-3 py-3 my-3">
     <p>

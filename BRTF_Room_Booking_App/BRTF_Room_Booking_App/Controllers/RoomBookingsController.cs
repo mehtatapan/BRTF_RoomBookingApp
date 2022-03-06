@@ -331,6 +331,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                     //_context.Add(roomBooking);    // DO NOT ADD "roomBooking". "roomBooking" variable is ONLY used to validate model state
                     await _context.SaveChangesAsync();
+                    TempData["Message"] = "Booking has been created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -441,6 +442,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+                    TempData["Message"] = "Booking has been edited successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -521,6 +523,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Booking has been deleted successfully!";
                 return RedirectToAction(nameof(Index));
             }
 

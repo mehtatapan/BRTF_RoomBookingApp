@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<BRTF_Room_Booking_App.Models.RoomBooking>
 
 @{ ViewData["Title"] = "Room Bookings"; }
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +11,22 @@
 
 
 </head>
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        @Html.Raw(TempData["AlertMessage"])
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["Message"])</strong>
+    </div>
+    <br />
+}
 <body class="align-items-center text-center justify-content-center">
 
     <br />

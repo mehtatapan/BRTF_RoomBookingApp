@@ -134,6 +134,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     _context.Add(roomGroup);
                     await _context.SaveChangesAsync();
+                    TempData["Message"] = "Room Group created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -189,6 +190,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+                    TempData["Message"] = "Room Group edited successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -247,6 +249,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 _context.RoomGroups.Remove(roomGroup);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Room Group deleted successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException dex)
