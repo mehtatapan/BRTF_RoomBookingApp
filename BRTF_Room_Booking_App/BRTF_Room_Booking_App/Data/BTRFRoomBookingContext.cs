@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BRTF_Room_Booking_App.ViewModels;
 
 namespace BRTF_Room_Booking_App.Data
 {
@@ -42,10 +43,17 @@ namespace BRTF_Room_Booking_App.Data
         public DbSet<TermAndProgram> TermAndPrograms { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<BookingSummary> BookingSummaries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.HasDefaultSchema("BT");
+
+            //For Booking Summary View Model
+            modelBuilder
+                .Entity<BookingSummary>()
+                .ToView(nameof(BookingSummaries))
+                .HasKey(a => a.ID);
 
             //Prevent Cascade Delete from TermAndProgram to User
             //so we are prevented from deleting a TermAndProgram with
@@ -161,5 +169,7 @@ namespace BRTF_Room_Booking_App.Data
                 }
             }
         }
+
+        public DbSet<BRTF_Room_Booking_App.ViewModels.BookingSummary> BookingSummary { get; set; }
     }
 }

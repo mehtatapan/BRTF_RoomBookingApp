@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BRTF_Room_Booking_App.ViewModels.BookingSummary>
+
+@{
+    ViewData["Title"] = "BookingSummary";
+}
+
+<h1>BookingSummary</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfAppointments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalHours)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfAppointments)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalHours)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

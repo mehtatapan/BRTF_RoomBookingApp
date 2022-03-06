@@ -9,6 +9,7 @@ using BRTF_Room_Booking_App.Data;
 using BRTF_Room_Booking_App.Models;
 using BRTF_Room_Booking_App.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using BRTF_Room_Booking_App.ViewModels;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -298,6 +299,23 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
             return View(room);
+        }
+
+        public IActionResult BookingSummary()
+        {
+            //previous version
+            //var sumQ = _context.RoomBookings.Include(a => a.Room)
+            //    .GroupBy(a => new { a.RoomID, a.Room.RoomName })
+            //    .Select(grp => new BookingSummary
+            //    {
+            //        ID = grp.Key.RoomID,
+            //        RoomName = grp.Key.RoomName,
+            //        NumberOfAppointments = grp.Count()
+            //        // TotalHoursBooked=grp.Sum()
+
+            //    });
+            //return View(sumQ.AsNoTracking().ToList());
+             return View(_context.BookingSummaries.AsNoTracking().ToList());
         }
 
         //This is a twist on the PopulateDropDownLists approach
