@@ -8,8 +8,6 @@ namespace BRTF_Room_Booking_App.Models
 {
     public class RoomUserGroupPermission
     {
-        public int ID { get; set; }
-
         [Display(Name = "User Group")]
         [Required(ErrorMessage = "You must assign a User Group.")]
         public int UserGroupID { get; set; }

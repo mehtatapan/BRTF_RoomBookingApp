@@ -55,6 +55,10 @@ namespace BRTF_Room_Booking_App.Data
                 .ToView(nameof(BookingSummaries))
                 .HasKey(a => a.ID);
 
+            //Add a composite primary key to RoomUserGroupPermission
+            modelBuilder.Entity<RoomUserGroupPermission>()
+                .HasKey(p => new { p.UserGroupID, p.RoomGroupID });
+
             //Prevent Cascade Delete from TermAndProgram to User
             //so we are prevented from deleting a TermAndProgram with
             //Users assigned
@@ -73,9 +77,9 @@ namespace BRTF_Room_Booking_App.Data
                 .HasForeignKey(p => p.UserGroupID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Prevent Cascade Delete from RoomUserGroupPermissions to RoomGroup
-            //so we are prevented from deleting a RoomGroup
-            //if we delete a UserGroup with RoomUserGroupPermissions
+            //Prevent Cascade Delete from RoomGroup to RoomUserGroupPermissions
+            //so we are prevented from deleting a RoomGroup with
+            //RoomUserGroupPermissions assigned
             modelBuilder.Entity<RoomGroup>()
                 .HasMany<RoomUserGroupPermission>(d => d.RoomUserGroupPermissions)
                 .WithOne(p => p.RoomGroup)
@@ -118,11 +122,6 @@ namespace BRTF_Room_Booking_App.Data
             //Add a unique index to the RoomGroup Name
             modelBuilder.Entity<RoomGroup>()
                 .HasIndex(p => p.AreaName)
-                .IsUnique();
-
-            //Add a unique index to the combined RoomGroupID and UserGroupID in Permissions
-            modelBuilder.Entity<RoomUserGroupPermission>()
-                .HasIndex(p => new { p.RoomGroupID, p.UserGroupID })
                 .IsUnique();
 
             //Add a unique index to the combined RoomGroupID and Room Name

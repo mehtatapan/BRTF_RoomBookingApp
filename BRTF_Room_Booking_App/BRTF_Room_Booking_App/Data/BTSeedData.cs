@@ -544,31 +544,108 @@ namespace BRTF_Room_Booking_App.Data
                     context.SaveChanges();
                 }
 
+                // Seed Room User Group Permissions
+                if (!context.RoomUserGroupPermissions.Any())
+                {
+                    // Give Admins access to all Areas
+                    int[] adminGroupIDs = context.UserGroups.Where(u => u.UserGroupName == "top-level admin" || u.UserGroupName == "admin").Select(u => u.ID).ToArray();
+                    int[] allRoomGroupIDs = context.RoomGroups.Select(r => r.ID).ToArray();
+
+                    foreach (int adminGroupID in adminGroupIDs)
+                    {
+                        foreach (int roomGroupID in allRoomGroupIDs)
+                        {
+                            // Construct Permission details
+                            RoomUserGroupPermission roomUserGroupPermission = new RoomUserGroupPermission()
+                            {
+                                UserGroupID = adminGroupID,
+                                RoomGroupID = roomGroupID
+                            };
+                            try
+                            {
+                                // Could be duplicates
+                                context.RoomUserGroupPermissions.Add(roomUserGroupPermission);
+                                context.SaveChanges();
+                            }
+                            catch (Exception e)
+                            {
+                                var m = e.Message;
+                                // So skip it and go on to the next
+                            }
+                        }
+                    }
+
+                    // Give all User Groups permission to access MAC Lab V106
+                    int[] nonAdminUserGroupIDs = context.UserGroups.Where(u => u.UserGroupName != "top-level admin" && u.UserGroupName != "admin").Select(u => u.ID).ToArray();
+
+                    foreach (int userGroupID in nonAdminUserGroupIDs)
+                    {
+                        // Construct Permission details
+                        RoomUserGroupPermission roomUserGroupPermission = new RoomUserGroupPermission()
+                        {
+                            UserGroupID = userGroupID,
+                            RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("MAC LAB V106")).ID
+                        };
+                        try
+                        {
+                            // Could be duplicates
+                            context.RoomUserGroupPermissions.Add(roomUserGroupPermission);
+                            context.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            var m = e.Message;
+                            // So skip it and go on to the next
+                        }
+                    }
+                }
+
                 // Seed many Room Bookings
                 if (!context.RoomBookings.Any())
                 {
-                    int[] userIDs = context.Users.Select(u => u.ID).ToArray();
-                    int[] roomIDs = context.Rooms.Select(r => r.ID).ToArray();
-                    int userIDCount = userIDs.Count();
-                    int roomIDCount = roomIDs.Count();
+                    // Gets User IDs and Room IDs to seed Bookings with
+                    var users = context.Users.Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup).Select(u => new { u.ID, u.TermAndProgram.UserGroupID }).ToArray();
+                    var rooms = context.Rooms.Select(r => new { r.ID, r.RoomGroupID }).ToArray();
+                    int userCount = users.Count();
+                    int roomCount = rooms.Count();
 
-                    // Add a Room Booking in the afternoon for each Room
+                    // Prepare dictionary of Permissions to prevent illegal Bookings from seeding
+                    var roomGroupIDs = context.RoomGroups.Select(r => r.ID).ToArray();
+                    Dictionary<int, int[]> permissionsDict = new Dictionary<int, int[]>();
+                    foreach (int roomGroupID in roomGroupIDs)
+                    {
+                        int[] userPermissions = context.RoomUserGroupPermissions.Where(p => p.RoomGroupID == roomGroupID).Select(p => p.UserGroupID).ToArray();
+                        permissionsDict.Add(roomGroupID, userPermissions);
+                    }
+
+                    // Add a Room Booking 3 bookings for each Room
                     for (int j = 0; j < 3; j++)
                     {
-                        for (int i = 0; i < roomIDCount; i++)
+                        for (int i = 0; i < roomCount; i++)
                         {
+                            // Get a valid User
+                            int userID;
+                            int[] roomPermissions;
+                            int index;
+                            permissionsDict.TryGetValue(rooms[i].RoomGroupID, out roomPermissions);
+                            do
+                            {
+                                index = random.Next(userCount);
+                                userID = users[index].ID;   // Get a random User's ID
+                            } while (!roomPermissions.Contains(users[index].UserGroupID));  // Loop if permissions does not contain that User's Group
+
                             // Construct Room Booking details
                             RoomBooking roomBooking = new RoomBooking()
                             {
                                 StartDate = DateTime.Now.AddDays((i + 1) * (j + 1)),
                                 EndDate = DateTime.Now.AddDays((i + 1) * (j + 1)).AddHours(random.Next(1, 3)),
-                                RoomID = roomIDs[i],
-                                UserID = userIDs[random.Next(userIDCount)],
+                                RoomID = rooms[i].ID,
+                                UserID = userID
                             };
-                            context.RoomBookings.Add(roomBooking);
                             try
                             {
                                 // Could be duplicates
+                                context.RoomBookings.Add(roomBooking);
                                 context.SaveChanges();
                             }
                             catch (Exception e)
@@ -580,40 +657,6 @@ namespace BRTF_Room_Booking_App.Data
                     }
                 }
 
-                // Seed 1 single Room Bookings
-                //if (!context.RoomBookings.Any())
-                //{
-                //    // Construct Room Booking details
-                //    RoomBooking roomBooking = new RoomBooking()
-                //    {
-                //        StartDate = DateTime.Today.AddDays(-1),
-                //        RoomID = context.Rooms.Where(r => r.RoomName.ToUpper().Contains("COMPUTER 10")).Select(r => r.ID).FirstOrDefault(),
-                //        UserID = context.Users.Select(u => u.ID).FirstOrDefault(),
-                //        StartTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 12 && b.MilitaryTimeMinute == 30).ID,
-                //        EndTimeID = context.BookingTimes.FirstOrDefault(b => b.MilitaryTimeHour == 13 && b.MilitaryTimeMinute == 30).ID
-                //    };
-                //    context.RoomBookings.Add(roomBooking);
-                //    context.SaveChanges();
-                //}
-
-                // Seed Room User Group Permissions
-                if (!context.RoomUserGroupPermissions.Any())
-                {
-                    int[] userGroupIDs = context.UserGroups.Select(u => u.ID).ToArray();
-
-                    // Give all User Groups permission to access MAC Lab V106
-                    foreach (int userGroupID in userGroupIDs)
-                    {
-                        // Construct Permission details
-                        RoomUserGroupPermission roomUserGroupPermission = new RoomUserGroupPermission()
-                        {
-                            UserGroupID = userGroupID,
-                            RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("MAC LAB V106")).ID
-                        };
-                        context.RoomUserGroupPermissions.Add(roomUserGroupPermission);
-                        context.SaveChanges();
-                    }
-                }
             }
         }
 
@@ -874,8 +917,8 @@ namespace BRTF_Room_Booking_App.Data
                             User userDetails = new User()
                             {
                                 Username = "topadmin",
-                                FirstName = "Top-level Admin",
-                                LastName = "Top-level Admin",
+                                FirstName = "Patrick",
+                                LastName = "Topadmin",
                                 Email = "topadmin@niagaracollege.ca",
                                 EmailBookingNotifications = true,
                                 EmailCancelNotifications = true,
@@ -903,8 +946,8 @@ namespace BRTF_Room_Booking_App.Data
                             User userDetails = new User()
                             {
                                 Username = "admin",
-                                FirstName = "Admin",
-                                LastName = "Admin",
+                                FirstName = "Amir",
+                                LastName = "Adminbeer",
                                 Email = "admin@niagaracollege.ca",
                                 EmailBookingNotifications = true,
                                 EmailCancelNotifications = true,
@@ -932,8 +975,8 @@ namespace BRTF_Room_Booking_App.Data
                             User userDetails = new User()
                             {
                                 Username = "user",
-                                FirstName = "User",
-                                LastName = "User",
+                                FirstName = "Tyler",
+                                LastName = "Userguy",
                                 Email = "user@ncstudents.niagaracollege.ca",
                                 EmailBookingNotifications = true,
                                 EmailCancelNotifications = true,

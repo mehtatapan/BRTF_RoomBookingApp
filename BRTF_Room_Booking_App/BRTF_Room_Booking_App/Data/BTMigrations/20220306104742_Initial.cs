@@ -84,14 +84,12 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 name: "RoomUserGroupPermissions",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
                     UserGroupID = table.Column<int>(nullable: false),
                     RoomGroupID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomUserGroupPermissions", x => x.ID);
+                    table.PrimaryKey("PK_RoomUserGroupPermissions", x => new { x.UserGroupID, x.RoomGroupID });
                     table.ForeignKey(
                         name: "FK_RoomUserGroupPermissions_RoomGroups_RoomGroupID",
                         column: x => x.RoomGroupID,
@@ -206,15 +204,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomUserGroupPermissions_UserGroupID",
+                name: "IX_RoomUserGroupPermissions_RoomGroupID",
                 table: "RoomUserGroupPermissions",
-                column: "UserGroupID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomUserGroupPermissions_RoomGroupID_UserGroupID",
-                table: "RoomUserGroupPermissions",
-                columns: new[] { "RoomGroupID", "UserGroupID" },
-                unique: true);
+                column: "RoomGroupID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TermAndPrograms_UserGroupID",
@@ -243,6 +235,8 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 table: "Users",
                 column: "Username",
                 unique: true);
+
+            ExtraMigration.Steps(migrationBuilder);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

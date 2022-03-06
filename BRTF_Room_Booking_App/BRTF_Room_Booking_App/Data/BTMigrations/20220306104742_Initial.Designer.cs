@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Room_Booking_App.Data.BTMigrations
 {
     [DbContext(typeof(BTRFRoomBookingContext))]
-    [Migration("20220303224907_Initial")]
+    [Migration("20220306104742_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,22 +149,15 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.RoomUserGroupPermission", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserGroupID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomGroupID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserGroupID")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("UserGroupID", "RoomGroupID");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserGroupID");
-
-                    b.HasIndex("RoomGroupID", "UserGroupID")
-                        .IsUnique();
+                    b.HasIndex("RoomGroupID");
 
                     b.ToTable("RoomUserGroupPermissions");
                 });

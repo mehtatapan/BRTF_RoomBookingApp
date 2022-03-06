@@ -21,7 +21,7 @@
                             <label asp-for="UserID" class="control-label"><strong>Full Name: *</strong></label>
                         </div>
                         <div class="col-10">
-                            <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
+                            <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID" disabled="@(ViewBag.UserIdDisabled)"></select>
                             <span asp-validation-for="UserID" class="text-danger"></span>
                         </div>
                     </div>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BRTF_Room_Booking_App.Models
 {
-    public class RoomBooking
+    public class RoomBooking : IValidatableObject
     {
         public int ID { get; set; }
 
@@ -45,18 +45,13 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "User")]
         public User User { get; set; }
 
-        //[Display(Name = "Start Time")]
-        //[Required(ErrorMessage = "You must assign a Start Time.")]
-        //public int StartTimeID { get; set; }
-
-        //[Display(Name = "Start Time")]
-        //public BookingTime StartTime { get; set; }
-
-        //[Display(Name = "End Time")]
-        //[Required(ErrorMessage = "You must assign a End Time.")]
-        //public int EndTimeID { get; set; }
-
-        //[Display(Name = "End Time")]
-        //public BookingTime EndTime { get; set; }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // Test for invalid Start-End Time
+            if (EndDate <= StartDate)
+            {
+                yield return new ValidationResult("End Time must be later than Start Time.", new[] { "EndDate" });
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Top-level Admin,Admin,User")]
     public class RoomBookingsController : Controller
     {
         private readonly BTRFRoomBookingContext _context;
@@ -158,7 +158,17 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Create
         public IActionResult Create()
         {
-            var roomGroupSelectList = RoomGroupSelectList();    // Generate the Select List of rooms before putting it in ViewData, so that the populated room data can match the select list
+            // Disable User selection field for non-Admins
+            if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
+            {
+                ViewData["UserIdDisabled"] = false;
+            }
+            else
+            {
+                ViewData["UserIdDisabled"] = true;
+            }
+
+            var roomGroupSelectList = PermittedRoomGroupSelectList();    // Generate the Select List of rooms before putting it in ViewData, so that the populated room data can match the select list
             ViewData["RoomGroupID"] = roomGroupSelectList;
             PopulateSelectedRoomData(Convert.ToInt32(roomGroupSelectList.FirstOrDefault().Value));
             ViewData["RepeatType"] = RepeatTypeSelectList();
@@ -176,6 +186,16 @@ namespace BRTF_Room_Booking_App.Controllers
             string Monday, string Tuesday, string Wednesday, string Thursday, string Friday, string Saturday, string Sunday,
             string RepeatEndDate)
         {
+            // Disable User selection field for non-Admins
+            if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
+            {
+                ViewData["UserIdDisabled"] = false;
+            }
+            else
+            {
+                ViewData["UserIdDisabled"] = true;
+            }
+
             // IMPORTANT NOTE: "roomBooking" variable is ONLY used to validate model state. DO NOT ADD "roomBooking"
 
             // Default all Repeat controls to Off
@@ -195,13 +215,6 @@ namespace BRTF_Room_Booking_App.Controllers
             if (roomBooking.StartDate < DateTime.Now)
             {
                 ModelState.AddModelError("StartDate", "Start Date can not be in the past.");
-            }
-
-            // Check that End Time is after Start Time
-            // Add an error if End Time is lower than Start Time
-            if (roomBooking.EndDate < roomBooking.StartDate)
-            {
-                ModelState.AddModelError("EndDate", "End Time must be later than Start Time.");
             }
 
             // Add model error if selected options is empty or cannot be cast as Int
@@ -277,6 +290,7 @@ namespace BRTF_Room_Booking_App.Controllers
                                     Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
                                 _context.RoomBookings.AddRange(bookings);
+                                // Save changes later at the end
                             }
                             else if (RepeatType == "Weeks")
                             {
@@ -285,6 +299,7 @@ namespace BRTF_Room_Booking_App.Controllers
                                     Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
                                 _context.RoomBookings.AddRange(bookings);
+                                // Save changes later at the end
                             }
 
                         }
@@ -311,6 +326,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             }
 
                             _context.RoomBookings.Add(booking);
+                            // Save changes
                         }
                     }
                     //_context.Add(roomBooking);    // DO NOT ADD "roomBooking". "roomBooking" variable is ONLY used to validate model state
@@ -327,7 +343,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID); // Reload room data separately from other dropdownlists, since it is connected to a multiselect
+            ViewData["RoomGroupID"] = PermittedRoomGroupSelectList(RoomGroupID); // Reload room data separately from other dropdownlists, since it is connected to a multiselect
             PopulateSelectedRoomData(RoomGroupID, selectedOptions);
             ViewData["RepeatType"] = RepeatTypeSelectList(RepeatType);
             PopulateDropDownLists();
@@ -337,6 +353,16 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            // Disable User selection field for non-Admins
+            if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
+            {
+                ViewData["UserIdDisabled"] = false;
+            }
+            else
+            {
+                ViewData["UserIdDisabled"] = true;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -359,7 +385,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
 
-            ViewData["RoomGroupID"] = RoomGroupSelectList(roomBooking.Room.RoomGroupID);
+            ViewData["RoomGroupID"] = PermittedRoomGroupSelectList(roomBooking.Room.RoomGroupID);
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
             return View(roomBooking);
@@ -370,17 +396,23 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int RoomGroupID)
+        public async Task<IActionResult> Edit(int id, int RoomGroupID, DateTime StartDate, DateTime EndDate)
         {
-            // Check that End Time is after Start Time
-            //BookingTime startTime = _context.BookingTimes.Where(t => t.ID == StartTimeID).FirstOrDefault();
-            //BookingTime endTime = _context.BookingTimes.Where(t => t.ID == EndTimeID).FirstOrDefault();
-            // Add an error if End Time is lower than Start Time
-            //if ((endTime.MilitaryTimeHour < startTime.MilitaryTimeHour)
-            //    || (endTime.MilitaryTimeHour == startTime.MilitaryTimeHour && endTime.MilitaryTimeMinute <= startTime.MilitaryTimeMinute))
-            //{
-            //    ModelState.AddModelError("EndTimeID", "End Time must be later than Start Time.");
-            //}
+            // Disable User selection field for non-Admins
+            if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
+            {
+                ViewData["UserIdDisabled"] = false;
+            }
+            else
+            {
+                ViewData["UserIdDisabled"] = true;
+            }
+
+            // Check that Start Time is not in the past
+            if (StartDate < DateTime.Now)
+            {
+                ModelState.AddModelError("StartDate", "Start Date can not be in the past.");
+            }
 
             // Get the RoomBooking to update
             var roomBookingToUpdate = await _context.RoomBookings
@@ -427,7 +459,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
+            ViewData["RoomGroupID"] = PermittedRoomGroupSelectList(RoomGroupID);
             ViewData["RoomID"] = RoomSelectList(RoomGroupID, roomBookingToUpdate.RoomID);
             PopulateDropDownLists(roomBookingToUpdate);
             return View(roomBookingToUpdate);
@@ -693,6 +725,24 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Where(d => d.Enabled == true)
                 .OrderBy(d => d.AreaName), "ID", "AreaName", selectedId);
         }
+        private SelectList PermittedRoomGroupSelectList(int? selectedId = null)
+        {
+            string loggedInUsername = User.Identity.Name;   // Get logged-in User's name
+
+            User loggedInUser = _context.Users.Where(u => u.Username == loggedInUsername).FirstOrDefault(); // Pull the User object by the logged-in User's name
+
+            // Get logged-in User's User Group
+            int loggedInUserGroupID = _context.TermAndPrograms.Where(t => t.ID == loggedInUser.TermAndProgramID).Select(t => t.UserGroupID).FirstOrDefault();
+
+            bool loggedInUserIsAdmin = User.IsInRole("Top-level Admin") || User.IsInRole("Admin");  // Determine whether logged-in User as an Admin
+
+            return new SelectList(_context.RoomGroups
+                .Include(r => r.RoomUserGroupPermissions)
+                .Where(r => (r.Enabled == true) /* Only show Enabled Areas */
+                         && (r.RoomUserGroupPermissions.Where(p => p.UserGroupID == loggedInUserGroupID).Count() > 0 /* Don't show Areas that a permission for the logged-in User's Group doesn't exist */
+                          || loggedInUserIsAdmin /* Show Areas regardless of permission if the User is an Admin */))
+                .OrderBy(r => r.AreaName), "ID", "AreaName", selectedId);
+        }
         private SelectList RoomSelectList(int? RoomGroupID = null, int? selectedId = null)
         {
             var query = from c in _context.Rooms.Include(c => c.RoomGroup)
@@ -765,7 +815,6 @@ namespace BRTF_Room_Booking_App.Controllers
             conflict = null;
             return true;
         }
+    
     }
-
-
 }
