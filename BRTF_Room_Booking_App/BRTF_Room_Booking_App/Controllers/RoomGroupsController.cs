@@ -24,8 +24,11 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: RoomGroups
         public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Area", string EnabledFilterString = "True")
+            string actionButton, string sortDirection = "asc", string sortField = "Is Enabled", string EnabledFilterString = "All")
         {
+            //Clear the sort/filter/paging URL Cookie for Controller
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             ViewData["Filtering"] = "";
 
             PopulateDropDownLists(); //data for User Filter DDL
@@ -35,7 +38,7 @@ namespace BRTF_Room_Booking_App.Controllers
                              select u;
 
             //  Filtering
-            if (EnabledFilterString != "")
+            if (EnabledFilterString != "All")
             {
                 ViewData["Filtering"] = " show ";
             }
@@ -76,12 +79,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 if (sortDirection == "asc")
                 {
                     roomGroups = roomGroups
-                        .OrderBy(r => r.Enabled);
+                        .OrderByDescending(r => r.Enabled);
                 }
                 else
                 {
                     roomGroups = roomGroups
-                        .OrderByDescending(r => r.Enabled);
+                        .OrderBy(r => r.Enabled);
                 }
             }
 
@@ -99,6 +102,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomGroups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -118,6 +124,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomGroups/Create
         public IActionResult Create()
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             return View();
         }
 
@@ -128,6 +137,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,AreaName,Description,BlackoutTime,MaxHoursPerSingleBooking,MaxHoursTotal,MaxNumberOfBookings,Enabled")] RoomGroup roomGroup)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -135,7 +147,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     _context.Add(roomGroup);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Room Group created successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { roomGroup.ID });
                 }
             }
             catch (DbUpdateException dex)
@@ -155,6 +167,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomGroups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -175,6 +190,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             var roomGroupToUpdate = await _context.RoomGroups.FirstOrDefaultAsync(rg => rg.ID == id);
 
             if (roomGroupToUpdate == null)
@@ -191,7 +209,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Room Group edited successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { roomGroupToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -223,6 +241,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomGroups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -244,13 +265,16 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             var roomGroup = await _context.RoomGroups.FindAsync(id);
             try
             {
                 _context.RoomGroups.Remove(roomGroup);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Room Group deleted successfully!";
-                return RedirectToAction(nameof(Index));
+                return Redirect(ViewData["returnURL"].ToString());
             }
             catch (DbUpdateException dex)
             {
@@ -279,6 +303,11 @@ namespace BRTF_Room_Booking_App.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool RoomGroupExists(int id)

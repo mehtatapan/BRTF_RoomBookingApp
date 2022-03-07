@@ -38,10 +38,10 @@
                 <div class="card card-body bg-light">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label class="control-label">Filter by Room:</label>
+                            <label class="control-label">Filter by Is Enabled:</label>
                             @Html.DropDownList("EnabledFilterString", new List<SelectListItem>
                        {   new SelectListItem { Text="Show All", Value="All"},
-                           new SelectListItem { Text="Show Enabled", Value="True", Selected= true},
+                           new SelectListItem { Text="Show Enabled", Value="True"},
                            new SelectListItem { Text="Show Disabled", Value="False"}
                        }, htmlAttributes: new { @class = "form-control" })
                         </div>
@@ -97,10 +97,3 @@
         <partial name="_PagingNavBar" />
     </form>
 </section>
-@section Scripts{
-    <script>
-        $('document').ready(function () {
-            $('#collapseFilter').collapse("hide")
-        });
-    </script>
-}

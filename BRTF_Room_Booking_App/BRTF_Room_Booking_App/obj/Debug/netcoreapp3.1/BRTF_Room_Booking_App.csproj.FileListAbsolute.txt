@@ -3604,3 +3604,5 @@ C:\Users\DT\Desktop\Working\BookingOverlaps2\PROG1440-Prototype_2\BRTF_Room_Book
 C:\Users\DT\Desktop\Working\BookingOverlaps2\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.dll
 C:\Users\DT\Desktop\Working\BookingOverlaps2\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\DT\Desktop\Working\BookingOverlaps2\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
+C:\Users\emmaa\Desktop\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\GlobalSettings\Edit.cshtml.g.cs
+C:\Users\emmaa\Desktop\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\BookingSummary.cshtml.g.cs
