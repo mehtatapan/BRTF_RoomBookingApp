@@ -4,10 +4,15 @@
 @{
     ViewData["Title"] = "Log in";
 }
-
-<h1>@ViewData["Title"]</h1>
+<link rel="stylesheet" href="~/css/site.css" />
+<div style="margin-left:25%; margin-bottom:5%;">
+    <img src="~/img/Logo.png" alt="Logo of BRTF" />
+</div>
 <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-3 text-center" style="background-color: #FFF; margin:auto; padding-top: 30px; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);">
+        <h1>@ViewData["Title"]</h1>
+
         <section>
             <form id="account" method="post">
                 <hr />
@@ -38,6 +43,7 @@
     </div>
 </div>
 
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
