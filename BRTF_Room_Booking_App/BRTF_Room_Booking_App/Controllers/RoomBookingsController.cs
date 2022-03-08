@@ -125,6 +125,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -144,8 +147,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
-                    //return Redirect(ViewData["returnURL"].ToString());
+                    TempData["Message"] = "You are not authorized to view another User's Booking details.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
 
@@ -158,6 +161,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Create
         public IActionResult Create()
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Disable User selection field for non-Admins
             if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
             {
@@ -168,11 +174,15 @@ namespace BRTF_Room_Booking_App.Controllers
                 ViewData["UserIdDisabled"] = true;
             }
 
+            RoomBooking blankBooking = new RoomBooking();
+            blankBooking.UserID = _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.ID).FirstOrDefault();
+
             var roomGroupSelectList = PermittedRoomGroupSelectList();    // Generate the Select List of rooms before putting it in ViewData, so that the populated room data can match the select list
             ViewData["RoomGroupID"] = roomGroupSelectList;
             PopulateSelectedRoomData(Convert.ToInt32(roomGroupSelectList.FirstOrDefault().Value));
+            ViewData["RoomID"] = RoomSelectList(Convert.ToInt32(roomGroupSelectList.FirstOrDefault().Value));
             ViewData["RepeatType"] = RepeatTypeSelectList();
-            PopulateDropDownLists();
+            PopulateDropDownLists(blankBooking);
             return View();
         }
 
@@ -184,8 +194,11 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> Create([Bind("ID,UserID,SpecialNotes,StartDate,EndDate")] RoomBooking roomBooking,
             string[] selectedOptions, int RoomGroupID, string chkRepeat, string RepeatInterval, string RepeatType,
             string Monday, string Tuesday, string Wednesday, string Thursday, string Friday, string Saturday, string Sunday,
-            string RepeatEndDate)
+            string RepeatEndDate, int RoomID)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Disable User selection field for non-Admins
             if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
             {
@@ -194,6 +207,7 @@ namespace BRTF_Room_Booking_App.Controllers
             else
             {
                 ViewData["UserIdDisabled"] = true;
+                roomBooking.UserID = _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.ID).FirstOrDefault();
             }
 
             // IMPORTANT NOTE: "roomBooking" variable is ONLY used to validate model state. DO NOT ADD "roomBooking"
@@ -217,20 +231,31 @@ namespace BRTF_Room_Booking_App.Controllers
                 ModelState.AddModelError("StartDate", "Start Date can not be in the past.");
             }
 
-            // Add model error if selected options is empty or cannot be cast as Int
-            if (selectedOptions.Count() == 0)
+            // Validation for Admin's Room selection boxes
+            if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
             {
-                ModelState.AddModelError("RoomID", "You must select a Room.");
-            }
-            else
-            {
-                int t;
-                if (!Int32.TryParse(selectedOptions[0], out t))
+                // Add model error if selected options is empty or cannot be cast as Int
+                if (selectedOptions.Count() == 0)
                 {
-                    // t failed to be set with the converted integer
-                    // Add here a message to user about the wrong input....
-                    ModelState.AddModelError("RoomID", "You must select a valid Room.");
+                    ModelState.AddModelError("RoomID", "You must select a Room.");
                 }
+                else
+                {
+                    int t;
+                    if (!Int32.TryParse(selectedOptions[0], out t))
+                    {
+                        // t failed to be set with the converted integer
+                        // Add here a message to user about the wrong input....
+                        ModelState.AddModelError("RoomID", "You must select a valid Room.");
+                    }
+                }
+            }
+            else if (User.IsInRole("User"))
+            {
+                // If the User is only a regular User, they can only select 1 Room
+                // We loop later on, to make a Booking for every Room in "selectedOptions"
+                // To make the loop only run once for 1 Room, we will make "selectedOptions" be the room the regular User selected
+                selectedOptions = new string[] { RoomID.ToString() };
             }
 
             // Validate Repeat controls if checkbox is On
@@ -283,25 +308,22 @@ namespace BRTF_Room_Booking_App.Controllers
                     {
                         if (chkRepeat == "on") // Check if we should make repeat Bookings
                         {
-                            if (RepeatType == "Days")
-                            {
-                                List<RoomBooking> bookings = GenerateBookingsForRepeatTypeDays(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
-                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
+                            //List<RoomBooking> timeConflictedBookings;
+
+                            List<RoomBooking> bookings = GenerateRepeatBookings(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
+                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval), RepeatType,
                                     Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
-                                _context.RoomBookings.AddRange(bookings);
-                                // Save changes later at the end
-                            }
-                            else if (RepeatType == "Weeks")
-                            {
-                                List<RoomBooking> bookings = GenerateBookingsForRepeatTypeWeeks(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
-                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval),
-                                    Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
 
-                                _context.RoomBookings.AddRange(bookings);
-                                // Save changes later at the end
-                            }
+                            //if (timeConflictedBookings != null)
+                            //{
+                            //    TempData["YourBookings"] = bookings;
+                            //    TempData["TimeConflictedBookings"] = timeConflictedBookings;
+                            //    throw new DbUpdateException("Booking time conflict violation.");
+                            //}
 
+                            _context.RoomBookings.AddRange(bookings);
+                            // Save changes later at the end
                         }
                         else
                         {
@@ -314,24 +336,38 @@ namespace BRTF_Room_Booking_App.Controllers
                                 SpecialNotes = roomBooking.SpecialNotes,
                                 StartDate = roomBooking.StartDate,
                                 EndDate = roomBooking.EndDate,
-                                RoomID = Convert.ToInt32(roomID)
+                                RoomID = Convert.ToInt32(roomID),
+                                Room = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault()
                             };
 
-                            TimeSpan duration = booking.EndDate - booking.StartDate;
+                            //TimeSpan duration = booking.EndDate - booking.StartDate;  // Sample code for skipping past conflicts
+                            //while (!RoomIsAvailable(booking, out RoomBooking conflict))
+                            //{
+                            //    booking.StartDate = conflict.EndDate.AddSeconds(1);
+                            //    booking.EndDate = booking.StartDate + duration;
+                            //}
 
-                            while (!RoomIsAvailable(booking, out RoomBooking conflict))
-                            {
-                                booking.StartDate = conflict.EndDate.AddSeconds(1);
-                                booking.EndDate = booking.StartDate + duration;
-                            }
+                            //if (!RoomIsAvailable(booking, out RoomBooking conflict))
+                            //{
+                            //    List<RoomBooking> bookings = new List<RoomBooking>();
+                            //    bookings.Add(booking);
+
+                            //    List<RoomBooking> conflicts = new List<RoomBooking>();
+                            //    conflicts.Add(conflict);
+
+                            //    TempData["YourBookings"] = bookings;
+                            //    TempData["TimeConflictedBookings"] = conflicts;
+
+                            //    throw new DbUpdateException("Booking time conflict violation.");
+                            //}
 
                             _context.RoomBookings.Add(booking);
-                            // Save changes
+                            // Save changes later
                         }
                     }
                     //_context.Add(roomBooking);    // DO NOT ADD "roomBooking". "roomBooking" variable is ONLY used to validate model state
                     await _context.SaveChangesAsync();
-                    TempData["Message"] = "Booking has been created successfully!";
+                    TempData["Message"] = "Booking was created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -339,13 +375,21 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dex)
             {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                if (dex.GetBaseException().Message == "Booking time conflict violation.")
+                {
+                    // We handle this violation by storing feedback into TempData earlier, so don't need to do anything here
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
             }
 
             ViewData["RoomGroupID"] = PermittedRoomGroupSelectList(RoomGroupID); // Reload room data separately from other dropdownlists, since it is connected to a multiselect
             PopulateSelectedRoomData(RoomGroupID, selectedOptions);
+            ViewData["RoomID"] = RoomSelectList(RoomGroupID, RoomID);
             ViewData["RepeatType"] = RepeatTypeSelectList(RepeatType);
             PopulateDropDownLists();
             return View(roomBooking);
@@ -354,6 +398,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Disable User selection field for non-Admins
             if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
             {
@@ -371,6 +418,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             var roomBooking = await _context.RoomBookings
                 .Include(r => r.Room)
+                .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (roomBooking == null)
             {
@@ -381,8 +429,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
-                    //return Redirect(ViewData["returnURL"].ToString());
+                    TempData["Message"] = "You are not authorized to edit another User's Bookings.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
 
@@ -399,6 +447,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int RoomGroupID, DateTime StartDate, DateTime EndDate)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Disable User selection field for non-Admins
             if (User.IsInRole("Top-level Admin") || User.IsInRole("Admin"))
             {
@@ -418,6 +469,7 @@ namespace BRTF_Room_Booking_App.Controllers
             // Get the RoomBooking to update
             var roomBookingToUpdate = await _context.RoomBookings
                 .Include(r => r.Room)
+                .Include(r => r.User)
                 .FirstOrDefaultAsync(p => p.ID == id);
 
             // Check that you got it or exit with a not found error
@@ -430,8 +482,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != roomBookingToUpdate.User.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
-                    //return Redirect(ViewData["returnURL"].ToString());
+                    TempData["Message"] = "You are not authorized to edit another User's Bookings.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
 
@@ -442,7 +494,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    TempData["Message"] = "Booking has been edited successfully!";
+                    TempData["Message"] = "Booking was edited successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -470,6 +522,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: RoomBookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -489,8 +544,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
-                    //return Redirect(ViewData["returnURL"].ToString());
+                    TempData["Message"] = "You are not authorized to delete another User's Bookings.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
 
@@ -505,6 +560,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             var roomBooking = await _context.RoomBookings
                 .Include(r => r.Room).ThenInclude(r => r.RoomGroup)
                 .Include(r => r.User)
@@ -514,8 +572,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
-                    //return Redirect(ViewData["returnURL"].ToString());
+                    TempData["Message"] = "You are not authorized to delete another User's Bookings.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
 
@@ -523,7 +581,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Booking has been deleted successfully!";
+                TempData["Message"] = "Booking was deleted successfully!";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -554,18 +612,29 @@ namespace BRTF_Room_Booking_App.Controllers
             return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
-        /// <summary>
-        /// Generates a List of Room Bookings, repeated from the StartDate until the RepeatEndDate, skipping weeks according to the "Interval".
-        /// Will only book days of the week that are "Included"
-        /// </summary>
-        /// <returns>List of Room Bookings to add.</returns>
-        private List<RoomBooking> GenerateBookingsForRepeatTypeWeeks(string SpecialNotes, int UserID, int RoomID,
-            DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval,
-            bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
+        private void ViewDataReturnURL()
         {
-            List<RoomBooking> bookings = new List<RoomBooking>();
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
+        }
 
-            for (DateTime day = StartDate; day <= RepeatEndDate; day = day.AddDays(1))
+        /// <returns></returns>
+        /// <summary>
+        /// Generates a List of Room Bookings, repeated from the StartDate until the RepeatEndDate, skipping weeks or days according to the "Interval".
+        /// Will only book days of the week that are "Included".
+        /// </summary>
+        /// <param name="timeConflictedBookings">Output list of existing Bookings that are conflicted by times of new Bookings.</param>
+        /// <returns>Generated list of Room Bookings to add.</returns>
+        private List<RoomBooking> GenerateRepeatBookings(string SpecialNotes, int UserID, int RoomID,
+            DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval, string RepeatType,
+            bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
+            //out List<RoomBooking> timeConflictedBookings)
+        {
+            //bool timeConflictsDetected = false;
+            List<RoomBooking> existingConflictedBookings = new List<RoomBooking>();
+
+            List<RoomBooking> bookingsToAdd = new List<RoomBooking>();
+
+            for (DateTime day = StartDate; day.Date <= RepeatEndDate; day = day.AddDays((RepeatType == "Days") ? RepeatInterval : 1))
             {
                 TimeSpan duration = EndDate - StartDate;
 
@@ -578,76 +647,55 @@ namespace BRTF_Room_Booking_App.Controllers
                     || (day.DayOfWeek == DayOfWeek.Saturday && IncludeSaturday)
                     || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday))
                 {
-                    RoomBooking booking = new RoomBooking
+                    RoomBooking newBooking = new RoomBooking
                     {
+
+                        UserID = UserID,
                         SpecialNotes = SpecialNotes,
                         StartDate = day,
                         EndDate = day + duration,
                         RoomID = RoomID,
-                        UserID = UserID
+                        Room = _context.Rooms.Where(r => r.ID == RoomID).FirstOrDefault()
                     };
 
-                    while (!RoomIsAvailable(booking, out RoomBooking conflict))
-                    {
-                        booking.StartDate = conflict.EndDate.AddSeconds(1);
-                        booking.EndDate = booking.StartDate + duration;
-                    }
+                    // Sample code for skipping past conflicts
+                    //while (!RoomIsAvailable(booking, out RoomBooking conflict))
+                    //{
+                    //    booking.StartDate = conflict.EndDate.AddSeconds(1);
+                    //    booking.EndDate = booking.StartDate + duration;
+                    //}
 
-                    bookings.Add(booking);
+                    //if (!RoomIsAvailable(newBooking, out RoomBooking conflict))
+                    //{
+                    //    timeConflictsDetected = true;
+                    //    existingConflictedBookings.Add(conflict);
+                    //}
+                    //else
+                    //{
+                    //    // Add blanks when there is no conflict, so User can know if some of their Bookings did not conflict while others did conflict
+                    //    existingConflictedBookings.Add(null);
+                    //}
+
+                    bookingsToAdd.Add(newBooking);
                 }
 
-                if (day.DayOfWeek == DayOfWeek.Saturday)
+                if ((RepeatType == "Weeks")
+                    && (day.DayOfWeek == DayOfWeek.Saturday))
                     day = day.AddDays(7 * (RepeatInterval - 1));   // Add days according to week interval at the end of the week
             }
 
-            return bookings;
-        }
+            // Return violation results:
+            // -Time conflict violations
+            //if (timeConflictsDetected == false)
+            //{
+            //    timeConflictedBookings = null;
+            //}
+            //else
+            //{
+            //    timeConflictedBookings = existingConflictedBookings;
+            //}
 
-        /// <summary>
-        /// Generates a List of Room Bookings, repeated from the StartDate until the RepeatEndDate, skipping days according to the "Interval".
-        /// Will only book days of the week that are "Included"
-        /// </summary>
-        /// <returns>List of Room Bookings to add.</returns>
-        private List<RoomBooking> GenerateBookingsForRepeatTypeDays(string SpecialNotes, int UserID, int RoomID,
-            DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval,
-            bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
-        {
-            List<RoomBooking> bookings = new List<RoomBooking>();
-
-            for (DateTime day = StartDate; day <= RepeatEndDate; day = day.AddDays(RepeatInterval))
-            {
-                TimeSpan duration = EndDate - StartDate;
-
-                // Check that this day of the week is checked On before adding booking
-                if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)
-                    || (day.DayOfWeek == DayOfWeek.Tuesday && IncludeTuesday)
-                    || (day.DayOfWeek == DayOfWeek.Wednesday && IncludeWednesday)
-                    || (day.DayOfWeek == DayOfWeek.Thursday && IncludeThursday)
-                    || (day.DayOfWeek == DayOfWeek.Friday && IncludeFriday)
-                    || (day.DayOfWeek == DayOfWeek.Saturday && IncludeSaturday)
-                    || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday))
-                {
-
-                    RoomBooking booking = new RoomBooking
-                    {
-                        SpecialNotes = SpecialNotes,
-                        StartDate = day,
-                        EndDate = day + duration,
-                        RoomID = RoomID,
-                        UserID = UserID
-                    };
-
-                    while (!RoomIsAvailable(booking, out RoomBooking conflict))
-                    {
-                        booking.StartDate = conflict.EndDate.AddSeconds(1);
-                        booking.EndDate = booking.StartDate + duration;
-                    }                        
-                    
-                    bookings.Add(booking);
-
-                }
-            }
-            return bookings;
+            return bookingsToAdd;
         }
 
         private void PopulateSelectedRoomData(int? RoomGroupID = null, string[] selectedOptions = null)
@@ -800,24 +848,33 @@ namespace BRTF_Room_Booking_App.Controllers
             ViewData["BookingList"] = JsonConvert.SerializeObject(bookingList);
         }
 
-        //Check if room is already booked for the selected time period
-        public bool RoomIsAvailable(RoomBooking newBooking, out RoomBooking conflict)
+        /// <summary>
+        /// Checks if a new Booking has a time conflict with an existing Booking.
+        /// </summary>
+        /// <param name="newBooking">New Booking to compare to existing Bookings and check for time conflicts.</param>
+        /// <param name="conflictBooking">Output the existing Booking that conflicts with the new Booking, if a conflict exists.</param>
+        /// <returns>True if there is no time conflict. False if there is a time conflict.</returns>
+        public bool RoomIsAvailable(RoomBooking newBooking, out RoomBooking conflictBooking)
         {
-            List<RoomBooking> existingBookings = new List<RoomBooking>(_context.RoomBookings.Where(b => b.RoomID == newBooking.RoomID));
+            List<RoomBooking> existingBookings =
+                new List<RoomBooking>(_context.RoomBookings
+                .Include(b => b.Room)
+                .Include(b => b.User)
+                .Where(b => b.RoomID == newBooking.RoomID));
 
-            foreach (RoomBooking r in existingBookings)
+            foreach (RoomBooking existingBooking in existingBookings)
             {
-                if ((newBooking.StartDate > r.StartDate && newBooking.StartDate < r.EndDate)
-                    || (newBooking.EndDate > r.StartDate && newBooking.EndDate < r.EndDate)
-                    || (newBooking.StartDate < r.StartDate && newBooking.EndDate > r.EndDate))
+                if ((newBooking.StartDate >= existingBooking.StartDate && newBooking.StartDate < existingBooking.EndDate) /* Start of new Booking is within an existing Booking */
+                 || (newBooking.EndDate > existingBooking.StartDate && newBooking.EndDate <= existingBooking.EndDate) /* End of a new Booking is within an existing Booking */
+                 || (newBooking.StartDate <= existingBooking.StartDate && newBooking.EndDate >= existingBooking.EndDate)) /* New Booking occurs on top of an existing Booking */
                 {
-                    conflict = r;
+                    conflictBooking = existingBooking;
                     return false;
                 }
             }
-            conflict = null;
+            conflictBooking = null;
             return true;
         }
-    
+
     }
 }

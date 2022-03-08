@@ -89,7 +89,10 @@
                 <thead>
                     <tr>
                         <th>
-                            <button type="submit" class="btn btn-link" name="actionButton" value="Start Date"><b>Start Date</b></button>
+                            <button type="submit" class="btn btn-link" name="actionButton" value="Start Date"><b>Date</b></button>
+                        </th>
+                        <th>
+                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Time</b></button>
                         </th>
                         <th>
                             <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
@@ -108,12 +111,15 @@
                                 @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
                             </td>
                             <td>
+                                @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Room.RoomName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.User.FullName)
                             </td>
-                            <td>
+                            <td style="width: 310px">
                                 <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
                                 <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
                                 <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>

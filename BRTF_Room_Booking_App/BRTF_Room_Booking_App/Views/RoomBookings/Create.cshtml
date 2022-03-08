@@ -7,6 +7,60 @@
     <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        
+        @if (TempData["TimeConflictedBookings"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left">
+                @:<b>Time conflict:</b> Your Booking times overlap with the following existing Bookings.<br /><br />
+                @:<table style='width:87%;'>
+                    @:<tr>
+                        @:<th></th>
+                        @:<th colspan='3'>Your Bookings</th>
+                        @:<th colspan='4'>Existing Bookings</th>
+                    @:</tr>
+                    @:<tr>
+                        @:<th>Room</th>
+                        @:<th>Date</th>
+                        @:<th>Start Time</th>
+                        @:<th>End Time</th>
+                        @:<th>Date</th>
+                        @:<th>Start Time</th>
+                        @:<th>End Time</th>
+                        @:<th>Booked For</th>
+                    @:</tr>
+
+                    List<RoomBooking> yourBookings = TempData["YourBookings"] as List<RoomBooking>;
+                    List<RoomBooking> conflictBookings = TempData["TimeConflictedBookings"] as List<RoomBooking>;
+                    int yourBookingsCount = yourBookings.Count;
+
+                    for (int i = 0; i < yourBookingsCount; i++)
+                    {
+                        @:<tr>
+                            @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortTimeString()))</td>
+                            if (conflictBookings[i] != null)
+                            {
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortDateString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].User.FullName))</td>
+                            }
+                            else
+                            {
+                                @:<td></td>
+                                @:<td colspan='3'>(no conflict)</td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking time.
+            @:</div>
+            @:<br />
+        }
+        
         <div>
             <br />
             <h4>Create New Booking</h4>
@@ -14,7 +68,6 @@
         </div>
         <div>
             <div class="container">
-
                 <form asp-action="Create">
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
@@ -79,12 +132,13 @@
                                 <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
                             </div>
                             <div class="col-10">
-                                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID">
+                                    <option value="">-Select a Room-</option>
+                                </select>
                                 <span asp-validation-for="RoomID" class="text-danger"></span>
                             </div>
                         </div>
                     }
-
                     <!-- Once Identity is implemented, only show this section if the user is an Admin -->
                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
@@ -194,7 +248,7 @@
                     <br />
                     <div class="form-group mt-3">
                         <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
-                        <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
+                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
                     </div>
                     <br />
                 </form>
@@ -215,21 +269,12 @@
             refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
         });
     </script>
-    <script>
-        $('document').ready(function () {
-            var selectedRoomGroup = $("#RoomGroupID").val();
-            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
-            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
-        });
-
-    </script>
     <script tye="text/javascript">
         $(function () {
             $('[data-toggle="popover"]').popover()
         })
     </script>
     <script type="text/javascript">
-
         // Refresh Listbox of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
             var selectedRoomGroup = $("#RoomGroupID").val();
@@ -237,6 +282,5 @@
             $("#selectedOptions").empty();  // Empty previously selected rooms because the area changed
             refreshListbox('availOptions', URL, true, 'There are no Rooms available in this Area.', true);
         });
-
     </script>
 }
