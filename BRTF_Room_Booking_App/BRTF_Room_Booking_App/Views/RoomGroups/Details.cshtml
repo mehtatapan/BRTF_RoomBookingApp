@@ -3,7 +3,22 @@
 @{
     ViewData["Title"] = "Room Group Details";
 }
-
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        @Html.Raw(TempData["AlertMessage"])
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["Message"])</strong>
+    </div>
+    <br />
+}
 <body style="background-color:#E4E6E6" class="justify-content-left">
 
     <br />
@@ -62,12 +77,14 @@
                             </strong>
                         </div>
                     </div>
-                    <div class="form-group">
+                </div>
+                <br/>
+                    <div>
                         <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
                         <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
                     </div>
-                </div>
+                <br/>
             </div>
         </section>
     </div>
-    </body>
+</body>

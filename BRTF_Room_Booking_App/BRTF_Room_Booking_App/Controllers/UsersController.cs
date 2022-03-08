@@ -40,6 +40,9 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID, 
             string actionButton, string sortDirection = "asc", string sortField = "Full Name")
         {
+            //Clear the sort/filter/paging URL Cookie for Controller
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
 
@@ -129,6 +132,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -163,6 +169,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [Authorize(Roles = "Top-level Admin, Admin")]
         public IActionResult Create()
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             ViewData["Role"] = RoleSelectList("User");
             PopulateDropDownLists();
             return View();
@@ -178,6 +187,9 @@ namespace BRTF_Room_Booking_App.Controllers
             [Bind("ID,Username,FirstName,MiddleName,LastName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user,
             string Password, string Role)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -234,6 +246,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -271,6 +286,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, string Password, string Role)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Get the User to update
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(p => p.ID == id);
             var identityUserToUpdate = await _identityContext.Users.Where(u => u.UserName == userToUpdate.Username).FirstOrDefaultAsync();
@@ -343,7 +361,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     await _identityContext.SaveChangesAsync();
                     await _context.SaveChangesAsync();
                     TempData["AlertMessage"] = "User Edited Successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { userToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -376,6 +394,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -410,6 +431,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Get the User to delete from BTRF Context and Identity
             var user = await _context.Users
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
@@ -440,7 +464,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     await DeleteIdentityUser(user.Username);
                     await _context.SaveChangesAsync();
                     TempData["AlertMessage"] = "<strong>Success!</strong> User deleted successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
             }
             catch (DbUpdateException)
@@ -927,6 +951,11 @@ namespace BRTF_Room_Booking_App.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool UserExists(int id)

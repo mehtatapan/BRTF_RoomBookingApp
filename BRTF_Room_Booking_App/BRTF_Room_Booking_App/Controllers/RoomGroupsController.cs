@@ -147,7 +147,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     _context.Add(roomGroup);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Room Group created successfully!";
-                    return RedirectToAction("Details", new { roomGroup.ID });
+                    return RedirectToAction("Index");
                 }
             }
             catch (DbUpdateException dex)

@@ -26,6 +26,9 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchProgCode, string SearchProgName, string SearchLevel,
             string actionButton, string sortDirection = "asc", string sortField = "Program Code")
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
 
@@ -139,6 +142,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: TermAndPrograms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -159,6 +165,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: TermAndPrograms/Create
         public IActionResult Create()
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             PopulateDropDownLists();
             return View();
         }
@@ -170,6 +179,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,ProgramName,ProgramCode,ProgramLevel,UserGroupID")] TermAndProgram termAndProgram)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -199,6 +211,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: TermAndPrograms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -220,6 +235,9 @@ namespace BRTF_Room_Booking_App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             // Get the TermAndProgram to update
             var termAndProgramToUpdate = await _context.TermAndPrograms.FirstOrDefaultAsync(p => p.ID == id);
 
@@ -238,7 +256,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Term & Program edited Successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { termAndProgramToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -271,6 +289,9 @@ namespace BRTF_Room_Booking_App.Controllers
         // GET: TermAndPrograms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //URL with the last filter, sort and page parameters for this controller
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -301,7 +322,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 _context.TermAndPrograms.Remove(termAndProgram);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Term & Program deleted Successfully!";
-                return RedirectToAction(nameof(Index));
+                return Redirect(ViewData["returnURL"].ToString());
             }
             catch (DbUpdateException dex)
             {
@@ -335,6 +356,11 @@ namespace BRTF_Room_Booking_App.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool TermAndProgramExists(int id)

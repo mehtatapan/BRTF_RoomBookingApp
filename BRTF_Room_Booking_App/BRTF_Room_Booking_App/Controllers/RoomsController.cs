@@ -176,7 +176,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     _context.Add(room);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Room created successfully!";
-                    return RedirectToAction("Details", new { room.ID });
+                    return RedirectToAction("Index");
                 }
             }
             catch (DbUpdateException dex)

@@ -3,6 +3,22 @@
 @{
     ViewData["Title"] = "Term & Program Details";
 }
+@if (TempData["AlertMessage"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        @Html.Raw(TempData["AlertMessage"])
+    </div>
+    <br />
+}
+@if (TempData["Message"] != null)
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>@Html.Raw(TempData["Message"])</strong>
+    </div>
+    <br />
+}
 <body style="background-color:#E4E6E6" class="justify-content-left">
 
     <br />
@@ -12,7 +28,7 @@
         <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
             <div>
                 <br />
-                <h4>Term & Program Information</h4>
+                <h4>Term and Program Information</h4>
                 <br />
             </div>
             <dl class="row">
@@ -41,10 +57,12 @@
                     @Html.DisplayFor(model => model.UserGroup.UserGroupName)
                 </dd>
             </dl>
+            <br/>
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
-                <a asp-action="Index" role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
+                <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Terms and Programs</a>
             </div>
+            <br/>
         </section>
     </div>
 </body>

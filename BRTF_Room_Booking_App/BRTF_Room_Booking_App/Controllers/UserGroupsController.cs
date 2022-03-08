@@ -218,7 +218,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "User Group edited successfully!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", new { userGroupToUpdate.ID });
                 }
                 catch (RetryLimitExceededException)
                 {

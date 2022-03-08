@@ -4,7 +4,9 @@
     ViewData["Title"] = "Edit Room";
 }
 <body style="background-color:#E4E6E6" class="justify-content-left">
+    <br />
     <h1 class="mb-4">Edit Room</h1>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
@@ -12,9 +14,10 @@
             <h4>Edit this Room</h4>
             <br />
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Edit">
+        <form asp-action="Edit">
+            <div class="row">
+                <div class="col-md-4">
+
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ID" />
                     <div class="colform-group">
@@ -38,13 +41,15 @@
                             </label>
                         </strong>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                        <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Rooms</a>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+            <br/>
+            <div>
+                <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
+                <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Rooms</a>
+            </div>
+            <br/>
+        </form>
     </section>
 </body>
 

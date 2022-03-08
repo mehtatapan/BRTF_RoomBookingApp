@@ -4,7 +4,9 @@
     ViewData["Title"] = "Delete Room";
 }
 <body style="background-color:#E4E6E6" class="justify-content-left">
+    <br />
     <h1 class="mb-4">Delete Room</h1>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
@@ -33,17 +35,19 @@
                 </div>
                 <div class="form-group form-check">
                     <strong>
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                    </label>
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+                        </label>
                     </strong>
                 </div>
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="ID" />
-                    <input type="submit" value="Delete" class="btn btn-danger mx-2" style="width:100px;" />
-                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Rooms</a>
-                </form>
             </div>
         </div>
-        </section>
-    </body>
+        <br />
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="ID" />
+            <input type="submit" value="Delete" class="btn btn-danger mx-2" style="width:100px;" />
+            <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Rooms</a>
+        </form>
+        <br />
+    </section>
+</body>
