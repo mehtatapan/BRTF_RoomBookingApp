@@ -1,5 +1,4 @@
-﻿
-@model BRTF_Room_Booking_App.Models.Room
+﻿@model BRTF_Room_Booking_App.Models.Room
 @{
     ViewData["Title"] = "Edit Room";
 }
@@ -43,16 +42,18 @@
                     </div>
                 </div>
             </div>
-            <br/>
+            <br />
             <div>
                 <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Rooms</a>
+                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Rooms</a>
             </div>
-            <br/>
+            <br />
         </form>
     </section>
 </body>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

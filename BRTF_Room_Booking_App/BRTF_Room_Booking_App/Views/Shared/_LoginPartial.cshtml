@@ -15,7 +15,7 @@
             <ul class="dropdown-menu" aria-labelledby="navbarIDDropdown">
                 @if (!String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Request.Cookies["userID"]))
                 {
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@HttpContextAccessor.HttpContext.Request.Cookies["userID"]" style="color: #E4E6E6">Manage Account</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@HttpContextAccessor.HttpContext.Request.Cookies["userID"]" style="color: #E4E6E6">Manage Account</a></li>
                     <li class="dropdown-divider"></li>
                 }
                 <li>

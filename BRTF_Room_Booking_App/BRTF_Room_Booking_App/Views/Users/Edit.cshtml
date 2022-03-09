@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body style="background-color:#E4E6E6" class="justify-content-left">
-    <br/>
+    <br />
     <h1 class="mb-4">Edit User</h1>
-    <br/>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
@@ -17,60 +17,86 @@
             <h4>User Details</h4>
             <br />
         </div>
-            <form asp-action="Edit">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="ID" />
-                        <div class="form-group">
-                            <label asp-for="Username" class="label">Username</label>
-                            <input asp-for="Username" class="form-control" disabled="disabled" />
-                            <span asp-validation-for="Username" class="text-danger"></span>
-                        </div>
+        <form asp-action="Edit">
+            <div class="row">
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ID" />
+                    <div class="form-group">
+                        <label asp-for="Username" class="label">Username</label>
+                        <input asp-for="Username" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
 
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MiddleName" class="label"></label>
+                        <input asp-for="MiddleName" class="form-control" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    @if (User.IsInRole("User"))
+                    {
                         <div class="form-group">
-                            <label asp-for="FirstName" class="label"></label>
-                            <input asp-for="FirstName" class="form-control" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                            <label asp-for="Email" class="label"></label>
+                            <input asp-for="Email" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="MiddleName" class="label"></label>
-                            <input asp-for="MiddleName" class="form-control" />
-                            <span asp-validation-for="MiddleName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="LastName" class="label"></label>
-                            <input asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                    {
                         <div class="form-group">
                             <label asp-for="Email" class="label"></label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                    </div>
+                    }
 
-                    <div class="col-md-6">
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Password" class="label">Password</label>
+                        <input id="Password" name="Password" class="form-control" type="password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ConfirmPassword" class="label">Confirm Password</label>
+                        <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" type="password"
+                               data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" />
+                        <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="label">
+                            <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="label">
+                            <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                        </label>
+                    </div>
+                    @if (User.IsInRole("User"))
+                    {
                         <div class="form-group">
-                            <label for="Password" class="label">Password</label>
-                            <input id="Password" name="Password" class="form-control" type="password" />
+                            <label asp-for="TermAndProgramID" class="label"></label>
+                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
+                            <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="ConfirmPassword" class="label">Confirm Password</label>
-                            <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" type="password"
-                                   data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" />
-                            <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
+                            <label for="Role" class="label"></label>
+                            <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role" disabled="disabled"></select>
                         </div>
-                        <div class="form-group form-check">
-                            <label class="label">
-                                <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                            </label>
-                        </div>
-                        <div class="form-group form-check">
-                            <label class="label">
-                                <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                            </label>
-                        </div>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                    {
                         <div class="form-group">
                             <label asp-for="TermAndProgramID" class="label"></label>
                             <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID"></select>
@@ -80,18 +106,26 @@
                             <label for="Role" class="label"></label>
                             <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
                         </div>
-                    </div>
-                </div>
-                    <br/>
-                    <div>
-                        <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Users</a>
-                    </div>
-                    <br/>
-            </form>
-        </section>
-    </body>
+                    }
 
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                </div>
+            </div>
+            <br />
+            <div>
+                <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
+                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                {
+                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
+                }
+
+            </div>
+            <br />
+        </form>
+    </section>
+</body>
+
+@section Scripts {
+            @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
         }
