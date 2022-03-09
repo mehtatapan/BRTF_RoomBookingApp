@@ -39,49 +39,75 @@
             <div class="col-md-6">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ID" />
-                <div class="form-group">
-                    <label asp-for="Username" class="label">Username</label>
-                    @Html.DisplayFor(model => model.Username)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <label asp-for="Username" class="label">Username</label>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.Username)
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label asp-for="FirstName" class="label"></label>
-                    @Html.DisplayFor(model => model.FirstName)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <label asp-for="FirstName" class="label"></label>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.FirstName)
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="label"></label>
-                    @Html.DisplayFor(model => model.MiddleName)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <label asp-for="MiddleName" class="label"></label>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.MiddleName)
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="LastName" class="label"></label>
-                    @Html.DisplayFor(model => model.LastName)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <label asp-for="LastName" class="label"></label>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.LastName)
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="label"></label>
-                    @Html.DisplayFor(model => model.Email)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <label asp-for="Email" class="label"></label>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.Email)
+                    </div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
                 <div class="form-group form-check">
                     <label class="label">
-                        <input class="form-check-input" asp-for="EmailBookingNotifications" disabled="disabled"/> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                        <input class="form-check-input" asp-for="EmailBookingNotifications" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
                     </label>
                 </div>
                 <div class="form-group form-check">
                     <label class="label">
-                        <input class="form-check-input" asp-for="EmailCancelNotifications" disabled="disabled"/> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                        <input class="form-check-input" asp-for="EmailCancelNotifications" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
                     </label>
                 </div>
-                    <div class="form-group">
-                        <label asp-for="TermAndProgramID" class="label"></label>
-                        @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                    <label asp-for="TermAndProgramID" class="label"></label>
                     </div>
-                    <div class="form-group">
-                        <label for="Role" class="label">Role</label>
-                        @ViewBag.Role
+                    <div class="col-8 pt-2">
+                    @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                    <label for="Role" class="label">Role</label>
+                    </div>
+                    <div class="col-5 pt-2">
+                    @ViewBag.Role
+                    </div>
+                </div>
             </div>
         </div>
         <br />
