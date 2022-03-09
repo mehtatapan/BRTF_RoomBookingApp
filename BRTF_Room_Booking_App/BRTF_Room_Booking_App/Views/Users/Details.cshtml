@@ -25,9 +25,9 @@
 </head>
 
 <body style="background-color:#E4E6E6" class="justify-content-left">
-    <br/>
+    <br />
     <h1 class="mb-4">User Details</h1>
-    <br/>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
@@ -35,73 +35,65 @@
             <h4>User Details</h4>
             <br />
         </div>
-        <div>
-            <dl class="row">
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Username)
-                </dt>
-                <dd class="col-sm-6">
+        <div class="row">
+            <div class="col-md-6">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label asp-for="Username" class="label">Username</label>
                     @Html.DisplayFor(model => model.Username)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </dt>
-                <dd class="col-sm-6">
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName" class="label"></label>
                     @Html.DisplayFor(model => model.FirstName)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.MiddleName)
-                </dt>
-                <dd class="col-sm-6">
+                </div>
+                <div class="form-group">
+                    <label asp-for="MiddleName" class="label"></label>
                     @Html.DisplayFor(model => model.MiddleName)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.LastName)
-                </dt>
-                <dd class="col-sm-6">
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="label"></label>
                     @Html.DisplayFor(model => model.LastName)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-6">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="label"></label>
                     @Html.DisplayFor(model => model.Email)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.EmailBookingNotifications)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.EmailCancelNotifications)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.TermAndProgram)
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
-                </dd>
-                <dt class="col-sm-6">
-                    Role
-                </dt>
-                <dd class="col-sm-6">
-                    @ViewBag.Role
-                </dd>
-            </dl>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group form-check">
+                    <label class="label">
+                        <input class="form-check-input" asp-for="EmailBookingNotifications" disabled="disabled"/> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="label">
+                        <input class="form-check-input" asp-for="EmailCancelNotifications" disabled="disabled"/> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                    </label>
+                </div>
+                    <div class="form-group">
+                        <label asp-for="TermAndProgramID" class="label"></label>
+                        @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
+                    </div>
+                    <div class="form-group">
+                        <label for="Role" class="label">Role</label>
+                        @ViewBag.Role
+                    </div>
+            </div>
         </div>
-        <br/>
+        <br />
         <div>
             <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
-                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-                {
-                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
-                }
+            @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+            {
+                <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
+            }
         </div>
-        <br/>
+        <br />
     </section>
+
 </body>
 
