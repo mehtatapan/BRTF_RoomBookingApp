@@ -612,7 +612,13 @@ namespace BRTF_Room_Booking_App.Controllers
                 ExcelPackage excel = new ExcelPackage();
 
                 // Check the file extension of uploaded file
-                if (theExcel.FileName.ToLower().Contains(".xlsx"))
+                if (theExcel == null)
+                {
+                    // No file was uploaded
+                    // so throw an error
+                    throw new Exception("User did not upload a file.");
+                }
+                else if (theExcel.FileName.ToLower().Contains(".xlsx"))
                 {
                     // If it is an Excel file, read it directly via memory stream
                     using (var memoryStream = new MemoryStream())
