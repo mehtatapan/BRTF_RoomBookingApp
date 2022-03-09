@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 
-<body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
+<body style="background-color:#E4E6E6" class="justify-content-left">
     <br />
     <h1>Details</h1>
     <br />
@@ -35,23 +35,29 @@
             <br />
         </div>
         <div>
-            <dl class="row">
-                <dt class="col-6 text-right">
-                    @Html.DisplayNameFor(model => model.UserGroupName)
-                </dt>
-                <dd class="col-6 text-left">
-                    @Html.DisplayFor(model => model.UserGroupName)
-                </dd>
-                <dt class="col-6 text-right">
-                    @Html.DisplayNameFor(model => model.RoomUserGroupPermissions)
-                </dt>
-                <dd class="col-6 text-left">
-                    @foreach (var r in Model.RoomUserGroupPermissions)
-                    {
-                        @r.RoomGroup.AreaName <br />
-                    }
-                </dd>
-            </dl>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-4 text-right pt-2">
+                            <strong><label asp-for="UserGroupName" class="label"></label></strong>
+                        </div>
+                        <div class="col-5 pt-2">
+                            @Html.DisplayFor(model => model.UserGroupName)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-right pt-2">
+                            <strong><label class="label">Room Group Permissions</label></strong>
+                        </div>
+                        <div class="col-5 pt-2">
+                            @foreach (var r in Model.RoomUserGroupPermissions)
+                            {
+                                @r.RoomGroup.AreaName <br />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <br />
         <div>
