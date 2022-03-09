@@ -26,23 +26,23 @@ namespace BRTF_Room_Booking_App.Controllers
         //    return View(await _context.GlobalSettings.ToListAsync());
         //}
 
-        //// GET: GlobalSettings/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: GlobalSettings/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var globalSetting = await _context.GlobalSettings
-        //        .FirstOrDefaultAsync(m => m.ID == id);
-        //    if (globalSetting == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var globalSetting = await _context.GlobalSettings
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (globalSetting == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(globalSetting);
-        //}
+            return View(globalSetting);
+        }
 
         //// GET: GlobalSettings/Create
         //public IActionResult Create()
@@ -122,7 +122,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         await _context.SaveChangesAsync();
                     }
                     TempData["AlertMessage"] = "Global Settings have been updated!";
-                    return RedirectToAction(nameof(Edit));
+                    return RedirectToAction("Details", new { gsToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
