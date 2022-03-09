@@ -5,13 +5,13 @@
 }
 <body style="background-color:#E4E6E6" class="justify-content-left">
     <br/>
-    <h1 class="mb-4">Create Room Group</h1>
+    <h1 class="mb-4 text-center">Create Room Group</h1>
     <br/>
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
             <br />
-            <h4>Create New Room Group</h4>
+            <h4 class="text-center">Create New Room Group</h4>
             <br />
         </div>
         <form asp-action="Create">
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <br/>
-            <div>
+            <div class="d-flex justify-content-center">
                 <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
                 <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
             </div>

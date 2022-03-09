@@ -6,13 +6,13 @@
 <body style="background-color:#E4E6E6" class="justify-content-left">
 
     <br />
-    <h1 class="mb-4">Details</h1>
+    <h1 class="mb-4 text-center">Details</h1>
     <br />
     <div>
         <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
             <div>
                 <br />
-                <h4>Are you sure you want to delete this Term and Program?</h4>
+                <h4 class="text-center">Are you sure you want to delete this Term and Program?</h4>
                 <br />
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -53,11 +53,13 @@
                 </div>
             </div>
             <br/>
+            <div class="d-flex justify-content-center">
             <form asp-action="Delete">
                 <input type="hidden" asp-for="ID" />
                 <input type="submit" value="Delete" class="btn btn-danger" style="width:100px;" />
                 <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Terms and Programs</a>
             </form>
+            </div>
             <br/>
         </section>
     </div>

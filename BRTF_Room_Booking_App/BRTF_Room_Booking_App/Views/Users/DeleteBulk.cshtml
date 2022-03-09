@@ -7,14 +7,14 @@
 </head>
 
 <br/>
-<h1>Bulk Delete Users</h1>
+<h1 class="text-center">Bulk Delete Users</h1>
 <br/>
 
-<div>
-    <h4>Select Roles and User Groups to delete Users from:</h4>
-    <hr />
-    <form asp-action="DeleteBulk">
-        <div class="container-white">
+<section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        <br/>
+        <h4 class="text-center">Select Roles and User Groups to delete Users from:</h4>
+        <br />
+        <form asp-action="DeleteBulk">
             <div class="form-group">
                 <label class="control-label"><b>Select Roles to delete Users from:</b></label>
                 <div class="col-md-offset-1">
@@ -39,9 +39,9 @@
                                 }
                             @:</tr>
                             }
-                    </table>
+                        </table>
+                    </div>
                 </div>
-            </div>
                 <div class="form-group">
                     <label class="control-label"><b>Select Groups to delete Users from:</b></label>
                     <div class="col-md-offset-1">
@@ -66,36 +66,38 @@
                                     }
                                 @:</tr>
                                 }
-                        </table>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                    <hr>
+                    <div>
                     <input type="checkbox"
                            name="selectAll"
                            value="Select All"
                            onClick="selectAllCheckboxes(this)" />
                     <b>Select All&nbsp;&nbsp;</b>
-        </div>
-        <br/>
-        <div>
-            <input type="submit" value="Delete Selected" class="btn btn-danger" />
-            <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Users</a>
-        </div>
-        <br/>
-    </form>
-</div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
-        function selectAllCheckboxes(source) {
-            checkboxesRoles = document.getElementsByName('selectedRoles');
-            for (var i = 0, n = checkboxesRoles.length; i < n; i++) {
-                checkboxesRoles[i].checked = source.checked;
+                    </div>
+
+                    <br />
+                    <div class="d-flex justify-content-center">
+                        <input type="submit" value="Delete Selected" class="btn btn-danger" />
+                        <a asp-action="Index" role="button" class="btn btn-secondary mx-2">Back to Users</a>
+                    </div>
+                    <br />
+                </form>
+
+</section>
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                <script type="text/javascript">
+                    function selectAllCheckboxes(source) {
+                        checkboxesRoles = document.getElementsByName('selectedRoles');
+                        for (var i = 0, n = checkboxesRoles.length; i < n; i++) {
+                            checkboxesRoles[i].checked = source.checked;
+                        }
+                        checkboxesGroups = document.getElementsByName('selectedGroups');
+                        for (var i = 0, n = checkboxesGroups.length; i < n; i++) {
+                            checkboxesGroups[i].checked = source.checked;
+                        }
+                    }
+                </script>
             }
-            checkboxesGroups = document.getElementsByName('selectedGroups');
-            for (var i = 0, n = checkboxesGroups.length; i < n; i++) {
-                checkboxesGroups[i].checked = source.checked;
-            }
-        }
-    </script>
-}

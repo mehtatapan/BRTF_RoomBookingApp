@@ -20,10 +20,14 @@
     <br />
 }
 <body style="background-color:#E4E6E6" class="justify-content-left">
-
-    <h1>Edit Global Settings</h1>
-    <hr />
+    <br/>
+    <h1 class="text-center">Edit Global Settings</h1>
+    <br />
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+
+        <br />
+        <h4 class="text-center">Details</h4>
+        <br />
 
         <div class="row">
             <form asp-action="Edit">
@@ -79,9 +83,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a  asp-area="" asp-controller="GlobalSettings" asp-action="Details" asp-route-id="1" style=""role="button" class="btn btn-secondary mx-2" style="width:100px;color: #E4E6E6;">Back</a>
+                <br/>
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Save" class="btn btn-primary mx-2 mb-4" style="width:100px" />
+                    <a asp-area="" asp-controller="GlobalSettings" asp-action="Details" asp-route-id="1" role="button" class="btn btn-secondary mx-2 mb-4" style="width:100px;color: #E4E6E6;">Back</a>
                 </div>
             </form>
         </div>
