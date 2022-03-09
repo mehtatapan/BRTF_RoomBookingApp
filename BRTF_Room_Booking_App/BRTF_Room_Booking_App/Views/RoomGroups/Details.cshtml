@@ -37,53 +37,71 @@
                 <input type="hidden" asp-for="ID" />
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <strong><label asp-for="AreaName" class="control-label"></label></strong>
-                            <input asp-for="AreaName" class="form-control" disabled />
-                            <span asp-validation-for="AreaName" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="AreaName" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.AreaName)
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <strong><label asp-for="Description" class="control-label"></label></strong>
-                            <textarea asp-for="Description" class="form-control" disabled></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="Description" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.Description)
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <strong><label asp-for="BlackoutTime" class="control-label"></label></strong>
-                            <input asp-for="BlackoutTime" class="form-control" disabled />
-                            <span asp-validation-for="BlackoutTime" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="BlackoutTime" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.BlackoutTime)
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <strong><label asp-for="MaxHoursPerSingleBooking" class="control-label"></label></strong>
-                            <input asp-for="MaxHoursPerSingleBooking" class="form-control" disabled />
-                            <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="MaxHoursPerSingleBooking" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.MaxHoursPerSingleBooking)
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
-                            <input asp-for="MaxHoursTotal" class="form-control" disabled />
-                            <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.MaxHoursTotal)
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <strong><label asp-for="MaxNumberOfBookings" class="control-label"></label></strong>
-                            <input asp-for="MaxNumberOfBookings" class="form-control" disabled />
-                            <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
-                        </div>
-                        <div class="form-group form-check">
-                            <strong>
-                                <label class="form-check-label">
-                                    <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                                </label>
-                            </strong>
+                        <div class="row">
+                            <div class="col-5 text-right pt-2">
+                                <strong><label asp-for="MaxNumberOfBookings" class="control-label"></label></strong>
+                            </div>
+                            <div class="col-5 pt-2">
+                                @Html.DisplayFor(model => model.MaxNumberOfBookings)
+                            </div>
+                            <div class="form-group form-check">
+                                <strong>
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+                                    </label>
+                                </strong>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <br/>
-                    <div>
-                        <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
-                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
-                    </div>
-                <br/>
+                <br />
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
+                    <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
+                </div>
+                <br />
             </div>
         </section>
     </div>
