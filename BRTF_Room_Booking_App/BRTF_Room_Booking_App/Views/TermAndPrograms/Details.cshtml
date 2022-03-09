@@ -31,38 +31,48 @@
                 <h4>Term and Program Information</h4>
                 <br />
             </div>
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.ProgramName)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ProgramName)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.ProgramCode)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ProgramCode)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.ProgramLevel)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ProgramLevel)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.UserGroup)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.UserGroup.UserGroupName)
-                </dd>
-            </dl>
-            <br/>
+            <div class="row">
+                <div class="col-md-6">
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <strong><label asp-for="ProgramName" class="control-label"></label></strong>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.ProgramName)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <strong><label asp-for="ProgramCode" class="control-label"></label></strong>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.ProgramCode)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <strong><label asp-for="ProgramLevel" class="control-label"></label></strong>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.ProgramLevel)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-right pt-2">
+                        <strong><label asp-for="UserGroupID" class="control-label"></label></strong>
+                    </div>
+                    <div class="col-5 pt-2">
+                        @Html.DisplayFor(model => model.UserGroup.UserGroupName)
+                    </div>
+                </div>
+                </div>
+            </div>
+            <br />
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
                 <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Terms and Programs</a>
             </div>
-            <br/>
+            <br />
         </section>
     </div>
 </body>
