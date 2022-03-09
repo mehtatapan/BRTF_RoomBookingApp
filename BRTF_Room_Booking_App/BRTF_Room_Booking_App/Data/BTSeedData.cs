@@ -598,6 +598,34 @@ namespace BRTF_Room_Booking_App.Data
                             // So skip it and go on to the next
                         }
                     }
+
+                    // Give Users in "pres" access to "Radio" Rooms
+                    int[] presUserGroupIDs = context.UserGroups.Where(u => u.UserGroupName.ToUpper().Contains("PRES")).Select(u => u.ID).ToArray();
+                    int[] radioRoomGroupIDs = context.RoomGroups.Where(r => r.AreaName.ToUpper().Contains("RADIO")).Select(r => r.ID).ToArray();
+
+                    foreach (int presUserGroupID in presUserGroupIDs)
+                    {
+                        foreach (int radioRoomGroupID in radioRoomGroupIDs)
+                        {
+                            // Construct Permission details
+                            RoomUserGroupPermission roomUserGroupPermission = new RoomUserGroupPermission()
+                            {
+                                UserGroupID = presUserGroupID,
+                                RoomGroupID = radioRoomGroupID
+                            };
+                            try
+                            {
+                                // Could be duplicates
+                                context.RoomUserGroupPermissions.Add(roomUserGroupPermission);
+                                context.SaveChanges();
+                            }
+                            catch (Exception e)
+                            {
+                                var m = e.Message;
+                                // So skip it and go on to the next
+                            }
+                        }
+                    }
                 }
 
                 // Seed many Room Bookings

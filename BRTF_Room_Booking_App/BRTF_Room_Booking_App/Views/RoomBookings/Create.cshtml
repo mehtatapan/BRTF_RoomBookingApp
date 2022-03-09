@@ -7,7 +7,7 @@
     <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
-        
+
         @if (TempData["TimeConflictedBookings"] != null)
         {
             @:<br />
@@ -34,8 +34,15 @@
                     List<RoomBooking> conflictBookings = TempData["TimeConflictedBookings"] as List<RoomBooking>;
                     int yourBookingsCount = yourBookings.Count;
 
+                    string previousRoomName = yourBookings[0].Room.RoomName;  // Used to bold text where the room name changes
+
                     for (int i = 0; i < yourBookingsCount; i++)
                     {
+                        if (yourBookings[i].Room.RoomName != previousRoomName)
+                        {
+                            @:<tr><td>&nbsp;</td></tr>
+                            previousRoomName = yourBookings[i].Room.RoomName;
+                        }
                         @:<tr>
                             @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))</td>
@@ -56,11 +63,170 @@
                         @:</tr>
                     }
                 @:</table><br />
-                @:Please adjust your Booking time.
+                @:Please adjust your Booking times.
             @:</div>
             @:<br />
         }
-        
+
+        @if (TempData["AreaHoursViolation"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left">
+                @:<b>Maximum Area hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Areas.<br /><br />
+                @:<table style='width:90%;'>
+                    @:<tr>
+                        @:<th>Area</th>
+                        @:<th>Your Existing Hours</th>
+                        @:<th>Hours Added By New Booking</th>
+                        @:<th>Your New Total</th>
+                        @:<th>Max Allowed Total</th>
+                        @:<th></th>
+                    @:</tr>
+
+                    List<IDictionary<string, string>> hourViolations = TempData["AreaHoursViolation"] as List<IDictionary<string, string>>;
+                    int hourViolationsCount = hourViolations.Count;
+
+                    for (int i = 0; i < hourViolationsCount; i++)
+                    {
+                        @:<tr>
+                            @:<td>@(Html.Raw(hourViolations[i]["AreaName"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["ExistingHoursForArea"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["NewHoursForArea"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["NewTotalHoursForArea"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursForArea"]))</td>
+                            if (Convert.ToInt32(hourViolations[i]["NewTotalHoursForArea"]) > Convert.ToInt32(hourViolations[i]["MaxHoursForArea"]))
+                            {
+                                @:<td><b>Exceeds Max</b></td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking times.
+            @:</div>
+            @:<br />
+        }
+
+        @if (TempData["RoomHoursViolation"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left">
+                @:<b>Maximum Room hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Rooms.<br /><br />
+                @:<table style='width:90%;'>
+                    @:<tr>
+                        @:<th>Room</th>
+                        @:<th>Your Existing Hours</th>
+                        @:<th>Hours Added By New Booking</th>
+                        @:<th>Your New Total</th>
+                        @:<th>Max Allowed Total</th>
+                        @:<th></th>
+                    @:</tr>
+
+                    List<IDictionary<string, string>> hourViolations = TempData["RoomHoursViolation"] as List<IDictionary<string, string>>;
+                    int hourViolationsCount = hourViolations.Count;
+
+                    for (int i = 0; i < hourViolationsCount; i++)
+                    {
+                        @:<tr>
+                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["ExistingHoursForRoom"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["NewHoursForRoom"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["NewTotalHoursForRoom"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursForRoom"]))</td>
+                            if (Convert.ToInt32(hourViolations[i]["NewTotalHoursForRoom"]) > Convert.ToInt32(hourViolations[i]["MaxHoursForRoom"]))
+                            {
+                                @:<td><b>Exceeds Max</b></td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking times.
+            @:</div>
+            @:<br />
+        }
+
+        @if (TempData["SingleBookingLengthViolation"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left">
+                @:<b>Booking length violation:</b> Your new Booking exceeds the maximum allowed uninterrupted time for single Bookings in these Rooms.<br /><br />
+                @:<table style='width:90%;'>
+                    @:<tr>
+                        @:<th>Room</th>
+                        @:<th>Booking Date</th>
+                        @:<th>Time</th>
+                        @:<th>Booking Length (Hours)</th>
+                        @:<th>Max Length (Hours)</th>
+                        @:<th></th>
+                    @:</tr>
+
+                    List<IDictionary<string, string>> hourViolations = TempData["SingleBookingLengthViolation"] as List<IDictionary<string, string>>;
+                    int hourViolationsCount = hourViolations.Count;
+
+                    string previousRoomName = hourViolations[0]["RoomName"];  // Used to bold text where the room name changes
+
+                    for (int i = 0; i < hourViolationsCount; i++)
+                    {
+                        if (hourViolations[i]["RoomName"] != previousRoomName)
+                        {
+                            @:<tr><td>&nbsp;</td></tr>
+                            previousRoomName = hourViolations[i]["RoomName"];
+                        }
+                        @:<tr>
+                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingDate"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingTime"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["HoursBooked"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursSingleBooking"]))</td>
+                            if (Convert.ToInt32(hourViolations[i]["HoursBooked"]) > Convert.ToInt32(hourViolations[i]["MaxHoursSingleBooking"]))
+                            {
+                                @:<td><b>Exceeds Max</b></td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking times.
+            @:</div>
+            @:<br />
+        }
+
+        @if (TempData["AreaBookingCountViolation"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left">
+                @:<b>Maximum Booking count violation:</b> Your new Booking exceeds the maximum number of separate Bookings you are allowed to have for these Areas.<br /><br />
+                @:<table style='width:90%;'>
+                    @:<tr>
+                        @:<th>Area</th>
+                        @:<th>Existing Bookings Count</th>
+                        @:<th>Count of New Bookings</th>
+                        @:<th>Your New Total</th>
+                        @:<th>Max Allowed Total</th>
+                        @:<th></th>
+                    @:</tr>
+
+                    List<IDictionary<string, string>> bookingViolations = TempData["AreaBookingCountViolation"] as List<IDictionary<string, string>>;
+                    int bookingViolationsCount = bookingViolations.Count;
+
+                    for (int i = 0; i < bookingViolationsCount; i++)
+                    {
+                        @:<tr>
+                            @:<td>@(Html.Raw(bookingViolations[i]["AreaName"]))</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["ExistingBookingsForArea"]))</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["NewBookingsForArea"]))</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["NewTotalBookingsForArea"]))</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["MaxBookingsForArea"]))</td>
+                            if (Convert.ToInt32(bookingViolations[i]["NewTotalBookingsForArea"]) > Convert.ToInt32(bookingViolations[i]["MaxBookingsForArea"]))
+                            {
+                                @:<td><b>Exceeds Max</b></td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking settings.
+            @:</div>
+            @:<br />
+        }
+
         <div>
             <br />
             <h4>Create New Booking</h4>

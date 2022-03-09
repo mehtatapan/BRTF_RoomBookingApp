@@ -303,34 +303,95 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Overall list of bookings to be added
+                    List<RoomBooking> bookingsToAdd = new List<RoomBooking>();
+
+                    // Overall results for time conflict detection
+                    bool overallTimeConflictFound = false;
+                    List<RoomBooking> overallTimeConflictedBookings = new List<RoomBooking>();
+
+                    // Overall results for violating total booking time for a Room
+                    bool overallRoomTimeViolationFound = false;
+                    List<IDictionary<string, string>> overallRoomHours = new List<IDictionary<string, string>>();
+
+                    // Overall results for violating total booking time for an Area
+                    bool overallAreaTimeViolationFound = false;
+                    List<IDictionary<string, string>> overallAreaHours = new List<IDictionary<string, string>>();
+                    HashSet<int> areaIDsBooked = new HashSet<int>();
+
+                    // Overall results for violating max time per single Booking
+                    bool overallSingleBookingLengthViolationFound = false;
+                    List<IDictionary<string, string>> overallSingleBookingHours = new List<IDictionary<string, string>>();
+
+                    // Overall results for violating max number of separate Bookings for an Area
+                    bool overallAreaBookingNumberViolationFound = false;
+                    List<IDictionary<string, string>> overallAreaBookingCounts = new List<IDictionary<string, string>>();
+
                     // Make a Bookings for each Room selected
                     foreach (string roomID in selectedOptions)
                     {
-                        if (chkRepeat == "on") // Check if we should make repeat Bookings
+                        // Get User's pre-existing booked time in this Room
+                        var thisRoom = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault();
+                        var existingBookingsForThisRoom = _context.RoomBookings
+                            .Where(b => (b.UserID == roomBooking.UserID) && (b.RoomID == Convert.ToInt32(roomID)) && (b.StartDate >= DateTime.Now));
+
+                        TimeSpan existingTotalTimeInThisRoom = TimeSpan.Zero;
+                        TimeSpan timeAddedByNewBookings = TimeSpan.Zero;
+
+                        // Tally up the User's existing time
+                        foreach(var existingBookingForThisRoom in existingBookingsForThisRoom)
                         {
-                            //List<RoomBooking> timeConflictedBookings;
-
-                            List<RoomBooking> bookings = GenerateRepeatBookings(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
-                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval), RepeatType,
-                                    Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on");
-
-
-                            //if (timeConflictedBookings != null)
-                            //{
-                            //    TempData["YourBookings"] = bookings;
-                            //    TempData["TimeConflictedBookings"] = timeConflictedBookings;
-                            //    throw new DbUpdateException("Booking time conflict violation.");
-                            //}
-
-                            _context.RoomBookings.AddRange(bookings);
-                            // Save changes later at the end
+                            TimeSpan duration = existingBookingForThisRoom.EndDate - existingBookingForThisRoom.StartDate;
+                            existingTotalTimeInThisRoom += duration;
                         }
-                        else
-                        {
-                            // Make a single Booking for each Room selected
 
-                            // Construct Room Booking details
-                            RoomBooking booking = new RoomBooking()
+                        // Store this Area ID so we know to check it afterwards
+                        areaIDsBooked.Add(thisRoom.RoomGroupID);
+
+                        // We will check how their existing time totals compare after generating their new bookings
+
+                        if (chkRepeat == "on") // Check if we should make repeat Bookings, "on" means we make repeat bookings
+                        {
+                            // Stores values of this room for time conflict detection
+                            bool timeConflictFoundForThisRoom;
+                            List<RoomBooking> timeConflictedBookingsForThisRoom;
+
+                            // Stores result for max single booking time violation
+                            bool singleBookingLengthViolationFoundForThisRoom;
+                            List<IDictionary<string, string>> singleBookingFeedbackForThisRoom;
+
+                            // Generate bookings to add for this room
+                            List<RoomBooking> bookingsForThisRoom = GenerateRepeatBookings(roomBooking.SpecialNotes, roomBooking.UserID, Convert.ToInt32(roomID),
+                                    roomBooking.StartDate, roomBooking.EndDate, Convert.ToDateTime(RepeatEndDate), Convert.ToInt32(RepeatInterval), RepeatType,
+                                    Monday == "on", Tuesday == "on", Wednesday == "on", Thursday == "on", Friday == "on", Saturday == "on", Sunday == "on",
+                                    out timeConflictFoundForThisRoom, out timeConflictedBookingsForThisRoom, out timeAddedByNewBookings,
+                                    out singleBookingLengthViolationFoundForThisRoom, out singleBookingFeedbackForThisRoom);
+
+
+                            if (timeConflictFoundForThisRoom == true)
+                            {
+                                overallTimeConflictFound = true;    // ONLY flag the overall result if a time conflict is found
+                            }
+                            overallTimeConflictedBookings.AddRange(timeConflictedBookingsForThisRoom); // ALWAYS track conflicts so far, in case there was a conflict in a different room
+
+                            if (singleBookingLengthViolationFoundForThisRoom == true)
+                            {
+                                overallSingleBookingLengthViolationFound = true;    // ONLY flag the overall result if a violation of single booking length is found
+                            }
+                            overallSingleBookingHours.AddRange(singleBookingFeedbackForThisRoom); // ALWAYS track conflicts so far, in case there was a violation in a different room
+
+                            bookingsToAdd.AddRange(bookingsForThisRoom);   // Append generated bookings to the list of bookings to add to _context at the end
+
+                            // Wait until the end to add bookings to _context
+                            // Wait until the end to save changes to _context
+                        }
+                        else //The user has not asked to make repeat bookings, so make only 1 booking
+                        {
+                            // Stores results of this room for time conflict detection
+                            RoomBooking timeConflictedBookingForThisRoom;
+
+                            // Make a single Booking for each Room selected
+                            RoomBooking bookingForThisRoom = new RoomBooking()
                             {
                                 UserID = roomBooking.UserID,
                                 SpecialNotes = roomBooking.SpecialNotes,
@@ -347,26 +408,161 @@ namespace BRTF_Room_Booking_App.Controllers
                             //    booking.EndDate = booking.StartDate + duration;
                             //}
 
-                            //if (!RoomIsAvailable(booking, out RoomBooking conflict))
-                            //{
-                            //    List<RoomBooking> bookings = new List<RoomBooking>();
-                            //    bookings.Add(booking);
+                            if (!RoomIsAvailable(bookingForThisRoom, out timeConflictedBookingForThisRoom))
+                            {
+                                overallTimeConflictFound = true;    // ONLY flag the overall result if a time conflict is found
+                            }
+                            overallTimeConflictedBookings.Add(timeConflictedBookingForThisRoom); // ALWAYS track conflicts so far, in case there was a conflict in a different room
 
-                            //    List<RoomBooking> conflicts = new List<RoomBooking>();
-                            //    conflicts.Add(conflict);
+                            // After generating the new bookings for this room, we compare it to the User's previously existing time
+                            timeAddedByNewBookings = bookingForThisRoom.EndDate - bookingForThisRoom.StartDate;
 
-                            //    TempData["YourBookings"] = bookings;
-                            //    TempData["TimeConflictedBookings"] = conflicts;
+                            // Check if the length for a single Booking was exceeded
+                            var thisArea = _context.RoomGroups.Where(r => r.ID == bookingForThisRoom.Room.RoomGroupID).FirstOrDefault();
+                            if (thisArea.MaxHoursPerSingleBooking != null)
+                            {
+                                if ((bookingForThisRoom.EndDate - bookingForThisRoom.StartDate).TotalHours > thisArea.MaxHoursPerSingleBooking)
+                                {
+                                    overallSingleBookingLengthViolationFound = true;   // ONLY flag the overall result if a booking time exceeds max allowed hours for this area
+                                }
+                            }
+                            // ALWAYS track time so far, in case there was an exception in a different room
+                            IDictionary<string, string> timeResultForThisBooking = new Dictionary<string, string>();
+                            timeResultForThisBooking.Add("RoomName", bookingForThisRoom.Room.RoomName);
+                            timeResultForThisBooking.Add("MaxHoursSingleBooking", thisArea.MaxHoursPerSingleBooking.ToString());
+                            timeResultForThisBooking.Add("BookingDate", bookingForThisRoom.StartDate.ToShortDateString());
+                            timeResultForThisBooking.Add("BookingTime", bookingForThisRoom.StartDate.ToShortTimeString() + " - " + bookingForThisRoom.EndDate.ToShortTimeString());
+                            timeResultForThisBooking.Add("HoursBooked", (bookingForThisRoom.EndDate - bookingForThisRoom.StartDate).TotalHours.ToString());
+                            overallSingleBookingHours.Add(timeResultForThisBooking);
 
-                            //    throw new DbUpdateException("Booking time conflict violation.");
-                            //}
+                            bookingsToAdd.Add(bookingForThisRoom);   // Append generated bookings to the list of bookings to add to _context at the end
 
-                            _context.RoomBookings.Add(booking);
-                            // Save changes later
+                            // Wait until the end to add bookings to _context
+                            // Wait until the end to save changes to _context
                         }
+
+                        // After generating new bookings for this room, we check the new time that was added
+                        if (thisRoom.RoomMaxHoursTotal != null)
+                        {
+                            if ((existingTotalTimeInThisRoom + timeAddedByNewBookings).TotalHours > thisRoom.RoomMaxHoursTotal)
+                            {
+                                overallRoomTimeViolationFound = true;   // ONLY flag the overall result if a room time exceeds max allowed hours for this room
+                            }
+                        }
+                        // ALWAYS track time so far, in case there was an exception in a different room
+                        IDictionary<string, string> timeResultForThisRoom = new Dictionary<string, string>();
+                        timeResultForThisRoom.Add("RoomName", thisRoom.RoomName);
+                        timeResultForThisRoom.Add("MaxHoursForRoom", thisRoom.RoomMaxHoursTotal.ToString());
+                        timeResultForThisRoom.Add("ExistingHoursForRoom", existingTotalTimeInThisRoom.TotalHours.ToString());
+                        timeResultForThisRoom.Add("NewHoursForRoom", timeAddedByNewBookings.TotalHours.ToString());
+                        timeResultForThisRoom.Add("NewTotalHoursForRoom", (existingTotalTimeInThisRoom + timeAddedByNewBookings).TotalHours.ToString());
+                        overallRoomHours.Add(timeResultForThisRoom);
                     }
-                    //_context.Add(roomBooking);    // DO NOT ADD "roomBooking". "roomBooking" variable is ONLY used to validate model state
-                    await _context.SaveChangesAsync();
+
+                    // We can check if the Area's hours were exceeded after each Room booking is done generating
+                    foreach (int areaID in areaIDsBooked)
+                    {
+                        // Get User's pre-existing booked time in this Area
+                        var thisArea = _context.RoomGroups.Where(r => r.ID == areaID).FirstOrDefault();
+                        var existingBookingsForThisArea = _context.RoomBookings.Include(b => b.Room)
+                            .Where(b => (b.UserID == roomBooking.UserID) && (b.Room.RoomGroupID == areaID) && (b.StartDate >= DateTime.Now));
+
+                        TimeSpan existingTotalTimeInThisArea = TimeSpan.Zero;
+                        TimeSpan timeAddedByNewBookings = TimeSpan.Zero;
+
+                        // Tally up the User's existing time
+                        foreach (var existingBookingForThisArea in existingBookingsForThisArea)
+                        {
+                            TimeSpan duration = existingBookingForThisArea.EndDate - existingBookingForThisArea.StartDate;
+                            existingTotalTimeInThisArea += duration;
+                        }
+
+                        // Get User's new hours from new bookings
+                        var newBookingsInThisArea = bookingsToAdd.Where(b => (b.Room.RoomGroupID == areaID) && (b.StartDate >= DateTime.Now));
+
+                        // Tally up the User's new time
+                        foreach (var newBookingInThisArea in newBookingsInThisArea)
+                        {
+                            TimeSpan duration = newBookingInThisArea.EndDate - newBookingInThisArea.StartDate;
+                            timeAddedByNewBookings += duration;
+                        }
+
+                        // Check if the time was exceeded
+                        if (thisArea.MaxHoursTotal != null)
+                        {
+                            if ((existingTotalTimeInThisArea + timeAddedByNewBookings).TotalHours > thisArea.MaxHoursTotal)
+                            {
+                                overallAreaTimeViolationFound = true;   // ONLY flag the overall result if a area time exceeds max allowed hours for this area
+                            }
+                        }
+                        // ALWAYS track time so far, in case there was an exception in a different area
+                        IDictionary<string, string> timeResultForThisArea = new Dictionary<string, string>();
+                        timeResultForThisArea.Add("AreaName", thisArea.AreaName);
+                        timeResultForThisArea.Add("MaxHoursForArea", thisArea.MaxHoursTotal.ToString());
+                        timeResultForThisArea.Add("ExistingHoursForArea", existingTotalTimeInThisArea.TotalHours.ToString());
+                        timeResultForThisArea.Add("NewHoursForArea", timeAddedByNewBookings.TotalHours.ToString());
+                        timeResultForThisArea.Add("NewTotalHoursForArea", (existingTotalTimeInThisArea + timeAddedByNewBookings).TotalHours.ToString());
+                        overallAreaHours.Add(timeResultForThisArea);
+
+                        // We can also tally how many bookings there are to see if we exceeded the max amount of allowed separate bookings
+                        if (thisArea.MaxNumberOfBookings != null)
+                        {
+                            if ((existingBookingsForThisArea.Count() + newBookingsInThisArea.Count()) > thisArea.MaxNumberOfBookings)
+                            {
+                                overallAreaBookingNumberViolationFound = true;   // ONLY flag the overall result if a number of bookings exceeds max allowed for this area
+                            }
+                        }
+                        // ALWAYS track count information so far, in case there was an exception in a different area
+                        IDictionary<string, string> countResultForThisArea = new Dictionary<string, string>();
+                        countResultForThisArea.Add("AreaName", thisArea.AreaName);
+                        countResultForThisArea.Add("MaxBookingsForArea", thisArea.MaxNumberOfBookings.ToString());
+                        countResultForThisArea.Add("ExistingBookingsForArea", existingBookingsForThisArea.Count().ToString());
+                        countResultForThisArea.Add("NewBookingsForArea", newBookingsInThisArea.Count().ToString());
+                        countResultForThisArea.Add("NewTotalBookingsForArea", (existingBookingsForThisArea.Count() + newBookingsInThisArea.Count()).ToString());
+                        overallAreaBookingCounts.Add(countResultForThisArea);
+                    }
+
+                    // ONLY store feedback in TempData if a violation occurred
+                    if (overallTimeConflictFound == true)
+                    {
+                        // Send feedback to User if any time conflicts detected overall
+                        TempData["YourBookings"] = bookingsToAdd;
+                        TempData["TimeConflictedBookings"] = overallTimeConflictedBookings;
+
+                        throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
+                    }
+                    if (overallRoomTimeViolationFound == true)
+                    {
+                        // Send feedback to User if their new bookings violate the time total for a specific room
+                        TempData["RoomHoursViolation"] = overallRoomHours;
+
+                        throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
+                    }
+                    if (overallAreaTimeViolationFound == true)
+                    {
+                        // Send feedback to User if their new bookings violate the time total for an area
+                        TempData["AreaHoursViolation"] = overallAreaHours;
+
+                        throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
+                    }
+                    if (overallSingleBookingLengthViolationFound == true)
+                    {
+                        // Send feedback to User if their new bookings violate the maximum time for a single booking
+                        TempData["SingleBookingLengthViolation"] = overallSingleBookingHours;
+
+                        throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
+                    }
+                    if (overallAreaBookingNumberViolationFound == true)
+                    {
+                        // Send feedback to User if their new bookings violate the maximum number of bookings allowed in this area
+                        TempData["AreaBookingCountViolation"] = overallAreaBookingCounts;
+
+                        throw new DbUpdateException("Total Booking count violation.");    // Break before bookings are added or saved
+                    }
+
+                    //_context.Add(roomBooking);    // DO NOT ADD "roomBooking" variable. "roomBooking" variable is ONLY used to validate model state
+                    _context.RoomBookings.AddRange(bookingsToAdd);  // Add bookings to _context
+                    await _context.SaveChangesAsync();              // Save changes to _context
                     TempData["Message"] = "Booking was created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -378,6 +574,14 @@ namespace BRTF_Room_Booking_App.Controllers
             catch (DbUpdateException dex)
             {
                 if (dex.GetBaseException().Message == "Booking time conflict violation.")
+                {
+                    // We handle this violation by storing feedback into TempData earlier, so don't need to do anything here
+                }
+                else if (dex.GetBaseException().Message == "Booking time total violation.")
+                {
+                    // We handle this violation by storing feedback into TempData earlier, so don't need to do anything here
+                }
+                else if (dex.GetBaseException().Message == "Total Booking count violation.")
                 {
                     // We handle this violation by storing feedback into TempData earlier, so don't need to do anything here
                 }
@@ -626,17 +830,24 @@ namespace BRTF_Room_Booking_App.Controllers
         /// <returns>Generated list of Room Bookings to add.</returns>
         private List<RoomBooking> GenerateRepeatBookings(string SpecialNotes, int UserID, int RoomID,
             DateTime StartDate, DateTime EndDate, DateTime RepeatEndDate, int RepeatInterval, string RepeatType,
-            bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday)
-            //out List<RoomBooking> timeConflictedBookings)
+            bool IncludeMonday, bool IncludeTuesday, bool IncludeWednesday, bool IncludeThursday, bool IncludeFriday, bool IncludeSaturday, bool IncludeSunday,
+            out bool timeConflictFound, out List<RoomBooking> timeConflictedBookings, out TimeSpan timeAddedByGeneratedBookings,
+            out bool singleBookingViolationFound, out List<IDictionary<string, string>> singleBookingFeedback)
         {
-            //bool timeConflictsDetected = false;
+            // Storage variables to give feedback for validation purposes
+            bool timeConflictsDetected = false;
             List<RoomBooking> existingConflictedBookings = new List<RoomBooking>();
+            TimeSpan totalTimeOfGeneratedBookings = TimeSpan.Zero;
 
-            List<RoomBooking> bookingsToAdd = new List<RoomBooking>();
+            bool singleBookingViolationDetected = false;
+            List<IDictionary<string, string>> singleBookingLengthFeedback = new List<IDictionary<string, string>>();
 
+            List<RoomBooking> bookingsToAdd = new List<RoomBooking>();  //Main list of generated bookings to return
+
+            TimeSpan duration = EndDate - StartDate;
             for (DateTime day = StartDate; day.Date <= RepeatEndDate; day = day.AddDays((RepeatType == "Days") ? RepeatInterval : 1))
             {
-                TimeSpan duration = EndDate - StartDate;
+                totalTimeOfGeneratedBookings += duration;
 
                 // Check that this day of the week is checked On before adding booking
                 if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)
@@ -649,7 +860,6 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     RoomBooking newBooking = new RoomBooking
                     {
-
                         UserID = UserID,
                         SpecialNotes = SpecialNotes,
                         StartDate = day,
@@ -665,16 +875,34 @@ namespace BRTF_Room_Booking_App.Controllers
                     //    booking.EndDate = booking.StartDate + duration;
                     //}
 
-                    //if (!RoomIsAvailable(newBooking, out RoomBooking conflict))
-                    //{
-                    //    timeConflictsDetected = true;
-                    //    existingConflictedBookings.Add(conflict);
-                    //}
-                    //else
-                    //{
-                    //    // Add blanks when there is no conflict, so User can know if some of their Bookings did not conflict while others did conflict
-                    //    existingConflictedBookings.Add(null);
-                    //}
+                    if (!RoomIsAvailable(newBooking, out RoomBooking conflict))
+                    {
+                        timeConflictsDetected = true;
+                        existingConflictedBookings.Add(conflict);
+                    }
+                    else
+                    {
+                        // Add blanks when there is no conflict, so User can know if some of their Bookings did not conflict while others did conflict
+                        existingConflictedBookings.Add(null);
+                    }
+
+                    // Check if the length for a single Booking was exceeded
+                    var thisArea = _context.RoomGroups.Where(r => r.ID == newBooking.Room.RoomGroupID).FirstOrDefault();
+                    if (thisArea.MaxHoursPerSingleBooking != null)
+                    {
+                        if (duration.TotalHours > thisArea.MaxHoursPerSingleBooking)
+                        {
+                            singleBookingViolationDetected = true;   // ONLY flag the overall result if a booking time exceeds max allowed hours for this area
+                        }
+                    }
+                    // ALWAYS track time so far, in case there was an exception in a different room
+                    IDictionary<string, string> timeResultForThisBooking = new Dictionary<string, string>();
+                    timeResultForThisBooking.Add("RoomName", newBooking.Room.RoomName);
+                    timeResultForThisBooking.Add("MaxHoursSingleBooking", thisArea.MaxHoursPerSingleBooking.ToString());
+                    timeResultForThisBooking.Add("BookingDate", newBooking.StartDate.ToShortDateString());
+                    timeResultForThisBooking.Add("BookingTime", newBooking.StartDate.ToShortTimeString() + " - " + newBooking.EndDate.ToShortTimeString());
+                    timeResultForThisBooking.Add("HoursBooked", duration.TotalHours.ToString());
+                    singleBookingLengthFeedback.Add(timeResultForThisBooking);
 
                     bookingsToAdd.Add(newBooking);
                 }
@@ -686,16 +914,15 @@ namespace BRTF_Room_Booking_App.Controllers
 
             // Return violation results:
             // -Time conflict violations
-            //if (timeConflictsDetected == false)
-            //{
-            //    timeConflictedBookings = null;
-            //}
-            //else
-            //{
-            //    timeConflictedBookings = existingConflictedBookings;
-            //}
+            timeConflictFound = timeConflictsDetected;
+            timeConflictedBookings = existingConflictedBookings;
+            // -Total time of new bookings
+            timeAddedByGeneratedBookings = totalTimeOfGeneratedBookings;
+            // -Hour check for length of single bookings
+            singleBookingViolationFound = singleBookingViolationDetected;
+            singleBookingFeedback = singleBookingLengthFeedback;
 
-            return bookingsToAdd;
+            return bookingsToAdd;   // Return list of generated bookings
         }
 
         private void PopulateSelectedRoomData(int? RoomGroupID = null, string[] selectedOptions = null)
