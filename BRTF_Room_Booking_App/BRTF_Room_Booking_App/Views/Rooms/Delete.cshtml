@@ -16,32 +16,48 @@
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
-            <div class="col-md-4">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ID" />
-                <div class="colform-group">
-                    <strong><label asp-for="RoomGroupID" class="control-label">Area</label></strong>
-                    <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>
-                </div>
-                <div class="form-group">
-                    <strong><label asp-for="RoomName" class="control-label"></label></strong>
-                    <input asp-for="RoomName" class="form-control" disabled />
-                    <span asp-validation-for="RoomName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <strong><label asp-for="RoomMaxHoursTotal" class="control-label"></label></strong>
-                    <input asp-for="RoomMaxHoursTotal" class="form-control" disabled />
-                    <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check">
-                    <strong>
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                        </label>
-                    </strong>
+                <div class="col-md-14">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ID" />
+                    <div class="row">
+                        <div class="col-5 text-right pt-2">
+                            <strong><label asp-for="RoomGroupID" class="control-label">Area:</label></strong>
+                        </div>
+                        <div class="col-5 pt-2">
+                            @Html.DisplayFor(model => model.RoomGroup.AreaName)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 text-right pt-2">
+                            <strong><label asp-for="RoomName" class="control-label"></label></strong>
+                        </div>
+                        <div class="col-5 pt-2">
+                            @Html.DisplayFor(model => model.RoomName)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 text-right pt-2">
+                            <strong><label asp-for="RoomMaxHoursTotal" class="control-label"></label></strong>
+                        </div>
+                        <div class="col-5 pt-2">
+                            @Html.DisplayFor(model => model.RoomMaxHoursTotal)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-right pt-2">
+                        </div>
+                        <div class="col-5 pt-2">
+                            <div class="form-group form-check">
+                                <strong>
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+                                    </label>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         <br />
         <form asp-action="Delete">
             <input type="hidden" asp-for="ID" />
