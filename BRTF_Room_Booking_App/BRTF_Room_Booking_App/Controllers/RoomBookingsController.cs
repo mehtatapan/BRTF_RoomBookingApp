@@ -495,7 +495,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Booking was edited successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { roomBookingToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
