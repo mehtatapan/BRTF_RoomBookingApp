@@ -2,43 +2,44 @@
 @{
     ViewData["Title"] = "Edit Room";
 }
-<body style="background-color:#E4E6E6" class="justify-content-left">
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="justify-content-center">
     <br />
-    <h1 class="mb-4 text-center">Edit Room</h1>
+    <h1 class="mb-4 text-center">Edit</h1>
     <br />
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 60%; margin:auto" class="px-5 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">Edit this Room</h4>
             <br />
         </div>
         <form asp-action="Edit">
-            <div class="row">
-                <div class="col-md-4">
-
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ID" />
-                    <div class="colform-group">
-                        <strong><label asp-for="RoomGroupID" class="control-label">Area:</label></strong>
+                    <div class="form-group">
+                        <label asp-for="RoomGroupID" class="label">Area</label>
                         <select asp-for="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="RoomName" class="control-label"></label></strong>
+                        <label asp-for="RoomName" class="label"></label>
                         <input asp-for="RoomName" class="form-control" />
                         <span asp-validation-for="RoomName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="RoomMaxHoursTotal" class="control-label"></label></strong>
+                        <label asp-for="RoomMaxHoursTotal" class="label"></label>
                         <input asp-for="RoomMaxHoursTotal" class="form-control" />
                         <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
                     </div>
-                    <div class="form-group form-check">
-                        <strong>
-                            <label class="form-check-label">
+                    <div class="form-group">
+                            <label class="label">
                                 <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
                             </label>
-                        </strong>
                     </div>
                 </div>
             </div>

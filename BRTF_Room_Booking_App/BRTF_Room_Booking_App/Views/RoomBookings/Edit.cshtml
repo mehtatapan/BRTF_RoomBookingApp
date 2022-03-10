@@ -15,7 +15,7 @@
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
         <div>
             <br />
-            <h4 class="text-center">Edit your Booking</h4>
+            <h4 class="text-center">Edit this Booking</h4>
             <br />
         </div>
         <div>
@@ -72,7 +72,7 @@
 
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="RoomGroupID" class="label"><strong>Area: *</strong></label>
+                            <label for="RoomGroupID" class="label">Area: *</label>
                         </div>
                         <div class="col-10">
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
@@ -80,17 +80,17 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
+                            <label asp-for="RoomID" class="label">Room: *</label>
                         </div>
                         <div class="col-10">
                             <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
                             <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
                     </div>
+                    <br/>
                     <div class="d-flex justify-content-center">
-                        <br />
                         <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
+                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
                     </div>
                     <br />
                 </form>

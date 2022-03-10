@@ -19,81 +19,87 @@
     </div>
     <br />
 }
-<br />
-<h1 style="text-align: center;">Room Groups</h1>
-<br />
 
-<section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-3 py-3 my-3">
-    <p>
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
-    </p>
-    <form asp-action="Index" method="get">
-        <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-        <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-        <div class="form-horizontal">
-            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Filter/Search
-            </button>
-            <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
-                <div class="card card-body bg-light">
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Filter by Is Enabled:</label>
-                            @Html.DropDownList("EnabledFilterString", new List<SelectListItem>
-                       {   new SelectListItem { Text="Show All", Value="All"},
-                           new SelectListItem { Text="Show Enabled", Value="True"},
-                           new SelectListItem { Text="Show Disabled", Value="False"}
-                       }, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Search by Room Group Name:</label>
-                            @Html.TextBox("SearchName", null, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-4 align-self-end">
-                            <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                            <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <br />
+    <h1 style="text-align: center;">Room Groups</h1>
+    <br />
+
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-3 py-3 my-3">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+        <form asp-action="Index" method="get">
+            <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+            <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+            <div class="form-horizontal">
+                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                    Filter/Search
+                </button>
+                <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+                    <div class="card card-body bg-light">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Filter by Is Enabled:</label>
+                                @Html.DropDownList("EnabledFilterString", new List<SelectListItem>
+                           {   new SelectListItem { Text="Show All", Value="All"},
+                               new SelectListItem { Text="Show Enabled", Value="True"},
+                               new SelectListItem { Text="Show Disabled", Value="False"}
+                           }, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Search by Room Group Name:</label>
+                                @Html.TextBox("SearchName", null, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-4 align-self-end">
+                                <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                                <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="submit" name="actionButton" value="Area" class="btn btn-link" />
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>
-                        <input type="submit" name="actionButton" value="Is Enabled" class="btn btn-link" />
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AreaName)
-                        </td>
-                        <td>
-                            <textarea asp-for="@item.Description" class="form-control" disabled></textarea>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Enabled)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                        </td>
+                        <th>
+                            <input type="submit" name="actionButton" value="Area" class="btn btn-link" style="font-weight:700"/>
+                        </th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Description" class="btn btn-link" style="font-weight:700" />
+                        </th>
+                        <th>
+                            <input type="submit" name="actionButton" value="Is Enabled" class="btn btn-link" style="font-weight:700"/>
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <partial name="_PagingNavBar" />
-    </form>
-</section>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AreaName)
+                            </td>
+                            <td>
+                                <textarea asp-for="@item.Description" class="form-control" disabled></textarea>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Enabled)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <partial name="_PagingNavBar" />
+        </form>
+    </section>
+</body>

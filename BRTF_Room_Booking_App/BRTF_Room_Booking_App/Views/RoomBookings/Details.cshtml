@@ -19,6 +19,7 @@
     </div>
     <br />
 }
+
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
@@ -29,72 +30,73 @@
     <h1 class="mb-4 text-center">Details</h1>
     <br />
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 40%; margin:auto" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 55%; margin:auto" class="px-5 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">Booking</h4>
             <br />
         </div>
-        <div class="container">
-
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="UserID" class="label">Full Name:</label>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="UserID" class="label">Full Name</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.User.FullName)
+                    </div>
                 </div>
-                <div class="col-10 pt-2">
-                    @Html.DisplayFor(model => model.User.FullName)
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="SpecialNotes" class="label">Special Notes</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.SpecialNotes)
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="SpecialNotes" class="label">Special Notes:</label>
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="StartDate" class="label">Start</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.StartDate)
+                    </div>
                 </div>
-                <div class="col-10 pt-2">
-                    @Html.DisplayFor(model => model.SpecialNotes)
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="EndDate" class="label">End</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.EndDate)
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="StartDate" class="label">Start:</label>
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="Room.RoomGroup.AreaName" class="label">Area</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @*<select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>*@
+                        @Html.DisplayFor(model => model.Room.RoomGroup.AreaName)
+                    </div>
                 </div>
-                <div class="col-5 pt-2">
-                    @Html.DisplayFor(model => model.StartDate)
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="EndDate" class="label">End:</label>
-                </div>
-                <div class="col-5 pt-2">
-                    @Html.DisplayFor(model => model.EndDate)
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="Room.RoomGroup.AreaName" class="label">Area:</label>
-                </div>
-                <div class="col-10 pt-2">
-                    @*<select asp-for="Room.RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID" disabled></select>*@
-                    @Html.DisplayFor(model => model.Room.RoomGroup.AreaName)
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2 text-right pt-2">
-                    <label asp-for="Room.RoomName" class="label">Room:</label>
-                </div>
-                <div class="col-10 pt-2">
-                    @*<select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>*@
-                    @Html.DisplayFor(model => model.Room.RoomName)
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="Room.RoomName" class="label">Room</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @*<select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID" disabled></select>*@
+                        @Html.DisplayFor(model => model.Room.RoomName)
+                    </div>
                 </div>
             </div>
         </div>
-        <br />
-        <div class="d-flex justify-content-center">
-            <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
-            <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2" style="width:100px;">Back</a>
-        </div>
-        <br />
-    </section>
+            <br />
+            <div class="d-flex justify-content-center">
+                <a asp-action="Edit" asp-route-id="@Model.ID" role="button" class="btn btn-primary mx-2" style="width:100px;">Edit</a>
+                <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
+            </div>
+            <br />
+</section>
 </body>
 @section Scripts {
     <script type="text/javascript">

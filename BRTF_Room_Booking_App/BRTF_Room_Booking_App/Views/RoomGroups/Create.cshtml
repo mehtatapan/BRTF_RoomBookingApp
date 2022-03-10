@@ -3,59 +3,59 @@
 @{
     ViewData["Title"] = "Create Room Group";
 }
-<body style="background-color:#E4E6E6" class="justify-content-left">
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="justify-content-center">
     <br/>
-    <h1 class="mb-4 text-center">Create Room Group</h1>
+    <h1 class="mb-4 text-center">Create</h1>
     <br/>
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 80%; margin:auto" class="px-5 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">Create New Room Group</h4>
             <br />
         </div>
         <form asp-action="Create">
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <strong><label asp-for="AreaName" class="control-label"></label></strong>
+                        <label asp-for="AreaName" class="label"></label>
                         <input asp-for="AreaName" class="form-control" />
                         <span asp-validation-for="AreaName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="Description" class="control-label"></label></strong>
+                        <label asp-for="Description" class="label"></label>
                         <textarea asp-for="Description" class="form-control"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="BlackoutTime" class="control-label"></label></strong>
+                        <label asp-for="BlackoutTime" class="label"></label>
                         <input asp-for="BlackoutTime" class="form-control" />
                         <span asp-validation-for="BlackoutTime" class="text-danger"></span>
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="form-group">
-                        <strong><label asp-for="MaxHoursPerSingleBooking" class="control-label"></label></strong>
+                        <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
                         <input asp-for="MaxHoursPerSingleBooking" class="form-control" />
                         <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
+                        <label asp-for="MaxHoursTotal" class="label"></label>
                         <input asp-for="MaxHoursTotal" class="form-control" />
                         <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <strong><label asp-for="MaxNumberOfBookings" class="control-label"></label></strong>
+                        <label asp-for="MaxNumberOfBookings" class="label"></label>
                         <input asp-for="MaxNumberOfBookings" class="form-control" />
                         <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
                     </div>
                     <div class="form-group form-check">
-                        <strong>
-                            <label class="form-check-label">
+                            <label class="label">
                                 <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
                             </label>
-                        </strong>
                     </div>
                 </div>
             </div>

@@ -19,6 +19,7 @@
     </div>
     <br />
 }
+
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
@@ -32,54 +33,56 @@
         <h4 class="text-center">Details</h4>
     <br/>
 
-    <div class="row">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <strong><label asp-for="StartOfTermDate" class="control-label"></label></strong>
-                    @Html.DisplayFor(model => model.StartOfTermDate)
+    <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="StartOfTermDate" class="label"></label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.StartOfTermDate)
+                    </div>
                 </div>
-                <div class="form-group">
-                    <strong><label asp-for="EndOfTermDate" class="control-label"></label></strong>
-                    @Html.DisplayFor(model => model.EndOfTermDate)
+                <div class="row">
+                    <div class="col-6 text-right py-2">
+                        <label asp-for="EndOfTermDate" class="label"></label>
+                    </div>
+                    <div class="col-6 py-2">
+                        @Html.DisplayFor(model => model.EndOfTermDate)
+                    </div>
                 </div>
-                <div class="form-group">
-                    <strong><label asp-for="LatestAllowableFutureBookingDay" class="control-label"></label></strong>
-                    @Html.DisplayFor(model => model.LatestAllowableFutureBookingDay)
+                <div class="row">
+                    <div class="col-6 text-right py-2">
+                        <label asp-for="LatestAllowableFutureBookingDay" class="label"></label>
+                    </div>
+                    <div class="col-6 py-2">
+                        @Html.DisplayFor(model => model.LatestAllowableFutureBookingDay)
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <h5>Email Settings</h5>
-                <div class="form-group form-check">
-                    <strong>
-                        <label class="form-check-label">
+                <br/>
+                    <h5  class="text-center">Email Settings</h5>
+                <br/>
+                    <div class="form-group form-check">
+                        <label class="label">
                             <input class="form-check-input" asp-for="EmailBookingNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailBookingNotificationsOverride)
                         </label>
-                    </strong>
-                </div>
-                <div class="form-group form-check">
-                    <strong>
-                        <label class="form-check-label">
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="label">
                             <input class="form-check-input" asp-for="PreventBookingNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.PreventBookingNotificationsOverride)
                         </label>
-                    </strong>
-                </div>
-                <div class="form-group form-check">
-                    <strong>
-                        <label class="form-check-label">
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="label">
                             <input class="form-check-input" asp-for="EmailCancelNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailCancelNotificationsOverride)
                         </label>
-                    </strong>
-                </div>
-                <div class="form-group form-check">
-                    <strong>
-                        <label class="form-check-label">
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="label">
                             <input class="form-check-input" asp-for="PreventCancelNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.PreventCancelNotificationsOverride)
                         </label>
-                    </strong>
-                </div>
+                    </div>
             </div>
-        </div>
     </div>
     <br/>
     <div class="d-flex justify-content-center">

@@ -27,191 +27,181 @@
                                 <div class="col-md-3"></div>
                             </div>
                             <br />
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="Role" class="label">Role *</label>
-                                        </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Role" class="label">Role *</label>
                                     </div>
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
-                                        </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID">
+                                            <option value="">- Select a Term and Program -</option>
+                                        </select>
+                                        <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Username" class="label">Username *</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="Username" class="form-control" placeholder="0123456" />
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="label">First Name *</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="MiddleName" class="label"></label>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
-                                        </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
+                                        <span asp-validation-for="MiddleName" class="text-danger"></span>
                                     </div>
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID">
-                                                <option value="">- Select a Term and Program -</option>
-                                            </select>
-                                            <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
-                                        </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="label">Last Name *</label>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="Username" class="label">Username *</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input asp-for="Username" class="form-control" placeholder="0123456" />
-                                            <span asp-validation-for="Username" class="text-danger"></span>
-                                        </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="FirstName" class="label">First Name *</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                                        </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Email" class="label">Email *</label>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="MiddleName" class="label"></label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
-                                            <span asp-validation-for="MiddleName" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="LastName" class="label">Last Name *</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                                            <span asp-validation-for="LastName" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label asp-for="Email" class="label">Email *</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input asp-for="Email" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="Password" class="label">Password *</label>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input id="Password" name="Password" class="form-control" type="password" placeholder="*******" required />
-                                            <span for="Password" class="field-validation-valid error" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red"></span>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="ConfirmPassword" class="label">Confirm Password *</label>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="*******" type="password"
-                                                   data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password"
-                                                   required />
-                                            <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group form-check">
-                                            <label class="label">
-                                                Email Notification:
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-9">
-                                        <div class="form-group form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-10">
-                                        <div class="form-group form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br />
-
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-5">
-                                        <div>
-                                            <input type="submit" value="Create" class="btn btn-primary" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div>
-                                            <a asp-action="Index" class="btn btn-primary" style="background-color:#777677">Back to Users</a>
-                                        </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="Email" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
 
                                     </div>
                                 </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Password" class="label">Password *</label>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input id="Password" name="Password" class="form-control" type="password" placeholder="*******" required />
+                                        <span for="Password" class="field-validation-valid error" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="ConfirmPassword" class="label">Confirm Password *</label>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="*******" type="password"
+                                               data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password"
+                                               required />
+                                        <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-check">
+                                        <label class="label">
+                                            Email Notification:
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="d-flex justify-content-center">
+                                <input type="submit" value="Add Users" class="btn btn-primary mx-2" style="width: 100px;" />
+                                <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -256,22 +246,10 @@
 
                                 <br />
 
-
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-5">
-                                        <div>
-                                            <input type="submit" value="Add Users" class="btn btn-primary" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div>
-                                            <a href='@ViewData["returnURL"]' class="btn btn-primary" style="background-color:#777677">Back to Users</a>
-                                        </div>
-
-                                    </div>
+                                <div class="d-flex justify-content-center">
+                                    <input type="submit" value="Add Users" class="btn btn-primary mx-2" style="width: 100px;"/>
+                                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
                                 </div>
-
                             </form>
                         </div>
                     </div>

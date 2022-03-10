@@ -4,13 +4,15 @@
     ViewData["Title"] = "Delete Room Group";
 }
 
-
-<body style="background-color:#E4E6E6" class="justify-content-left">
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="justify-content-center">
     <br/>
-    <h1 class="mb-4 text-center">Delete Room Group</h1>
+    <h1 class="mb-4 text-center">Delete</h1>
     <br/>
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 80%; margin:auto" class="px-5 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">Are you sure you want to delete this Room Group?</h4>
@@ -19,63 +21,59 @@
         <div class="container">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
-            <div class="row">
-                    <div class="col-md-6">
+            <div class="row justify-content-center">
+                    <div class="col-md-9">
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="AreaName" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="AreaName" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.AreaName)
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="Description" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="Description" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.Description)
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="BlackoutTime" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="BlackoutTime" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.BlackoutTime)
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="MaxHoursPerSingleBooking" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.MaxHoursPerSingleBooking)
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="MaxHoursTotal" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.MaxHoursTotal)
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-5 text-right pt-2">
-                                <strong><label asp-for="MaxNumberOfBookings" class="control-label"></label></strong>
+                            <div class="col-6 text-right py-2">
+                                <label asp-for="MaxNumberOfBookings" class="label"></label>
                             </div>
-                            <div class="col-5 pt-2">
+                            <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.MaxNumberOfBookings)
                             </div>
-                            <div class="form-group form-check">
-                                <strong>
-                                    <label class="form-check-label">
+                            <div class="col-6 text-right pt-2">
+                                    <label class="label">
                                         <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
                                     </label>
-                                </strong>
                             </div>
                         </div>
                     </div>
@@ -84,7 +82,7 @@
             <div class="d-flex justify-content-center">
                 <form asp-action="Delete">
                     <input type="hidden" asp-for="ID" />
-                    <input type="submit" value="Delete" class="btn btn-danger" style="width:100px;" />
+                    <input type="submit" value="Delete" class="btn btn-danger mx-2" style="width:100px;" />
                     <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
                 </form>
             </div>
