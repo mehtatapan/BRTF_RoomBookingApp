@@ -339,24 +339,24 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
 
                     // Update User role
-                    if (Role != identityUserRole)
-                    {
-                        IdentityResult removeRoleResult = await _userManager.RemoveFromRoleAsync(identityUserToUpdate, identityUserRole);
+                    //if (Role != identityUserRole)
+                    //{
+                    //    IdentityResult removeRoleResult = await _userManager.RemoveFromRoleAsync(identityUserToUpdate, identityUserRole);
 
-                        if (!removeRoleResult.Succeeded)
-                        {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                            throw new Exception("Error removing User from previous Role.");
-                        }
+                    //    if (!removeRoleResult.Succeeded)
+                    //    {
+                    //        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    //        throw new Exception("Error removing User from previous Role.");
+                    //    }
 
-                        IdentityResult addRoleResult = await _userManager.AddToRoleAsync(identityUserToUpdate, Role);
+                    //    IdentityResult addRoleResult = await _userManager.AddToRoleAsync(identityUserToUpdate, Role);
 
-                        if (!addRoleResult.Succeeded)
-                        {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                            throw new Exception("Error adding User to new Role.");
-                        }
-                    }
+                    //    if (!addRoleResult.Succeeded)
+                    //    {
+                    //        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    //        throw new Exception("Error adding User to new Role.");
+                    //    }
+                    //}
 
                     await _identityContext.SaveChangesAsync();
                     await _context.SaveChangesAsync();
