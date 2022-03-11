@@ -6,12 +6,12 @@
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
-<body style="background-color:#E4E6E6" class="justify-content-left">
+<body class="justify-content-left">
     <br />
-    <h1 class="mb-4 text-center">Edit</h1>
+    <h1 class="text-center">Edit</h1>
     <br />
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 65%; margin:auto" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 55%; margin:auto" class="px-1 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">Edit this User</h4>
@@ -23,13 +23,13 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ID" />
                     <div class="form-group">
-                        <label asp-for="Username" class="label">Username: *</label>
+                        <label asp-for="Username" class="label">Username *</label>
                         <input asp-for="Username" class="form-control" disabled="disabled" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="FirstName" class="label">FirstName: *</label>
+                        <label asp-for="FirstName" class="label">First Name *</label>
                         <input asp-for="FirstName" class="form-control" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
@@ -39,14 +39,14 @@
                         <span asp-validation-for="MiddleName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="LastName" class="label">Last Name: *</label>
+                        <label asp-for="LastName" class="label">Last Name *</label>
                         <input asp-for="LastName" class="form-control" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     @if (User.IsInRole("User"))
                     {
                         <div class="form-group">
-                            <label asp-for="Email" class="label">Email: *</label>
+                            <label asp-for="Email" class="label">Email *</label>
                             <input asp-for="Email" class="form-control" disabled="disabled" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
@@ -54,7 +54,7 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
                         <div class="form-group">
-                            <label asp-for="Email" class="label">Email: *</label>
+                            <label asp-for="Email" class="label">Email *</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
@@ -70,25 +70,24 @@
                                data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" />
                         <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="label">
+                    <div class="form-group">
+                        <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
+                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
+                        <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Role" class="label">Role *</label>
+                        <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role" disabled="disabled"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmailBookingNotifications" class="label">Email Notification</label>
+                        <div class="form-group form-check">
                             <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                        </label>
-                    </div>
-                    <div class="form-group form-check">
-                        <label class="label">
+                        </div>
+                        <div class="form-group form-check">
                             <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                        </label>
+                        </div>
                     </div>
-                        <div class="form-group">
-                            <label asp-for="TermAndProgramID" class="label">Term And Program: *</label>
-                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
-                            <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="Role" class="label">Role: *</label>
-                            <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role" disabled="disabled"></select>
-                        </div>
                 </div>
             </div>
             <br />

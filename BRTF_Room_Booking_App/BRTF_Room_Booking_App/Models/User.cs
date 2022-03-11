@@ -49,7 +49,7 @@ namespace BRTF_Room_Booking_App.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Receive email notifications when I make a booking")]
+        [Display(Name = "Receive email confirmation when I make a booking")]
         public bool EmailBookingNotifications { get; set; }
 
         [Display(Name = "Receive email when my booking is cancelled")]

@@ -7,258 +7,139 @@
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
+<body class="justify-content-center">
+    <br />
+    <h1 class="text-center">Register Users</h1>
+    <br />
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 55%; margin:auto" class="px-1 py-2 mt-3 mb-5">
+        <div>
+            <br />
+            <h4 class="text-center">Individual User Entry</h4>
+            <br />
+        </div>
+        <form asp-action="Create" asp-controller="Users" method="post" enctype="multipart/form-data">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
 
-<br />
-<h1>Register Users</h1>
+                    <div class="form-group">
+                        <label for="Role" class="label">Role *</label>
+                        <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
+                    </div>
 
-<body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
-    <form asp-action="Create" asp-controller="Users" method="post" enctype="multipart/form-data">
-        <div class="container py-5 h-100">
-            <div class="row justify-content-center align-items-center h-100">
-                <div class="col-12 col-lg-9 col-xl-7">
-                    <div class="card shadow-2-strong card-registration"  style="border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);">
-                        <div class="card-body p-4 p-md-5">
+                    <div class="form-group">
+                        <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
+                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID">
+                            <option value="">- Select a Term and Program -</option>
+                        </select>
+                        <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-4"></div>
-                                <div class="col-md-5">
-                                    <h5>Individual User Entry</h5>
-                                </div>
-                                <div class="col-md-3"></div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="Role" class="label">Role *</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label asp-for="Username" class="label">Username *</label>
+                        <input asp-for="Username" class="form-control" placeholder="0123456" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID">
-                                            <option value="">- Select a Term and Program -</option>
-                                        </select>
-                                        <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="label">First Name *</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Username" class="label">Username *</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="Username" class="form-control" placeholder="0123456" />
-                                        <span asp-validation-for="Username" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label asp-for="MiddleName" class="label"></label>
+                        <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="FirstName" class="label">First Name *</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="label">Last Name *</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="MiddleName" class="label"></label>
-                                    </div>
-                                </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="label">Email *</label>
+                        <input asp-for="Email" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
 
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
-                                        <span asp-validation-for="MiddleName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label for="Password" class="label">Password *</label>
+                        <input id="Password" name="Password" class="form-control" type="password" placeholder="*******" required />
+                        <span for="Password" class="field-validation-valid error" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red"></span>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="LastName" class="label">Last Name *</label>
-                                    </div>
-                                </div>
+                    <div class="form-group">
+                        <label for="ConfirmPassword" class="label">Confirm Password *</label>
+                        <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="*******" type="password"
+                               data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" required />
+                        <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
+                    </div>
 
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label asp-for="Email" class="label">Email *</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="Email" class="form-control" placeholder="username@ncstudents.niagaracollege.ca" />
-                                        <span asp-validation-for="Email" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="Password" class="label">Password *</label>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input id="Password" name="Password" class="form-control" type="password" placeholder="*******" required />
-                                        <span for="Password" class="field-validation-valid error" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="ConfirmPassword" class="label">Confirm Password *</label>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="*******" type="password"
-                                               data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password"
-                                               required />
-                                        <span for="ConfirmPassword" class="field-validation-valid error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true" style="color:red"></span>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group form-check">
-                                        <label class="label">
-                                            Email Notification:
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10">
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-
-                            <div class="d-flex justify-content-center">
-                                <input type="submit" value="Add Users" class="btn btn-primary mx-2" style="width: 100px;" />
-                                <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
-                            </div>
+                    <div class="form-group">
+                        <label class="label">Email Notification</label>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="EmailBookingNotifications" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
+                            </label>
                         </div>
                     </div>
+
+                    <br />
+                    <div class="d-flex justify-content-center">
+                        <input type="submit" value="Add User" class="btn btn-primary mx-2" style="width: 100px;" />
+                        <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
+                    </div>
+                    <br/>
                 </div>
             </div>
-        </div>
         </form>
+    </section>
+    <br/>
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 55%; margin:auto" class="px-1 py-2 mt-2 mb-5">
+        <div>
+            <br />
+            <h4 class="text-center">Bulk User Entry</h4>
+            <br />
+        </div>
+        <div class="row justify-content-center">
+            <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
 
-        <div class="container py-5 h-100">
-            <div class="row justify-content-center align-items-center h-100">
-                <div class="col-12 col-lg-9 col-xl-7">
-                    <div class="card shadow-2-strong card-registration"  style="border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);">
-                        <div class="card-body p-4 p-md-5">
-
-                            <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <h5>Bulk User Entry</h5>
-                                    </div>
-                                </div>
-
-                                <br />
-
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <div class="form-group">
-                                            <label class="control-label">Upload XLSX/CSV File:</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                    </div>
-                                    <div class="col-md-11 text-center">
-                                        <div class="form-group">
-                                            <input type="file" class="" name="theExcel" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 text-center">
-                                        <div class="form-group">
-                                            <a asp-action="DownloadExampleExcel" class="btn btn-primary mt-2">Download Example File</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <br />
-
-                                <div class="d-flex justify-content-center">
-                                    <input type="submit" value="Add Users" class="btn btn-primary mx-2" style="width: 100px;"/>
-                                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
-                                </div>
-                            </form>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="form-group">
+                            <label class="control-label">Upload XLSX/CSV File:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-11 text-center">
+                        <div class="form-group">
+                            <input type="file" class="" name="theExcel" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="form-group">
+                            <a asp-action="DownloadExampleExcel" class="btn btn-primary mt-2">Download Example File</a>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <br />
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Add Users" class="btn btn-primary mx-2" style="width: 100px;" />
+                    <a href='@ViewData["returnURL"]' class="btn btn-secondary mx-2">Back to Users</a>
+                </div>
+                <br/>
+            </form>
         </div>
-
-
-
+    </section>
 </body>
 
 

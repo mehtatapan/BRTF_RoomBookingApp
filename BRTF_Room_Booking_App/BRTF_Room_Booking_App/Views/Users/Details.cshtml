@@ -26,10 +26,10 @@
 
 <body style="background-color:#E4E6E6" class="justify-content-left">
     <br />
-    <h1 class="mb-4 text-center">Details</h1>
+    <h1 class="text-center">Details</h1>
     <br />
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 65%; margin:auto" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 55%; margin:auto" class="px-1 py-2 my-3">
         <div>
             <br />
             <h4 class="text-center">User Details</h4>
@@ -79,30 +79,31 @@
                         @Html.DisplayFor(model => model.Email)
                     </div>
                 </div>
-                <div class="row justify-content-center pt-2">
-                    <label class="label">
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="TermAndProgramID" class="label"></label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label for="Role" class="label">Role</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @ViewBag.Role
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="EmailBookingNotifications" class="label">Email Notification</label>
+                    </div>
+                    <div class="col-6 pt-2 form-check">
                         <input class="form-check-input" asp-for="EmailBookingNotifications" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailBookingNotifications)
-                    </label>
-                </div>
-                <div class="row justify-content-center py-2">
-                    <label class="label">
+                        <br/>
+                        <br/>
                         <input class="form-check-input" asp-for="EmailCancelNotifications" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
-                    </label>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-right pt-2">
-                    <label asp-for="TermAndProgramID" class="label"></label>
-                    </div>
-                    <div class="col-6 pt-2">
-                    @Html.DisplayFor(model => model.TermAndProgram.TermAndProgramSummary)
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-right pt-2">
-                    <label for="Role" class="label">Role</label>
-                    </div>
-                    <div class="col-6 pt-2">
-                    @ViewBag.Role
                     </div>
                 </div>
             </div>
