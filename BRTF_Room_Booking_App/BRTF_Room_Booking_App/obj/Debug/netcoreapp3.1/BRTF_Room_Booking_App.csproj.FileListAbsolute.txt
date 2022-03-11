@@ -4989,3 +4989,5 @@ C:\Users\mehta\Source\Repos\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room
 C:\Users\mehta\Source\Repos\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.dll
 C:\Users\mehta\Source\Repos\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\mehta\Source\Repos\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
+C:\Users\mehta\Downloads\Prototype_2_v3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\GlobalSettings\Details.cshtml.g.cs
+C:\Users\mehta\Downloads\Prototype_2_v3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Views\Rooms\BookingSummary.cshtml.g.cs

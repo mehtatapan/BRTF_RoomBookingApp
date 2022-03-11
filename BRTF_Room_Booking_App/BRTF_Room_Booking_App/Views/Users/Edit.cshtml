@@ -80,31 +80,15 @@
                             <input class="form-check-input" asp-for="EmailCancelNotifications" /> @Html.DisplayNameFor(model => model.EmailCancelNotifications)
                         </label>
                     </div>
-                    @if (User.IsInRole("User"))
-                    {
                         <div class="form-group">
                             <label asp-for="TermAndProgramID" class="label"></label>
                             <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
                             <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="Role" class="label"></label>
+                            <label for="Role" class="label">Role</label>
                             <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role" disabled="disabled"></select>
                         </div>
-                    }
-                    @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-                    {
-                        <div class="form-group">
-                            <label asp-for="TermAndProgramID" class="label"></label>
-                            <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID"></select>
-                            <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="Role" class="label">Role</label>
-                            <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role"></select>
-                        </div>
-                    }
-
                 </div>
             </div>
             <br />
