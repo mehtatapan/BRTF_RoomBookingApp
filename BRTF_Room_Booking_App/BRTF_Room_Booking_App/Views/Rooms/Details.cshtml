@@ -63,11 +63,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6 text-right pt-2">
-                            <div class="form-group">
-                                    <label class="label">
-                                        <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                                    </label>
+                        <div class="col-6 text-right py-2">
+                            <label class="label">Is Enabled</label>
+                        </div>
+                        <div class="col-6 pt-2">
+                            <div class="form-group form-check">
+                                <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
                             </div>
                         </div>
                     </div>

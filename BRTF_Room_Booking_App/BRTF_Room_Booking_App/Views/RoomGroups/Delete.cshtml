@@ -70,10 +70,15 @@
                             <div class="col-6 py-2">
                                 @Html.DisplayFor(model => model.MaxNumberOfBookings)
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6 text-right pt-2">
-                                    <label class="label">
-                                        <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                                    </label>
+                                <label class="label">Is Enabled</label>
+                            </div>
+                            <div class="col-6 py-2">
+                                <div class="form-group form-check">
+                                    <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
+                                </div>
                             </div>
                         </div>
                     </div>

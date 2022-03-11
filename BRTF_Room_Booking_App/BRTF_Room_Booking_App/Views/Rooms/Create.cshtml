@@ -35,10 +35,11 @@
                         <input asp-for="RoomMaxHoursTotal" class="form-control"/>
                         <span asp-validation-for="RoomMaxHoursTotal" class="text-danger"></span>
                     </div>
-                    <div class="form-group form-check">
-                            <label class="label">
+                    <div class="form-group">
+                            <label class="label">Is Enabled</label>
+                            <div class="form-group form-check">
                                 <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                            </label>
+                            </div>
                     </div>
                 </div>
             </div>
