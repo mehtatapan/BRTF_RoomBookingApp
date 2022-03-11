@@ -23,22 +23,22 @@
                 <div class="col-lg-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="ProgramName" class="label"></label>
+                        <label asp-for="ProgramName" class="label">Program Name: *</label>
                         <input asp-for="ProgramName" class="form-control" />
                         <span asp-validation-for="ProgramName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ProgramCode" class="label"></label>
+                        <label asp-for="ProgramCode" class="label">Program Code: *</label>
                         <input asp-for="ProgramCode" class="form-control" />
                         <span asp-validation-for="ProgramCode" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ProgramLevel" class="label"></label>
+                        <label asp-for="ProgramLevel" class="label">Program Level: *</label>
                         <input asp-for="ProgramLevel" class="form-control" />
                         <span asp-validation-for="ProgramLevel" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="UserGroupID" class="label"></label>
+                        <label asp-for="UserGroupID" class="label">User Group: *</label>
                         <select asp-for="UserGroupID" class="form-control" asp-items="ViewBag.UserGroupID"></select>
                     </div>
                 </div>

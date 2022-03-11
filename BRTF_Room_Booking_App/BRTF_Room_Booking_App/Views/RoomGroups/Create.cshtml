@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="AreaName" class="label"></label>
+                        <label asp-for="AreaName" class="label">Area Name: *</label>
                         <input asp-for="AreaName" class="form-control" />
                         <span asp-validation-for="AreaName" class="text-danger"></span>
                     </div>
@@ -33,7 +33,7 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="BlackoutTime" class="label"></label>
+                        <label asp-for="BlackoutTime" class="label">Blackout Time: *</label>
                         <input asp-for="BlackoutTime" class="form-control" />
                         <span asp-validation-for="BlackoutTime" class="text-danger"></span>
                     </div>

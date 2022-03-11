@@ -23,13 +23,13 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ID" />
                     <div class="form-group">
-                        <label asp-for="Username" class="label">Username</label>
+                        <label asp-for="Username" class="label">Username: *</label>
                         <input asp-for="Username" class="form-control" disabled="disabled" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="FirstName" class="label"></label>
+                        <label asp-for="FirstName" class="label">FirstName: *</label>
                         <input asp-for="FirstName" class="form-control" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
@@ -39,14 +39,14 @@
                         <span asp-validation-for="MiddleName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="LastName" class="label"></label>
+                        <label asp-for="LastName" class="label">Last Name: *</label>
                         <input asp-for="LastName" class="form-control" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     @if (User.IsInRole("User"))
                     {
                         <div class="form-group">
-                            <label asp-for="Email" class="label"></label>
+                            <label asp-for="Email" class="label">Email: *</label>
                             <input asp-for="Email" class="form-control" disabled="disabled" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
@@ -54,7 +54,7 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
                         <div class="form-group">
-                            <label asp-for="Email" class="label"></label>
+                            <label asp-for="Email" class="label">Email: *</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
@@ -81,12 +81,12 @@
                         </label>
                     </div>
                         <div class="form-group">
-                            <label asp-for="TermAndProgramID" class="label"></label>
+                            <label asp-for="TermAndProgramID" class="label">Term And Program: *</label>
                             <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
                             <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="Role" class="label">Role</label>
+                            <label for="Role" class="label">Role: *</label>
                             <select id="Role" name="Role" class="form-control" asp-items="ViewBag.Role" disabled="disabled"></select>
                         </div>
                 </div>
