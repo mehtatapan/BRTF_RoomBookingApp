@@ -17,10 +17,7 @@ body {
 }
 
 .header {
-    position: absolute;
     color: #282828;
-    left: 15%;
-    top: 15%;
 }
 
 .label {
@@ -29,20 +26,14 @@ body {
 
 .section-one-title {
     min-width: 500px;
-    position: absolute;
     color: #282828;
-    transform: translate(-50%,-50%);
-    top: 37%;
-    left: 33%;
+    margin: auto;
 }
 
 .section-one {
     width: 35%;
     min-width: 500px;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
+    margin:auto;
 }
 
 .section-two-title {
