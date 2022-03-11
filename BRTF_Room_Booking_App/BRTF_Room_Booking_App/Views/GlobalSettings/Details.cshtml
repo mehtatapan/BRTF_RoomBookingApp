@@ -27,7 +27,7 @@
     <br/>
     <h1 class="text-center">Global Settings</h1>
     <br />
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 70%; margin:auto" class="px-5 py-2 my-3">
 
     <br/>
         <h4 class="text-center">Details</h4>
@@ -63,22 +63,22 @@
                     <h5  class="text-center">Email Settings</h5>
                 <br/>
                     <div class="form-group form-check">
-                        <label class="label">
+                        <label>
                             <input class="form-check-input" asp-for="EmailBookingNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailBookingNotificationsOverride)
                         </label>
                     </div>
                     <div class="form-group form-check">
-                        <label class="label">
+                        <label>
                             <input class="form-check-input" asp-for="PreventBookingNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.PreventBookingNotificationsOverride)
                         </label>
                     </div>
                     <div class="form-group form-check">
-                        <label class="label">
+                        <label>
                             <input class="form-check-input" asp-for="EmailCancelNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.EmailCancelNotificationsOverride)
                         </label>
                     </div>
                     <div class="form-group form-check">
-                        <label class="label">
+                        <label>
                             <input class="form-check-input" asp-for="PreventCancelNotificationsOverride" disabled="disabled" /> @Html.DisplayNameFor(model => model.PreventCancelNotificationsOverride)
                         </label>
                     </div>
