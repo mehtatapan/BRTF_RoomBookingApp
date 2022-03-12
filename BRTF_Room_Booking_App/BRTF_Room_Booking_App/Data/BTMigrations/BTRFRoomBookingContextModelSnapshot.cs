@@ -125,8 +125,14 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
+                    b.Property<DateTime>("EarliestTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LatestTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("MaxHoursPerSingleBooking")
                         .HasColumnType("INTEGER");

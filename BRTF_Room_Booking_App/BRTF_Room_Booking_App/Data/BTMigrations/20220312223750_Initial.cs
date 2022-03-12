@@ -38,6 +38,8 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     MaxHoursPerSingleBooking = table.Column<int>(nullable: true),
                     MaxHoursTotal = table.Column<int>(nullable: true),
                     MaxNumberOfBookings = table.Column<int>(nullable: true),
+                    EarliestTime = table.Column<DateTime>(nullable: false),
+                    LatestTime = table.Column<DateTime>(nullable: false),
                     Enabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

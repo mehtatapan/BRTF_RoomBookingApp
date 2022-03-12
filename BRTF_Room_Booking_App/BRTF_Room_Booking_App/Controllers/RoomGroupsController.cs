@@ -135,7 +135,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,AreaName,Description,BlackoutTime,MaxHoursPerSingleBooking,MaxHoursTotal,MaxNumberOfBookings,Enabled")] RoomGroup roomGroup)
+        public async Task<IActionResult> Create([Bind("ID,AreaName,Description,BlackoutTime,MaxHoursPerSingleBooking,MaxHoursTotal,MaxNumberOfBookings,EarliestTime,LatestTime,Enabled")] RoomGroup roomGroup)
         {
             //URL with the last filter, sort and page parameters for this controller
             ViewDataReturnURL();
@@ -203,7 +203,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (await TryUpdateModelAsync<RoomGroup>(roomGroupToUpdate, "",
                 r => r.AreaName, r => r.Description, r => r.BlackoutTime,
                 r => r.MaxHoursPerSingleBooking, r => r.MaxHoursTotal,
-                r => r.MaxNumberOfBookings, r => r.Enabled))
+                r => r.MaxNumberOfBookings, r => r.EarliestTime, r => r.LatestTime, r => r.Enabled))
             {
                 try
                 {

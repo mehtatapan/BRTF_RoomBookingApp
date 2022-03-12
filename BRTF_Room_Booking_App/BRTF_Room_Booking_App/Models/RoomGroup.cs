@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BRTF_Room_Booking_App.Models
 {
-    public class RoomGroup
+    public class RoomGroup : IValidatableObject
     {
         public RoomGroup()
         {
@@ -39,6 +39,23 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Maximum Number of Separate Bookings in This Area")]
         public int? MaxNumberOfBookings { get; set; }
 
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [Display(Name = "Earliest Time a Booking Can be Made in This Area")]
+        [DataType(DataType.Time)]
+        public DateTime EarliestTime { get; set; }
+
+        [DataType(DataType.Time)]
+        private DateTime _latestTime = new DateTime(3000, 1, 1, 23, 30, 0); //this enables us to set the LatestTime to default to 11:30pm
+
+        [Required(ErrorMessage = "Cannot be blank.")]
+        [Display(Name = "Latest Time a Booking Can be Made in This Area")]
+        [DataType(DataType.Time)]
+        public DateTime LatestTime
+        {
+            get { return _latestTime; }
+            set { _latestTime = value; }
+        }
+
         [Display(Name = "Area is Enabled")]
         public bool Enabled { get; set; }
 
@@ -47,5 +64,14 @@ namespace BRTF_Room_Booking_App.Models
 
         [Display(Name = "Room User Group Permissions")]
         public ICollection<RoomUserGroupPermission> RoomUserGroupPermissions { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // Test for invalid Start-End Time
+            if (LatestTime <= EarliestTime)
+            {
+                yield return new ValidationResult("Latest Time a Booking Can be Made in This Area must be later than Earliest Time a Booking Can be Made in This Area.", new[] { "LatestTime" });
+            }
+        }
     }
 }

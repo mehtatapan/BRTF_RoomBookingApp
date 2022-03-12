@@ -22,66 +22,82 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <div class="row justify-content-center">
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="AreaName" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.AreaName)
-                            </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="AreaName" class="label"></label>
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="Description" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.Description)
-                            </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.AreaName)
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="BlackoutTime" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.BlackoutTime)
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="Description" class="label"></label>
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.MaxHoursPerSingleBooking)
-                            </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.Description)
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="MaxHoursTotal" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.MaxHoursTotal)
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="BlackoutTime" class="label"></label>
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right py-2">
-                                <label asp-for="MaxNumberOfBookings" class="label"></label>
-                            </div>
-                            <div class="col-6 py-2">
-                                @Html.DisplayFor(model => model.MaxNumberOfBookings)
-                            </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.BlackoutTime)
                         </div>
-                        <div class="row">
-                            <div class="col-6 text-right pt-2">
-                                <label class="label">Is Enabled</label>
-                            </div>
-                            <div class="col-6 py-2">
-                                <div class="form-group form-check">
-                                    <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
-                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
+                        </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.MaxHoursPerSingleBooking)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="MaxHoursTotal" class="label"></label>
+                        </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.MaxHoursTotal)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="MaxNumberOfBookings" class="label"></label>
+                        </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.MaxNumberOfBookings)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="EarliestTime" class="label"></label>
+                        </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.EarliestTime)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right py-2">
+                            <label asp-for="LatestTime" class="label"></label>
+                        </div>
+                        <div class="col-6 py-2">
+                            @Html.DisplayFor(model => model.LatestTime)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right pt-2">
+                            <label class="label">Is Enabled</label>
+                        </div>
+                        <div class="col-6 py-2">
+                            <div class="form-group form-check">
+                                <input class="form-check-input" asp-for="Enabled" disabled /> @Html.DisplayNameFor(model => model.Enabled)
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             <br/>
             <div class="d-flex justify-content-center">

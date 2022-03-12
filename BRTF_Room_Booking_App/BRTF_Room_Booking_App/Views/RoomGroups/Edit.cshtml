@@ -24,7 +24,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label asp-for="AreaName" class="label">Area Name: *</label>
+                            <label asp-for="AreaName" class="label">Area Name *</label>
                             <input asp-for="AreaName" class="form-control" />
                             <span asp-validation-for="AreaName" class="text-danger"></span>
                         </div>
@@ -34,7 +34,7 @@
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="BlackoutTime" class="label">Blackout Time: *</label>
+                            <label asp-for="BlackoutTime" class="label">Blackout Time *</label>
                             <input asp-for="BlackoutTime" class="form-control" />
                             <span asp-validation-for="BlackoutTime" class="text-danger"></span>
                         </div>
@@ -52,6 +52,22 @@
                             <label asp-for="MaxNumberOfBookings" class="label"></label>
                             <input asp-for="MaxNumberOfBookings" class="form-control" />
                             <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" title="Earliest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the earliest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 12:00am.">
+                                <img src="~/img/questionmark.png" width="25" height="25" />
+                            </button>
+                            <label asp-for="EarliestTime" class="label">Earliest Time a Booking Can be Made in This Area *</label>
+                            <input asp-for="EarliestTime" class="form-control" />
+                            <span asp-validation-for="EarliestTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" title="Latest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the latest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 11:30pm.">
+                                <img src="~/img/questionmark.png" width="25" height="25" />
+                            </button>
+                            <label asp-for="LatestTime" class="label">Latest Time a Booking Can be Made in This Area *</label>
+                            <input asp-for="LatestTime" class="form-control" />
+                            <span asp-validation-for="LatestTime" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label class="label">Is Enabled</label>
@@ -73,4 +89,9 @@
 
         @section Scripts {
             @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script tye="text/javascript">
+                 $(function () {
+                     $('[data-toggle="popover"]').popover()
+                 })
+        </script>
         }

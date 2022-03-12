@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body class="justify-content-center">
-    <br/>
+    <br />
     <h1 class="mb-4 text-center">Create</h1>
-    <br/>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 80%; margin:auto" class="px-5 py-2 my-3">
         <div>
@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="AreaName" class="label">Area Name: *</label>
+                        <label asp-for="AreaName" class="label">Area Name *</label>
                         <input asp-for="AreaName" class="form-control" />
                         <span asp-validation-for="AreaName" class="text-danger"></span>
                     </div>
@@ -33,7 +33,7 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="BlackoutTime" class="label">Blackout Time: *</label>
+                        <label asp-for="BlackoutTime" class="label">Blackout Time *</label>
                         <input asp-for="BlackoutTime" class="form-control" />
                         <span asp-validation-for="BlackoutTime" class="text-danger"></span>
                     </div>
@@ -53,19 +53,35 @@
                         <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <button type="button" title="Earliest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the earliest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 12:00am.">
+                            <img src="~/img/questionmark.png" width="25" height="25" />
+                        </button>
+                        <label asp-for="EarliestTime" class="label">Earliest Time a Booking Can be Made in This Area *</label>
+                        <input asp-for="EarliestTime" type="time" class="form-control" />
+                        <span asp-validation-for="EarliestTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" title="Latest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the latest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 11:30pm.">
+                            <img src="~/img/questionmark.png" width="25" height="25" />
+                        </button>
+                        <label asp-for="LatestTime" class="label">Latest Time a Booking Can be Made in This Area *</label>
+                        <input asp-for="LatestTime" type="time" class="form-control" />
+                        <span asp-validation-for="LatestTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label class="label">Is Enabled</label>
                         <div class="form-group form-check">
                             <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
-            <br/>
+            <br />
             <div class="d-flex justify-content-center">
                 <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
                 <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
             </div>
-            <br/>
+            <br />
         </form>
     </section>
 </body>
@@ -74,4 +90,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script tye="text/javascript">
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
 }
