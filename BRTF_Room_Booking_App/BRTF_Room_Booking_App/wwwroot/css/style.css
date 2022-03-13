@@ -16,86 +16,17 @@ body {
     padding: 30px 40px 10px 40px;
 }
 
+section {
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+
 .header {
     color: #282828;
 }
 
 .label {
     font-weight: 700;
-}
-
-.section-one-title {
-    min-width: 500px;
-    color: #282828;
-    margin: auto;
-}
-
-.section-one {
-    width: 35%;
-    min-width: 500px;
-    margin:auto;
-}
-
-.section-two-title {
-    min-width: 500px;
-    position: absolute;
-    color: #282828;
-    transform: translate(-50%,-50%);
-    top: 79%;
-    left: 33%;
-}
-
-.section-two {
-    width: 35%;
-    min-width: 500px;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 80%;
-    left: 50%;
-}
-
-.section-three-title {
-    min-width: 500px;
-    position: absolute;
-    color: #282828;
-    transform: translate(-50%,-50%);
-    top: 102%;
-    left: 33%;
-}
-
-.section-three {
-    width: 35%;
-    min-width: 500px;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 130%;
-    left: 50%;
-}
-
-.section-four-title {
-    min-width: 500px;
-    position: absolute;
-    color: #282828;
-    transform: translate(-50%,-50%);
-    top: 178%;
-    left: 32%;
-}
-
-.section-four {
-    width: 35%;
-    min-width: 500px;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 186%;
-    left: 50%;
-}
-
-.final-note {
-    position: absolute;
-    color: #282828;
-    left: 15%;
-    top: 210%;
-    padding-bottom: 150px;
 }
 
 .wrapper {
@@ -120,7 +51,7 @@ body {
     justify-content: space-between;
     font-size: 16px;
     color: #fff;
-    font-weight: 500;
+    font-weight: 400;
     border: none;
     outline: none;
     cursor: pointer;
