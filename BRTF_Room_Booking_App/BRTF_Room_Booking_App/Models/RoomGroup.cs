@@ -45,7 +45,7 @@ namespace BRTF_Room_Booking_App.Models
         public DateTime EarliestTime { get; set; }
 
         [DataType(DataType.Time)]
-        private DateTime _latestTime = new DateTime(3000, 1, 1, 23, 30, 0); //this enables us to set the LatestTime to default to 11:30pm
+        private DateTime _latestTime = new DateTime(3000, 1, 1, 23, 59, 0); //this enables us to set the LatestTime to default to 11:30pm
 
         [Required(ErrorMessage = "Cannot be blank.")]
         [Display(Name = "Latest Time a Booking Can be Made in This Area")]

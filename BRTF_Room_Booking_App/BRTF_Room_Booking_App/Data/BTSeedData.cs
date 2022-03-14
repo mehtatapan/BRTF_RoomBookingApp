@@ -441,7 +441,7 @@ namespace BRTF_Room_Booking_App.Data
                             RoomName = "V110",
                             RoomMaxHoursTotal = Int32.MaxValue,
                             Enabled = true,
-                            RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper().Contains("V110")).ID
+                            RoomGroupID = context.RoomGroups.FirstOrDefault(u => u.AreaName.ToUpper() == "V110").ID
                         },
                         new Room()
                         {
@@ -633,7 +633,7 @@ namespace BRTF_Room_Booking_App.Data
                 {
                     // Gets User IDs and Room IDs to seed Bookings with
                     var users = context.Users.Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup).Select(u => new { u.ID, u.TermAndProgram.UserGroupID }).ToArray();
-                    var rooms = context.Rooms.Select(r => new { r.ID, r.RoomGroupID }).ToArray();
+                    var rooms = context.Rooms.Include(r => r.RoomGroup).Where(r => r.Enabled == true && r.RoomGroup.Enabled == true).Select(r => new { r.ID, r.RoomGroupID }).ToArray();
                     int userCount = users.Count();
                     int roomCount = rooms.Count();
 

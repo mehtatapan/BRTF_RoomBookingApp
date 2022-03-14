@@ -11,22 +11,26 @@
         @if (TempData["TimeConflictedBookings"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left">
+            @:<div class="alert alert-danger text-left text-body">
                 @:<b>Time conflict:</b> Your Booking times overlap with the following existing Bookings.<br /><br />
-                @:<table style='width:87%;'>
-                    @:<tr>
-                        @:<th></th>
-                        @:<th colspan='3'>Your Bookings</th>
-                        @:<th colspan='4'>Existing Bookings</th>
-                    @:</tr>
+                @:<table style='width:100%;'>
                     @:<tr>
                         @:<th>Room</th>
-                        @:<th>Date</th>
-                        @:<th>Start Time</th>
-                        @:<th>End Time</th>
-                        @:<th>Date</th>
-                        @:<th>Start Time</th>
-                        @:<th>End Time</th>
+                        @:<th colspan='4'>Your Bookings</th>
+                        @:<th style="width: 4%;"></th> @* Space between User bookings and Existing bookings *@
+                        @:<th colspan='5'>Existing Bookings</th>
+                    @:</tr>
+                    @:<tr>
+                        @:<th></th>
+                        @:<th>Start&nbsp;Date</th>
+                        @:<th>Start&nbsp;Time</th>
+                        @:<th>End&nbsp;Date</th>
+                        @:<th>End&nbsp;Time</th>
+                        @:<th></th>
+                        @:<th>Start&nbsp;Date</th>
+                        @:<th>Start&nbsp;Time</th>
+                        @:<th>End&nbsp;Date</th>
+                        @:<th>End&nbsp;Time</th>
                         @:<th>Booked For</th>
                     @:</tr>
 
@@ -44,21 +48,24 @@
                             previousRoomName = yourBookings[i].Room.RoomName;
                         }
                         @:<tr>
-                            @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))&nbsp;</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortDateString()))</td>
                             @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortTimeString()))</td>
+                            @:<td></td>
                             if (conflictBookings[i] != null)
                             {
                                 @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortDateString()))</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortDateString()))</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].User.FullName))</td>
                             }
                             else
                             {
                                 @:<td></td>
-                                @:<td colspan='3'>(no conflict)</td>
+                                @:<td colspan='4'>(no conflict)</td>
                             }
                         @:</tr>
                     }
@@ -71,9 +78,9 @@
         @if (TempData["AreaHoursViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left">
+            @:<div class="alert alert-danger text-left text-body">
                 @:<b>Maximum Area hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Areas.<br /><br />
-                @:<table style='width:90%;'>
+                @:<table style='width:100%;'>
                     @:<tr>
                         @:<th>Area</th>
                         @:<th>Your Existing Hours</th>
@@ -89,12 +96,12 @@
                     for (int i = 0; i < hourViolationsCount; i++)
                     {
                         @:<tr>
-                            @:<td>@(Html.Raw(hourViolations[i]["AreaName"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["ExistingHoursForArea"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["NewHoursForArea"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["NewTotalHoursForArea"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursForArea"]))</td>
-                            if (Convert.ToInt32(hourViolations[i]["NewTotalHoursForArea"]) > Convert.ToInt32(hourViolations[i]["MaxHoursForArea"]))
+                            @:<td>@(Html.Raw(hourViolations[i]["AreaName"]))&nbsp;</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["ExistingHoursForArea"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewHoursForArea"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewTotalHoursForArea"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["MaxHoursForArea"]).ToString("0.##"))) hours</td>
+                            if (Convert.ToDouble(hourViolations[i]["NewTotalHoursForArea"]) > Convert.ToDouble(hourViolations[i]["MaxHoursForArea"]))
                             {
                                 @:<td><b>Exceeds Max</b></td>
                             }
@@ -109,9 +116,9 @@
         @if (TempData["RoomHoursViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left">
+            @:<div class="alert alert-danger text-left text-body">
                 @:<b>Maximum Room hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Rooms.<br /><br />
-                @:<table style='width:90%;'>
+                @:<table style='width:100%;'>
                     @:<tr>
                         @:<th>Room</th>
                         @:<th>Your Existing Hours</th>
@@ -127,12 +134,12 @@
                     for (int i = 0; i < hourViolationsCount; i++)
                     {
                         @:<tr>
-                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["ExistingHoursForRoom"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["NewHoursForRoom"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["NewTotalHoursForRoom"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursForRoom"]))</td>
-                            if (Convert.ToInt32(hourViolations[i]["NewTotalHoursForRoom"]) > Convert.ToInt32(hourViolations[i]["MaxHoursForRoom"]))
+                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))&nbsp;</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["ExistingHoursForRoom"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewHoursForRoom"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewTotalHoursForRoom"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["MaxHoursForRoom"]).ToString("0.##"))) hours</td>
+                            if (Convert.ToDouble(hourViolations[i]["NewTotalHoursForRoom"]) > Convert.ToDouble(hourViolations[i]["MaxHoursForRoom"]))
                             {
                                 @:<td><b>Exceeds Max</b></td>
                             }
@@ -147,15 +154,17 @@
         @if (TempData["SingleBookingLengthViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left">
-                @:<b>Booking length violation:</b> Your new Booking exceeds the maximum allowed uninterrupted time for single Bookings in these Rooms.<br /><br />
-                @:<table style='width:90%;'>
+            @:<div class="alert alert-danger text-left text-body">
+                @:<b>Booking length violation:</b> Your following Bookings exceed the maximum allowed uninterrupted time for Booking lengths in these Rooms.<br /><br />
+                @:<table style='width:100%;'>
                     @:<tr>
                         @:<th>Room</th>
-                        @:<th>Booking Date</th>
-                        @:<th>Time</th>
-                        @:<th>Booking Length (Hours)</th>
-                        @:<th>Max Length (Hours)</th>
+                        @:<th>Start Date</th>
+                        @:<th>Start Time</th>
+                        @:<th>End Date</th>
+                        @:<th>End Time</th>
+                        @:<th>Your Booking Length</th>
+                        @:<th>Max Allowed Length</th>
                         @:<th></th>
                     @:</tr>
 
@@ -172,12 +181,14 @@
                             previousRoomName = hourViolations[i]["RoomName"];
                         }
                         @:<tr>
-                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["BookingDate"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["BookingTime"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["HoursBooked"]))</td>
-                            @:<td>@(Html.Raw(hourViolations[i]["MaxHoursSingleBooking"]))</td>
-                            if (Convert.ToInt32(hourViolations[i]["HoursBooked"]) > Convert.ToInt32(hourViolations[i]["MaxHoursSingleBooking"]))
+                            @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))&nbsp;</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingStartDate"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingStartTime"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingEndDate"]))</td>
+                            @:<td>@(Html.Raw(hourViolations[i]["BookingEndTime"]))</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["HoursBooked"]).ToString("0.##"))) hours</td>
+                            @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["MaxHoursSingleBooking"]).ToString("0.##"))) hours</td>
+                            if (Convert.ToDouble(hourViolations[i]["HoursBooked"]) > Convert.ToDouble(hourViolations[i]["MaxHoursSingleBooking"]))
                             {
                                 @:<td><b>Exceeds Max</b></td>
                             }
@@ -192,12 +203,12 @@
         @if (TempData["AreaBookingCountViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left">
+            @:<div class="alert alert-danger text-left text-body">
                 @:<b>Maximum Booking count violation:</b> Your new Booking exceeds the maximum number of separate Bookings you are allowed to have for these Areas.<br /><br />
-                @:<table style='width:90%;'>
+                @:<table style='width:100%;'>
                     @:<tr>
                         @:<th>Area</th>
-                        @:<th>Existing Bookings Count</th>
+                        @:<th>Your Existing Bookings</th>
                         @:<th>Count of New Bookings</th>
                         @:<th>Your New Total</th>
                         @:<th>Max Allowed Total</th>
@@ -210,11 +221,11 @@
                     for (int i = 0; i < bookingViolationsCount; i++)
                     {
                         @:<tr>
-                            @:<td>@(Html.Raw(bookingViolations[i]["AreaName"]))</td>
-                            @:<td>@(Html.Raw(bookingViolations[i]["ExistingBookingsForArea"]))</td>
-                            @:<td>@(Html.Raw(bookingViolations[i]["NewBookingsForArea"]))</td>
-                            @:<td>@(Html.Raw(bookingViolations[i]["NewTotalBookingsForArea"]))</td>
-                            @:<td>@(Html.Raw(bookingViolations[i]["MaxBookingsForArea"]))</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["AreaName"]))&nbsp;</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["ExistingBookingsForArea"])) bookings</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["NewBookingsForArea"])) bookings</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["NewTotalBookingsForArea"])) bookings</td>
+                            @:<td>@(Html.Raw(bookingViolations[i]["MaxBookingsForArea"])) bookings</td>
                             if (Convert.ToInt32(bookingViolations[i]["NewTotalBookingsForArea"]) > Convert.ToInt32(bookingViolations[i]["MaxBookingsForArea"]))
                             {
                                 @:<td><b>Exceeds Max</b></td>
@@ -223,6 +234,76 @@
                     }
                 @:</table><br />
                 @:Please adjust your Booking settings.
+            @:</div>
+            @:<br />
+        }
+
+        @if (TempData["BlackoutTimeViolation"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-danger text-left text-body">
+                @:<b>Blackout time violation:</b> Some Rooms require a minimum blackout time between consecutive Bookings for the same User. Your new Booking violates the blackout time of your existing Bookings.<br /><br />
+                @:<table style='width:100%;'>
+                    @:<tr>
+                        @:<th>Room</th>
+                        @:<th colspan='4'>Your New Bookings</th>
+                        @:<th style="width: 3%;"></th> @* Space between New bookings and Existing bookings *@
+                        @:<th colspan='6'>Your Existing Bookings</th>
+                    @:</tr>
+                    @:<tr>
+                        @:<th></th>
+                        @:<th>Start&nbsp;Date&nbsp;</th>
+                        @:<th>Start&nbsp;Time&nbsp;</th>
+                        @:<th>End&nbsp;Date&nbsp;</th>
+                        @:<th>End&nbsp;Time&nbsp;</th>
+                        @:<th></th>
+                        @:<th>Start&nbsp;Date&nbsp;</th>
+                        @:<th>Start&nbsp;Time&nbsp;</th>
+                        @:<th>End&nbsp;Date&nbsp;</th>
+                        @:<th>End&nbsp;Time&nbsp;</th>
+                        @:<th>Time Between Your Bookings</th>
+                        @:<th>Minimum Required Blackout</th>
+                    @:</tr>
+
+                    List<RoomBooking> yourBookings = TempData["YourBookings"] as List<RoomBooking>;
+                    List<RoomBooking> conflictBookings = TempData["BlackoutTimeViolation"] as List<RoomBooking>;
+                    List<double> blackoutTimes = TempData["BlackoutTimeValues"] as List<double>;
+                    int yourBookingsCount = yourBookings.Count;
+
+                    string previousRoomName = yourBookings[0].Room.RoomName;  // Used to bold text where the room name changes
+
+                    for (int i = 0; i < yourBookingsCount; i++)
+                    {
+                        if (yourBookings[i].Room.RoomName != previousRoomName)
+                        {
+                            @:<tr><td>&nbsp;</td></tr>
+                            previousRoomName = yourBookings[i].Room.RoomName;
+                        }
+                        @:<tr>
+                            @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))&nbsp;</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))&nbsp;</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))&nbsp;</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortDateString()))&nbsp;</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortTimeString()))&nbsp;</td>
+                            @:<td></td>
+                            if (conflictBookings[i] != null)
+                            {
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortDateString()))&nbsp;</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))&nbsp;</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortDateString()))&nbsp;</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))&nbsp;</td>
+                                @:<td>@(Html.Raw((yourBookings[i].StartDate - conflictBookings[i].EndDate).TotalHours.ToString("0.##"))) hours&nbsp;</td>
+                                @:<td>@(Html.Raw(blackoutTimes[i].ToString("0.##"))) hours&nbsp;</td>
+                            }
+                            else
+                            {
+                                @:<td></td>
+                                @:<td colspan='5'>(no violation)</td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking times.
             @:</div>
             @:<br />
         }
@@ -274,9 +355,20 @@
                     <br />
                     <div class="row form-group">
                         <div class="col-1 text-right" style="padding:0px">
-                            <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="To add a Room to your Booking, first select the Area. You will then be able to select the desired Room in that Area from the Dropdown below.">
-                                <img src="~/img/questionmark.png" width="30" height="30" />
-                            </button>
+                            @if (User.IsInRole("User"))
+                            {
+                                <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                                        data-content="To add a Room to your Booking, first select the Area. Then select the desired Room in that Area from the dropdown list below.">
+                                    <img src="~/img/questionmark.png" width="30" height="30" />
+                                </button>
+                            }
+                            @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                            {
+                                <button type="button" title="Room Selection Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                                        data-content="To add a Room to your Booking, first select the Area. Then select the desired Room in that Area from the listbox on the lower right, and press the ➕ button to add that Room to the Rooms you want to book. You cannot book Rooms from different Areas at the same time.">
+                                    <img src="~/img/questionmark.png" width="30" height="30" />
+                                </button>
+                            }
                         </div>
                         <div class="col-11 text-left" style="padding-top:5px">
                             <h5>Select a Room: </h5>
@@ -291,6 +383,12 @@
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
                         </div>
                     </div>
+
+                    <div id="areaDescription" class="alert alert-dark" role="alert">
+                        <h6 id="areaDescription_Title">Connection Error</h6>
+                        <span id="areaDescription_Body">Could not load Area description.</span>
+                    </div>
+
                     @if (User.IsInRole("User"))
                     {
                         <div class="row form-group">
@@ -327,7 +425,8 @@
                     <br />
                     <div class="row form-group">
                         <div class="col-1 text-right" style="padding:0px">
-                            <button type="button" title="Repeating Bookings Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="If you want your Booking to be repeated regularly, click this checkbox. You can then select how frequently you would like the Booking to occur. You may choose to repeat bookings every x Days or Weeks until your chosen Repeat End Date, and specify the days of the week on which it should be booked.">
+                            <button type="button" title="Repeating Bookings Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                                    data-content="If you want your Booking to be repeated over a period of time, click this checkbox. Then select how frequently you want the Booking to occur. You may choose to repeat bookings every X number of Days or Weeks until your chosen Repeat End Date, and specify which days of the week within that period should be booked.">
                                 <img src="~/img/questionmark.png" width="30" height="30" />
                             </button>
                         </div>
@@ -413,7 +512,7 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <br />
                     <div>
-                        <input type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
+                        <input id="btnSubmit" type="submit" value="Create" class="btn btn-primary mx-2" style="width:100px;" />
                         <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Bookings</a>
                     </div>
                     <br />
@@ -427,26 +526,60 @@
     <script src="~/js/multiselect.js"></script>
     <script src="~/js/refreshListbox.js"></script>
     <script src="~/js/refreshDDL.js"></script>
-    <script type="text/javascript">
-        // Refresh DDL of available rooms when Area is changed
-        $('#RoomGroupID').change(function () {
-            var selectedRoomGroup = $("#RoomGroupID").val();
-            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
-            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
-        });
-    </script>
     <script tye="text/javascript">
         $(function () {
             $('[data-toggle="popover"]').popover()
         })
     </script>
     <script type="text/javascript">
-        // Refresh Listbox of available rooms when Area is changed
+        // Refresh User DDL of available rooms when Area is changed
+        $('#RoomGroupID').change(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
+            refreshDDL('RoomID', URL, true, "There are no Rooms available in this Area.", true, "-Select a Room-", true);
+        });
+        // Refresh Admin Listbox of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
             var selectedRoomGroup = $("#RoomGroupID").val();
             var URL = "/RoomBookings/GetRooms/" + selectedRoomGroup;
             $("#selectedOptions").empty();  // Empty previously selected rooms because the area changed
             refreshListbox('availOptions', URL, true, 'There are no Rooms available in this Area.', true);
+            $("#selectedOptions").fadeToggle(400, function () {
+                $("#selectedOptions").fadeToggle(400);
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        // Load initial Area description when page loads
+        $('document').ready(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetArea/" + selectedRoomGroup;
+            $.getJSON(URL, function (data) {
+                if (data !== null && !jQuery.isEmptyObject(data)) {
+                    $("#areaDescription_Title").text(data.areaName);
+                    $("#areaDescription_Body").html(data.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                } else {
+                    $("#areaDescription_Title").text("Connection Error");
+                    $("#areaDescription_Body").html("Could not load Area description.");
+                }
+            });
+        });
+        // Refresh Area description when Area is changed
+        $('#RoomGroupID').change(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var URL = "/RoomBookings/GetArea/" + selectedRoomGroup;
+            $.getJSON(URL, function (data) {
+                if (data !== null && !jQuery.isEmptyObject(data)) {
+                    $("#areaDescription_Title").text(data.areaName);
+                    $("#areaDescription_Body").html(data.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                } else {
+                    $("#areaDescription_Title").text("Connection Error");
+                    $("#areaDescription_Body").html("Could not load Area description.");
+                }
+                $("#areaDescription").fadeToggle(400, function () {
+                    $("#areaDescription").fadeToggle(400);
+                });
+            });
         });
     </script>
 }
