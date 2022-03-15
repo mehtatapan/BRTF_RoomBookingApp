@@ -339,7 +339,8 @@
                             <label asp-for="StartDate" class="control-label"><strong>Start: *</strong></label>
                         </div>
                         <div class="col-5">
-                            <input textmode="DateTime" asp-for="StartDate" class="form-control" />
+                            <input textmode="DateTime" id="startDateInput" asp-for="StartDate" class="form-control" />
+                            <span id="startDateError" class="text-danger"></span>
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
                     </div>
@@ -348,7 +349,8 @@
                             <label asp-for="EndDate" class="control-label"><strong>End: *</strong></label>
                         </div>
                         <div class="col-5">
-                            <input textmode="DateTime" asp-for="EndDate" class="form-control" />
+                            <input textmode="DateTime" asp-for="EndDate" id="endDateInput" class="form-control" />
+                            <span id="endDateError" class="text-danger"></span>
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
@@ -580,6 +582,26 @@
                     $("#areaDescription").fadeToggle(400);
                 });
             });
+        });
+    </script>
+    <script>
+        $("#startDateInput").change(function () {
+            console.log($("#startDateInput").val());
+            if ($("#startDateInput").val().length == 0 || new Date($("#startDateInput").val()) < new Date($.now())) {
+                $("#startDateError").html("The start date cannot be in the past. Please select a new date/time.");
+            }
+            else {
+                $("#startDateError").html("");
+            }
+        });
+        $("#endDateInput").change(function () {
+            console.log($("#endDateInput").val());
+            if ($("#endDateInput").val().length == 0 || new Date($("#endDateInput").val()) < new Date($("#startDateInput").val())) {
+                $("#endDateError").html("The end date/time must occur after the selected start date/time. Please select a new date/time.");
+            }
+            else {
+                $("#endDateError").html("");
+            }
         });
     </script>
 }

@@ -28,8 +28,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="RoomName" class="label">Room Name *</label>
-                        <input asp-for="RoomName" class="form-control" />
-                        <span asp-validation-for="RoomName" class="text-danger"></span>
+                        <input asp-for="RoomName" id="roomNameInput" class="form-control" />
+                        <span asp-validation-for="RoomName" id="roomNameError" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="RoomMaxHoursTotal" class="label"></label>
@@ -47,7 +47,7 @@
             <br />
             <div class="d-flex justify-content-center">
                 <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                        <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Rooms</a>
+                <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Rooms</a>
             </div>
             <br />
         </form>
@@ -56,6 +56,17 @@
 
 @section Scripts {
     @{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+    $("#roomNameInput").on("input", function () {
+        if ($("#roomNameInput").val().length == 0) {
+            $("#roomNameError").html("Please enter a room name, up to 50 characters in length.");
+        }
+        else {
+            $("#roomNameError").html("");
+        }
+    });
+</script>
 }

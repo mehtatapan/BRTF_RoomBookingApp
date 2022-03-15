@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body class="justify-content-center">
-    <br/>
+    <br />
     <h1 class="mb-4 text-center">Edit</h1>
-    <br/>
+    <br />
 
     <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 80%; margin:auto" class="px-5 py-2 my-3">
         <div>
@@ -18,80 +18,118 @@
             <h4 class="text-center">Edit this Room Group</h4>
             <br />
         </div>
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ID" />
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label asp-for="AreaName" class="label">Area Name *</label>
-                            <input asp-for="AreaName" class="form-control" />
-                            <span asp-validation-for="AreaName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Description" class="label"></label>
-                            <textarea asp-for="Description" class="form-control"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="BlackoutTime" class="label">Blackout Time *</label>
-                            <input asp-for="BlackoutTime" class="form-control" />
-                            <span asp-validation-for="BlackoutTime" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
-                            <input asp-for="MaxHoursPerSingleBooking" class="form-control" />
-                            <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
-                            <input asp-for="MaxHoursTotal" class="form-control" />
-                            <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="MaxNumberOfBookings" class="label"></label>
-                            <input asp-for="MaxNumberOfBookings" class="form-control" />
-                            <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" title="Earliest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the earliest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 12:00am.">
-                                <img src="~/img/questionmark.png" width="25" height="25" />
-                            </button>
-                            <label asp-for="EarliestTime" class="label">Earliest Time a Booking Can be Made in This Area *</label>
-                            <input asp-for="EarliestTime" class="form-control" />
-                            <span asp-validation-for="EarliestTime" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" title="Latest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the latest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 11:30pm.">
-                                <img src="~/img/questionmark.png" width="25" height="25" />
-                            </button>
-                            <label asp-for="LatestTime" class="label">Latest Time a Booking Can be Made in This Area *</label>
-                            <input asp-for="LatestTime" class="form-control" />
-                            <span asp-validation-for="LatestTime" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="label">Is Enabled</label>
-                            <div class="form-group form-check">
-                                <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                            </div>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label asp-for="AreaName" class="label">Area Name *</label>
+                        <input asp-for="AreaName" id="areaNameInput" class="form-control" />
+                        <span asp-validation-for="AreaName" id="areaNameError" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BlackoutTime" class="label">Blackout Time *</label>
+                        <input asp-for="BlackoutTime" id="blackoutTimeInput" class="form-control" />
+                        <span asp-validation-for="BlackoutTime" id="blackoutTimeError" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
+                        <input asp-for="MaxHoursPerSingleBooking" class="form-control" />
+                        <span asp-validation-for="MaxHoursPerSingleBooking" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="MaxHoursTotal" class="control-label"></label></strong>
+                        <input asp-for="MaxHoursTotal" class="form-control" />
+                        <span asp-validation-for="MaxHoursTotal" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxNumberOfBookings" class="label"></label>
+                        <input asp-for="MaxNumberOfBookings" class="form-control" />
+                        <span asp-validation-for="MaxNumberOfBookings" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" title="Earliest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the earliest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 12:00am.">
+                            <img src="~/img/questionmark.png" width="25" height="25" />
+                        </button>
+                        <label asp-for="EarliestTime" class="label">Earliest Time a Booking Can be Made in This Area *</label>
+                        <input asp-for="EarliestTime" id="earliestTimeInput" class="form-control" />
+                        <span id="earliestTimeError" class="text-danger"></span>
+                        <span asp-validation-for="EarliestTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" title="Latest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the latest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 11:30pm.">
+                            <img src="~/img/questionmark.png" width="25" height="25" />
+                        </button>
+                        <label asp-for="LatestTime" class="label">Latest Time a Booking Can be Made in This Area *</label>
+                        <input asp-for="LatestTime" id="latestTimeInput" class="form-control" />
+                        <span id="latestTimeError" class="text-danger"></span>
+                        <span asp-validation-for="LatestTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Is Enabled</label>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
                         </div>
                     </div>
                 </div>
-                <br />
-                <div class="d-flex justify-content-center">
-                    <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                    <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
-                </div>
-                <br />
-            </form>
-        </section>
-    </body>
+            </div>
+            <br />
+            <div class="d-flex justify-content-center">
+                <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
+                <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
+            </div>
+            <br />
+        </form>
+    </section>
+</body>
 
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script tye="text/javascript">
-                 $(function () {
-                     $('[data-toggle="popover"]').popover()
-                 })
-        </script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script tye="text/javascript">
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $("#areaNameInput").on("input", function () {
+        if ($("#areaNameInput").val().length == 0) {
+            $("#areaNameError").html("Please enter an area name, up to a maximum of 100 characters.");
         }
+        else {
+            $("#areaNameInputError").html("");
+        }
+    });
+    $("#blackoutTimeInput").on("input", function () {
+        if ($("#blackoutTimeInput").val().length == 0) {
+            $("#blackoutTimeError").html("Please enter a blackout time, in hours.");
+        }
+        else {
+            $("#blackoutTimeError").html("");
+        }
+    });
+    $("#earliestTimeInput").change(function () {
+        console.log($("#earliestTimeInput").val())
+        if ($("#earliestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00") > new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00")) {
+            $("#earliestTimeError").html("The earliest time cannot be after the latest time. Please select a new time.");
+        }
+        else {
+            $("#earliestTimeError").html("");
+        }
+    });
+    $("#latestTimeInput").change(function () {
+        if ($("#latestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00") < new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00")) {
+            $("#latestTimeError").html("The latest time must occur after the selected earliest start time. Please select a new time.");
+        }
+        else {
+            $("#latestTimeError").html("");
+        }
+    });
+</script>

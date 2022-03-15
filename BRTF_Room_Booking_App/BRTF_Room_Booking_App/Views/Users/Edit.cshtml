@@ -5,6 +5,7 @@
 }
 <head>
     <link rel="stylesheet" href="~/css/style.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body class="justify-content-left">
     <br />
@@ -30,8 +31,8 @@
 
                     <div class="form-group">
                         <label asp-for="FirstName" class="label">First Name *</label>
-                        <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <input asp-for="FirstName" id="firstNameInput" class="form-control" />
+                        <span asp-validation-for="FirstName" id="firstNameError" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="MiddleName" class="label"></label>
@@ -40,23 +41,23 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="LastName" class="label">Last Name *</label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        <input asp-for="LastName" id="lastNameInput" class="form-control" />
+                        <span asp-validation-for="LastName" id="lastNameError" class="text-danger"></span>
                     </div>
                     @if (User.IsInRole("User"))
                     {
                         <div class="form-group">
                             <label asp-for="Email" class="label">Email *</label>
-                            <input asp-for="Email" class="form-control" disabled="disabled" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" id="emailInput" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="Email" id="emailError" class="text-danger"></span>
                         </div>
                     }
                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
                         <div class="form-group">
                             <label asp-for="Email" class="label">Email *</label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" id="emailInput" class="form-control" />
+                            <span asp-validation-for="Email" id="emailError" class="text-danger"></span>
                         </div>
                     }
 
@@ -72,8 +73,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="TermAndProgramID" class="label">Term and Program *</label>
-                        <select asp-for="TermAndProgramID" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
-                        <span asp-validation-for="TermAndProgramID" class="text-danger"></span>
+                        <select asp-for="TermAndProgramID" id="termProgramInput" class="form-control" asp-items="ViewBag.TermAndProgramID" disabled="disabled"></select>
+                        <span asp-validation-for="TermAndProgramID" id="termProgramError" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="Role" class="label">Role *</label>
@@ -109,3 +110,38 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
         }
+<script>
+    $("#firstNameInput").on("input", function () {
+        if ($("#firstNameInput").val().length == 0) {
+            $("#firstNameError").html("Please enter a first name, to a maximum of 50 characters.");
+        }
+        else {
+            $("#firstNameError").html("");
+        }
+    });
+    $("#lastNameInput").on("input", function () {
+        if ($("#lastNameInput").val().length == 0) {
+            $("#lastNameError").html("Please enter a last name, to a maximum of 50 characters.");
+        }
+        else {
+            $("#lastNameError").html("");
+        }
+    });
+    $("#emailInput").on("input", function () {
+        let emailChk = new RegExp("^[a-zA-Z]+?[a-zA-Z0-9]*?@@[a-zA-Z.]*?niagaracollege\\.ca$");
+        if ($("#emailInput").val().length == 0 || emailChk.test($("#emailInput").val()) == false) {
+            $("#emailError").html("Please enter a valid Niagara College email, to a maximum of 200 characters.");
+        }
+        else {
+            $("#emailError").html("");
+        }
+    });
+    $("#termProgramInput").on("input", function () {
+        if ($("#termProgramInput").val().length == 0) {
+            $("#termProgramError").html("You must assign a Term and Program.");
+        }
+        else {
+            $("#termProgramError").html("");
+        }
+    });
+</script>

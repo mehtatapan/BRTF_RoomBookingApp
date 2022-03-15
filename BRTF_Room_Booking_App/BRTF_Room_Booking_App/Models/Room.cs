@@ -25,7 +25,7 @@ namespace BRTF_Room_Booking_App.Models
         }
 
         [Display(Name = "Room")]
-        [Required(ErrorMessage = "Cannot be blank.")]
+        [Required(ErrorMessage = "Please enter a room name, up to 50 characters in length.")]
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string RoomName { get; set; }
 

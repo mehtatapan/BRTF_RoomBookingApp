@@ -27,8 +27,8 @@
                         <input type="hidden" asp-for="ID" />
                         <div class="form-group text-left">
                             <label asp-for="UserGroupName" class="label">User Group *</label>
-                            <input asp-for="UserGroupName" class="form-control" />
-                            <span asp-validation-for="UserGroupName" class="text-danger"></span>
+                            <input asp-for="UserGroupName" id="userGroupInput" class="form-control" />
+                            <span asp-validation-for="UserGroupName" id="userGroupError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -38,6 +38,7 @@
                                     <strong>-</strong>
                                 </button>
                                 @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                                <span id="selectedOptionsError" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6 text-left">
@@ -60,7 +61,18 @@
     </section>
 </body>
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script src="~/js/multiselect.js"></script>
-    }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/multiselect.js"></script>
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $("#userGroupInput").on("input", function () {
+        if ($("#userGroupInput").val().length == 0) {
+            $("#userGroupError").html("Please enter a User Group name, up to a maximum of 20 characters.");
+        }
+        else {
+            $("#userGroupError").html("");
+        }
+    });
+</script>

@@ -23,13 +23,13 @@ namespace BRTF_Room_Booking_App.Models
         }
 
         [Display(Name = "Username")]
-        [Required(ErrorMessage = "Username is required.")]
+        [Required(ErrorMessage = "Please enter a username, to a maximum of 50 characters.")]
         [StringLength(50, ErrorMessage = "Username cannot be more than 50 characters long.")]
         public string Username { get; set; }
 
 
         [Display(Name = "First Name")]
-        [Required(ErrorMessage = "First Name is required.")]
+        [Required(ErrorMessage = "Please enter a first name, to a maximum of 50 characters.")]
         [StringLength(50, ErrorMessage = "First Name cannot be more than 50 characters long.")]
         public string FirstName { get; set; }
 
@@ -38,12 +38,12 @@ namespace BRTF_Room_Booking_App.Models
         public string MiddleName { get; set; }
 
         [Display(Name = "Last Name")]
-        [Required(ErrorMessage = "Last name is required.")]
+        [Required(ErrorMessage = "Please enter a last name, to a maximum of 100 characters.")]
         [StringLength(100, ErrorMessage = "Last Name cannot be more than 100 characters long.")]
         public string LastName { get; set; }
 
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "Email is required.")]
+        [Required(ErrorMessage = "Please enter a valid Niagara College email, to a maximum of 200 characters.")]
         [StringLength(200, ErrorMessage = "Email cannot be more than 200 characters long.")]
         [RegularExpression("^[a-zA-Z]+?[a-zA-Z0-9]*?@[a-zA-Z.]*?niagaracollege\\.ca$", ErrorMessage = "Email must be a Niagara College email address.")]
         [DataType(DataType.EmailAddress)]

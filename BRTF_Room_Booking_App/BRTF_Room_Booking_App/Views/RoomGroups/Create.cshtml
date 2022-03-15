@@ -24,8 +24,8 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="AreaName" class="label">Area Name *</label>
-                        <input asp-for="AreaName" class="form-control" />
-                        <span asp-validation-for="AreaName" class="text-danger"></span>
+                        <input asp-for="AreaName" id="areaNameInput" class="form-control" />
+                        <span asp-validation-for="AreaName" id="areaNameError" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="label"></label>
@@ -34,8 +34,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="BlackoutTime" class="label">Blackout Time *</label>
-                        <input asp-for="BlackoutTime" class="form-control" />
-                        <span asp-validation-for="BlackoutTime" class="text-danger"></span>
+                        <input asp-for="BlackoutTime" id="blackoutTimeInput" class="form-control" />
+                        <span asp-validation-for="BlackoutTime" id="blackoutTimeError" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="MaxHoursPerSingleBooking" class="label"></label>
@@ -57,15 +57,17 @@
                             <img src="~/img/questionmark.png" width="25" height="25" />
                         </button>
                         <label asp-for="EarliestTime" class="label">Earliest Time a Booking Can be Made in This Area *</label>
-                        <input asp-for="EarliestTime" type="time" class="form-control" />
-                        <span asp-validation-for="EarliestTime" class="text-danger"></span>
+                        <input asp-for="EarliestTime" id="earliestTimeInput" type="time" class="form-control" />
+                        <span id="earliestTimeError" class="text-danger"></span>
+                        <span asp-validation-for="EarliestTime"  class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <button type="button" title="Latest Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-content="Please select the latest time you would like bookings to be able to be made for this area. If you would like this area to be available 24 hours please set this field to 11:30pm.">
                             <img src="~/img/questionmark.png" width="25" height="25" />
                         </button>
                         <label asp-for="LatestTime" class="label">Latest Time a Booking Can be Made in This Area *</label>
-                        <input asp-for="LatestTime" type="time" class="form-control" />
+                        <input asp-for="LatestTime" id="latestTimeInput" type="time" class="form-control" />
+                        <span id="latestTimeError" class="text-danger"></span>
                         <span asp-validation-for="LatestTime" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -95,4 +97,41 @@
             $('[data-toggle="popover"]').popover()
         })
     </script>
+
 }
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $("#areaNameInput").on("input", function () {
+        if ($("#areaNameInput").val().length == 0) {
+            $("#areaNameError").html("Please enter an area name, up to a maximum of 100 characters.");
+        }
+        else {
+            $("#areaNameInputError").html("");
+        }
+    });
+    $("#blackoutTimeInput").on("input", function () {
+        if ($("#blackoutTimeInput").val().length == 0) {
+            $("#blackoutTimeError").html("Please enter a blackout time, in hours.");
+        }
+        else {
+            $("#blackoutTimeError").html("");
+        }
+    });
+    $("#earliestTimeInput").change(function () {
+        console.log($("#earliestTimeInput").val())
+        if ($("#earliestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00") > new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00")) {
+            $("#earliestTimeError").html("The earliest time cannot be after the latest time. Please select a new time.");
+        }
+        else {
+            $("#earliestTimeError").html("");
+        }
+    });
+    $("#latestTimeInput").change(function () {
+        if ($("#latestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00") < new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00")) {
+            $("#latestTimeError").html("The latest time must occur after the selected earliest start time. Please select a new time.");
+        }
+        else {
+            $("#latestTimeError").html("");
+        }
+    });
+</script>

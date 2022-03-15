@@ -17,7 +17,7 @@ namespace BRTF_Room_Booking_App.Models
         public int ID { get; set; }
 
         [Display(Name = "User Group")]
-        [Required(ErrorMessage = "Cannot be blank.")]
+        [Required(ErrorMessage = "Please enter a User Group name, up to a maximum of 20 characters.")]
         [StringLength(20, ErrorMessage = "Cannot be more than 20 characters long.")]
         public string UserGroupName { get; set; }
 

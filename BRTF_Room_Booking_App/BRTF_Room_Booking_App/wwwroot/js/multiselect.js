@@ -17,6 +17,13 @@ function switchOptions(event, senderDDL, receiverDDL) {
         selectedOptions.forEach(function (o, idx) {
             senderDDL.remove(o.index);
             receiverDDL.appendChild(o);
+                if ($("#selectedOptions option").length == 0) {
+                    console.log($("#selectedOptions option").length)
+                    $("#selectedOptionsError").html("You must select at least one option from the right.");
+                }
+                else {
+                    $("#selectedOptionsError").html("");
+                }
         });
     }
 }

@@ -17,7 +17,7 @@ namespace BRTF_Room_Booking_App.Models
         public int ID { get; set; }
 
         [Display(Name = "Area")]
-        [Required(ErrorMessage = "Cannot be blank.")]
+        [Required(ErrorMessage = "Please enter an area name, up to a maximum of 100 characters.")]
         [StringLength(100, ErrorMessage = "Cannot be more than 100 characters long.")]
         public string AreaName { get; set; }
 
@@ -27,7 +27,7 @@ namespace BRTF_Room_Booking_App.Models
         public string Description { get; set; }
 
         [Display(Name = "Hours of Blackout Time Between Consecutive Bookings in This Area")]
-        [Required(ErrorMessage = "Cannot be blank.")]
+        [Required(ErrorMessage = "Please enter a blackout time, in hours.")]
         public int BlackoutTime { get; set; }
 
         [Display(Name = "Maximum Hours Per Single Booking in This Area")]
