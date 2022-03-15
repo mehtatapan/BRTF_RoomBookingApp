@@ -342,6 +342,7 @@ namespace BRTF_Room_Booking_App.Controllers
                .OrderBy(p => p.Room.RoomName)
                .AsNoTracking()
                .ToList();
+
             if (start == null && end == null)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
@@ -405,19 +406,23 @@ namespace BRTF_Room_Booking_App.Controllers
         [Authorize(Roles = "Top-level Admin")]
         public IActionResult DownloadBookings()
         {
-            //Get the appointments
-            var appts = from a in _context.BookingSummaries
-                        .Include(a => a.RoomName)
-                        .Include(a => a.NumberOfAppointments)
-                        .Include(a => a.TotalHours)
-                        orderby a.NumberOfAppointments
-                        select new
-                        {
-                            Room = a.RoomName,
-                            NumberOfAppointments = a.NumberOfAppointments,
-                            TotalHours = a.TotalHours
+            //Get the bookings
+            var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+               .OrderBy(p => p.Room.RoomName).OrderBy(p => p.Room.RoomGroup)
+               .AsNoTracking()
+               .ToList();
 
-                        };
+            var appts = filtered
+                .GroupBy(a => new { a.RoomID, a.Room.RoomName, a.Room.RoomGroup.AreaName })
+                .Select(grp => new BookingSummary
+                {
+                    ID = grp.Key.RoomID,
+                    RoomName = grp.Key.RoomName,
+                    RoomGroup = grp.Key.AreaName,
+                    NumberOfAppointments = grp.Count(),
+                    TotalHours = (int)grp.Sum(a => a.EndDate.Subtract(a.StartDate).TotalHours)
+                });
+
             //How many rows?
             int numRows = appts.Count();
 
@@ -427,52 +432,45 @@ namespace BRTF_Room_Booking_App.Controllers
                 using (ExcelPackage excel = new ExcelPackage())
                 {
 
-                    //Note: you can also pull a spreadsheet out of the database if you
-                    //have saved it in the normal way we do, as a Byte Array in a Model
-                    //such as the UploadedFile class.
-                    //
-                    // Suppose...
-                    //
-                    // var theSpreadsheet = _context.UploadedFiles.Include(f => f.FileContent).Where(f => f.ID == id).SingleOrDefault();
-                    //
-                    //    //Pass the Byte[] FileContent to a MemoryStream
-                    //
-                    // using (MemoryStream memStream = new MemoryStream(theSpreadsheet.FileContent.Content))
-                    // {
-                    //     ExcelPackage package = new ExcelPackage(memStream);
-                    // }
-
                     var workSheet = excel.Workbook.Worksheets.Add("BookingSummaries");//RoomBookings?
 
                     //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(appts, true);
 
                     //Set Style and backgound colour of headings
-                    //using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
-                    //{
-                    //    headings.Style.Font.Bold = true;
-                    //    var fill = headings.Style.Fill;
-                    //    fill.PatternType = ExcelFillStyle.Solid;
-                    //    fill.BackgroundColor.SetColor(Color.LightBlue);
-                    //}
-
-
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 5])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightBlue);
+                    }
 
                     //Autofit columns
                     workSheet.Cells.AutoFitColumns();
-                    //Note: You can manually set width of columns as well
-                    //workSheet.Column(7).Width = 10;
 
                     //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Booking Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 5])
                     {
                         Rng.Merge = true; //Merge columns start and end range
                         Rng.Style.Font.Bold = true; //Font should be bold
                         Rng.Style.Font.Size = 18;
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
-
+                    //Since the time zone where the server is running can be different, adjust to 
+                    //Local for us.
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 9])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
 
                     //Ok, time to download the Excel
 

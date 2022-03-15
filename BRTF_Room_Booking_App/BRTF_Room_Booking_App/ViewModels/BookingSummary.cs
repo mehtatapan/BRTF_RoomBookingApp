@@ -25,8 +25,5 @@ namespace BRTF_Room_Booking_App.ViewModels
         [Display(Name = "Room Group")]
         public string RoomGroup { get; set; }
 
-
-
-
     }
 }
