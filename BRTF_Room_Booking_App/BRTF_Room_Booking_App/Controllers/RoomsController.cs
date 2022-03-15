@@ -10,6 +10,11 @@ using BRTF_Room_Booking_App.Models;
 using BRTF_Room_Booking_App.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using BRTF_Room_Booking_App.ViewModels;
+using Microsoft.AspNetCore.Http.Features;
+using System.IO;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -328,21 +333,207 @@ namespace BRTF_Room_Booking_App.Controllers
             return View(room);
         }
 
-        public IActionResult BookingSummary()
-        {
-            //previous version
-            //var sumQ = _context.RoomBookings.Include(a => a.Room)
-            //    .GroupBy(a => new { a.RoomID, a.Room.RoomName })
-            //    .Select(grp => new BookingSummary
-            //    {
-            //        ID = grp.Key.RoomID,
-            //        RoomName = grp.Key.RoomName,
-            //        NumberOfAppointments = grp.Count()
-            //        // TotalHoursBooked=grp.Sum()
+        //public IActionResult BookingSummary()
+        //{
+        //    //previous version
+        //    var sumQ = _context.RoomBookings.Include(a => a.Room).ThenInclude(a=>a.RoomGroupID)
+        //        .GroupBy(a => new { a.RoomID, a.Room.RoomName })
+        //        .Select(grp => new BookingSummary
+        //        {
+        //            ID = grp.Key.RoomID,
+        //            RoomName = grp.Key.RoomName,
+        //            NumberOfAppointments = grp.Count(),
+        //             //TotalHours= grp.Sum(a=> a.)
+        //             TotalHours= grp.Sum(a=>a.)
 
-            //    });
-            //return View(sumQ.AsNoTracking().ToList());
-             return View(_context.BookingSummaries.AsNoTracking().ToList());
+
+        //        });
+        //    return View(sumQ.AsNoTracking().ToList());
+        //   // return View(_context.BookingSummaries.AsNoTracking().ToList());
+        //}
+        public IActionResult BookingSummary(DateTime? start, DateTime? end, string? SearchRoom, int? RoomGroupID)
+
+        {
+            ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
+            //The next two lines should be removed as they
+            //were just so I could test some date ranges without
+            //passing values to the paraneters
+            //start ??= DateTime.Parse("1700-03-01");
+            //end ??= DateTime.Parse("2025-03-20");
+            var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+               .Where(a => a.StartDate >= start && a.EndDate <= end)
+               .AsNoTracking()
+               .ToList();
+            if (start == null && end == null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+               // .Where(a => a.StartDate >= start && a.EndDate <= end)
+               .AsNoTracking()
+               .ToList();
+
+            }
+            else if (start == null && end != null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .Where(a => a.EndDate <= end)
+               .AsNoTracking()
+               .ToList();
+            }
+            else if (start != null && end == null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .Where(a => a.StartDate >= start)
+               .AsNoTracking()
+               .ToList();
+            }
+            if (!String.IsNullOrEmpty(SearchRoom))
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+               .Where(r => r.Room.RoomName.ToUpper().Contains(SearchRoom.ToUpper()))
+              .AsNoTracking()
+              .ToList();
+
+            }
+            if (RoomGroupID.HasValue)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+             .Where(r => r.Room.RoomGroupID == RoomGroupID)
+             .AsNoTracking()
+             .ToList();
+
+            }
+
+
+
+            //Now do the grouping
+            var sumQ = filtered
+                .GroupBy(a => new { a.RoomID, a.Room.RoomName, a.Room.RoomGroup.AreaName })
+                .Select(grp => new BookingSummary
+                {
+                    ID = grp.Key.RoomID,
+                    RoomName = grp.Key.RoomName,
+                    NumberOfAppointments = grp.Count(),
+                    TotalHours = (int)grp.Sum(a => a.EndDate.Subtract(a.StartDate).TotalHours),
+                    RoomGroup = grp.Key.AreaName
+
+                });
+
+
+
+            return View(sumQ.ToList());
+
+            //return View(_context.BookingSummaries.AsNoTracking().ToList());
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult DownloadBookings()
+        {
+            //Get the appointments
+            var appts = from a in _context.BookingSummaries
+                        .Include(a => a.RoomName)
+                        .Include(a => a.NumberOfAppointments)
+                        .Include(a => a.TotalHours)
+                        orderby a.NumberOfAppointments
+                        select new
+                        {
+                            Room = a.RoomName,
+                            NumberOfAppointments = a.NumberOfAppointments,
+                            TotalHours = a.TotalHours
+
+                        };
+            //How many rows?
+            int numRows = appts.Count();
+
+            if (numRows > 0) //We have data
+            {
+                //Create a new spreadsheet from scratch.
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    //Note: you can also pull a spreadsheet out of the database if you
+                    //have saved it in the normal way we do, as a Byte Array in a Model
+                    //such as the UploadedFile class.
+                    //
+                    // Suppose...
+                    //
+                    // var theSpreadsheet = _context.UploadedFiles.Include(f => f.FileContent).Where(f => f.ID == id).SingleOrDefault();
+                    //
+                    //    //Pass the Byte[] FileContent to a MemoryStream
+                    //
+                    // using (MemoryStream memStream = new MemoryStream(theSpreadsheet.FileContent.Content))
+                    // {
+                    //     ExcelPackage package = new ExcelPackage(memStream);
+                    // }
+
+                    var workSheet = excel.Workbook.Worksheets.Add("BookingSummaries");//RoomBookings?
+
+                    //Note: Cells[row, column]
+                    workSheet.Cells[3, 1].LoadFromCollection(appts, true);
+
+                    //Set Style and backgound colour of headings
+                    //using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    //{
+                    //    headings.Style.Font.Bold = true;
+                    //    var fill = headings.Style.Fill;
+                    //    fill.PatternType = ExcelFillStyle.Solid;
+                    //    fill.BackgroundColor.SetColor(Color.LightBlue);
+                    //}
+
+
+
+                    //Autofit columns
+                    workSheet.Cells.AutoFitColumns();
+                    //Note: You can manually set width of columns as well
+                    //workSheet.Column(7).Width = 10;
+
+                    //Add a title and timestamp at the top of the report
+                    workSheet.Cells[1, 1].Value = "Booking Report";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    {
+                        Rng.Merge = true; //Merge columns start and end range
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+
+
+                    //Ok, time to download the Excel
+
+                    //I usually stream the response back to avoid possible
+                    //out of memory errors on the server if you have a large spreadsheet.
+                    //NOTE: Since .NET Core 3 most Web Servers disallow sync IO so we
+                    //need to temporarily change the setting for the server.
+                    //If we can't then we will try to build the file and return a FileContentResult
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=Bookings.xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "Bookings.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            return NotFound();
         }
 
         //This is a twist on the PopulateDropDownLists approach

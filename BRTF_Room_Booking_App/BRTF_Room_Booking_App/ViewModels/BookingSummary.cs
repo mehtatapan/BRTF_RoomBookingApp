@@ -22,6 +22,11 @@ namespace BRTF_Room_Booking_App.ViewModels
         [Display(Name = "Total Hours Booked")]
         public int TotalHours { get; set; }
 
+        [Display(Name = "Room Group")]
+        public string RoomGroup { get; set; }
+
+
+
 
     }
 }
