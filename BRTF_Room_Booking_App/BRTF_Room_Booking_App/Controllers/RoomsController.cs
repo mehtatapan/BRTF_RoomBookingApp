@@ -333,77 +333,57 @@ namespace BRTF_Room_Booking_App.Controllers
             return View(room);
         }
 
-        //public IActionResult BookingSummary()
-        //{
-        //    //previous version
-        //    var sumQ = _context.RoomBookings.Include(a => a.Room).ThenInclude(a=>a.RoomGroupID)
-        //        .GroupBy(a => new { a.RoomID, a.Room.RoomName })
-        //        .Select(grp => new BookingSummary
-        //        {
-        //            ID = grp.Key.RoomID,
-        //            RoomName = grp.Key.RoomName,
-        //            NumberOfAppointments = grp.Count(),
-        //             //TotalHours= grp.Sum(a=> a.)
-        //             TotalHours= grp.Sum(a=>a.)
-
-
-        //        });
-        //    return View(sumQ.AsNoTracking().ToList());
-        //   // return View(_context.BookingSummaries.AsNoTracking().ToList());
-        //}
         public IActionResult BookingSummary(DateTime? start, DateTime? end, string? SearchRoom, int? RoomGroupID)
-
         {
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
-            //The next two lines should be removed as they
-            //were just so I could test some date ranges without
-            //passing values to the paraneters
-            //start ??= DateTime.Parse("1700-03-01");
-            //end ??= DateTime.Parse("2025-03-20");
+
             var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
                .Where(a => a.StartDate >= start && a.EndDate <= end)
+               .OrderBy(p => p.Room.RoomName)
                .AsNoTracking()
                .ToList();
             if (start == null && end == null)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
-               // .Where(a => a.StartDate >= start && a.EndDate <= end)
-               .AsNoTracking()
-               .ToList();
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
 
             }
             else if (start == null && end != null)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
                 .Where(a => a.EndDate <= end)
-               .AsNoTracking()
-               .ToList();
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
             }
             else if (start != null && end == null)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
                 .Where(a => a.StartDate >= start)
-               .AsNoTracking()
-               .ToList();
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
             }
             if (!String.IsNullOrEmpty(SearchRoom))
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
                .Where(r => r.Room.RoomName.ToUpper().Contains(SearchRoom.ToUpper()))
-              .AsNoTracking()
-              .ToList();
+               .OrderBy(p => p.Room.RoomName)
+               .AsNoTracking()
+               .ToList();
 
             }
             if (RoomGroupID.HasValue)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
-             .Where(r => r.Room.RoomGroupID == RoomGroupID)
-             .AsNoTracking()
-             .ToList();
+                .Where(r => r.Room.RoomGroupID == RoomGroupID)
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
 
             }
-
-
 
             //Now do the grouping
             var sumQ = filtered
@@ -418,15 +398,11 @@ namespace BRTF_Room_Booking_App.Controllers
 
                 });
 
-
-
             return View(sumQ.ToList());
-
-            //return View(_context.BookingSummaries.AsNoTracking().ToList());
 
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Top-level Admin")]
         public IActionResult DownloadBookings()
         {
             //Get the appointments
