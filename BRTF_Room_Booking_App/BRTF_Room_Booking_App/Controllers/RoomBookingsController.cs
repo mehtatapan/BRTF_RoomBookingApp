@@ -280,7 +280,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             // Check that Start Time is not in the past
-            if (roomBooking.StartDate < DateTime.Now)
+            if (roomBooking.StartDate < DateTime.Today)
             {
                 ModelState.AddModelError("StartDate", "Start Time can not be in the past.");
             }
@@ -726,7 +726,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             // Check that Start Time is not in the past
-            if (StartDate < DateTime.Now)
+            if (StartDate < DateTime.Today)
             {
                 ModelState.AddModelError("StartDate", "Start Date can not be in the past.");
             }
