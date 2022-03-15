@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -20,10 +21,14 @@ namespace BRTF_Room_Booking_App.Controllers
     public class RoomBookingsController : Controller
     {
         private readonly BTRFRoomBookingContext _context;
+        private readonly ApplicationDbContext _identityContext;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RoomBookingsController(BTRFRoomBookingContext context)
+        public RoomBookingsController(BTRFRoomBookingContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _identityContext = identityContext;
+            _userManager = userManager;
         }
 
         // GET: RoomBookings
@@ -570,6 +575,12 @@ namespace BRTF_Room_Booking_App.Controllers
                         overallAreaNumberOfBookingsFeedback.Add(numberOfBookingsFeedbackForThisArea);
                     }
 
+                    // Get User's role so we only show rule violations to non-admins
+                    User bookingUser = _context.Users.Where(u => u.ID == roomBooking.UserID).FirstOrDefault();
+                    var identityUser = _identityContext.Users.FirstOrDefault(p => p.UserName == bookingUser.Username);
+                    string identityUserRole = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
+                    bool userIsNotAdmin = ((identityUserRole != "Admin") && (identityUserRole != "Top-level Admin"));
+
                     // ONLY store feedback in TempData if a violation occurred
                     if (overallIsTimeConflictFound == true)
                     {
@@ -579,35 +590,35 @@ namespace BRTF_Room_Booking_App.Controllers
 
                         throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
                     }
-                    if (overallIsRoomTimeViolationFound == true)
+                    if (overallIsRoomTimeViolationFound == true && userIsNotAdmin)
                     {
                         // Send feedback to User if their new bookings violate the time total for a specific room
                         TempData["RoomHoursViolation"] = overallRoomTimeFeedback;
 
                         throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
                     }
-                    if (overallIsAreaTimeViolationFound == true)
+                    if (overallIsAreaTimeViolationFound == true && userIsNotAdmin)
                     {
                         // Send feedback to User if their new bookings violate the time total for an area
                         TempData["AreaHoursViolation"] = overallAreaTimeFeedback;
 
                         throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
                     }
-                    if (overallIsSingleBookingLengthViolationFound == true)
+                    if (overallIsSingleBookingLengthViolationFound == true && userIsNotAdmin)
                     {
                         // Send feedback to User if their new bookings violate the maximum time for a single booking
                         TempData["SingleBookingLengthViolation"] = overallSingleBookingLengthFeedback;
 
                         throw new DbUpdateException("Booking time total violation.");    // Break before bookings are added or saved
                     }
-                    if (overallIsAreaNumberOfBookingsViolationFound == true)
+                    if (overallIsAreaNumberOfBookingsViolationFound == true && userIsNotAdmin)
                     {
                         // Send feedback to User if their new bookings violate the maximum number of bookings allowed in this area
                         TempData["AreaBookingCountViolation"] = overallAreaNumberOfBookingsFeedback;
 
                         throw new DbUpdateException("Total Booking count violation.");    // Break before bookings are added or saved
                     }
-                    if (overallIsBlackoutViolationFound == true)
+                    if (overallIsBlackoutViolationFound == true && userIsNotAdmin)
                     {
                         // Send feedback to User if their new bookings violate the minimum blackout time allowed for a room
                         TempData["YourBookings"] = overallNewBookingsToAdd;
