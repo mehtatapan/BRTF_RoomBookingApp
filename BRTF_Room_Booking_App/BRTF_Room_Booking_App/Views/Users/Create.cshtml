@@ -127,7 +127,9 @@
                     </div>
                     <div class="col-md-12 text-center">
                         <div class="form-group">
-                            <a asp-action="DownloadExampleExcel" class="btn btn-primary mt-2">Download Example File</a>
+                            <a asp-action="DownloadExampleExcel" class="btn btn-primary mt-2">Download Example File</a> <button type="button" title="Bulk User Upload Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="This downloadable Excel file shows the correct format bulk user data should be in prior to uploading. Please ensure all column headers match the exact locations of those in the example file in order to complete a successful bulk user upload.">
+    <img src="~/img/questionmark.png" width="30" height="30" />
+</button>
                         </div>
                     </div>
                 </div>
@@ -149,6 +151,10 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
+
     $("#firstNameInput").on("input", function () {
         if ($("#firstNameInput").val().length == 0) {
             $("#firstNameError").html("Please enter a first name, to a maximum of 50 characters.");

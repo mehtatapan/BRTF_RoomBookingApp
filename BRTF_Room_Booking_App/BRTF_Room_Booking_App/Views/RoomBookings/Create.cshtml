@@ -318,7 +318,7 @@
                 <form asp-action="Create">
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="UserID" class="control-label"><strong>Full Name: *</strong></label>
+                            <label asp-for="UserID" class="control-label"><strong>Full Name *</strong></label>
                         </div>
                         <div class="col-10">
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID" disabled="@(ViewBag.UserIdDisabled)"></select>
@@ -327,7 +327,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="SpecialNotes" class="control-label"><strong>Special Notes:</strong></label>
+                            <label asp-for="SpecialNotes" class="control-label"><strong>Special Notes</strong></label>
                         </div>
                         <div class="col-10">
                             <textarea asp-for="SpecialNotes" class="form-control"></textarea>
@@ -336,7 +336,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="StartDate" class="control-label"><strong>Start: *</strong></label>
+                            <label asp-for="StartDate" class="control-label"><strong>Start *</strong></label>
                         </div>
                         <div class="col-5">
                             <input textmode="DateTime" id="startDateInput" asp-for="StartDate" class="form-control" />
@@ -346,7 +346,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="EndDate" class="control-label"><strong>End: *</strong></label>
+                            <label asp-for="EndDate" class="control-label"><strong>End *</strong></label>
                         </div>
                         <div class="col-5">
                             <input textmode="DateTime" asp-for="EndDate" id="endDateInput" class="form-control" />
@@ -373,13 +373,13 @@
                             }
                         </div>
                         <div class="col-11 text-left" style="padding-top:5px">
-                            <h5>Select a Room: </h5>
+                            <h5>Select a Room </h5>
                         </div>
                     </div>
 
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label for="RoomGroupID" class="label"><strong>Area: *</strong></label>
+                            <label for="RoomGroupID" class="label"><strong>Area *</strong></label>
                         </div>
                         <div class="col-10">
                             <select id="RoomGroupID" name="RoomGroupID" class="form-control" asp-items="ViewBag.RoomGroupID"></select>
@@ -395,7 +395,7 @@
                     {
                         <div class="row form-group">
                             <div class="col-2 text-right pt-2">
-                                <label asp-for="RoomID" class="label"><strong>Room: *</strong></label>
+                                <label asp-for="RoomID" class="label"><strong>Room *</strong></label>
                             </div>
                             <div class="col-10">
                                 <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID">
@@ -441,7 +441,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-2 text-right">
-                                    <label for="RepeatInterval" class="control-label"><strong>Every:</strong></label>
+                                    <label for="RepeatInterval" class="control-label"><strong>Every *</strong></label>
                                 </div>
                                 <div class="col-5">
                                     <input type="number" id="RepeatInterval" name="RepeatInterval" step="1" min="1" value="@(ViewData["RepeatInterval"])" class="form-control" />
@@ -502,7 +502,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-2 text-right pt-2">
-                                        <label for="RepeatEndDate" class="control-label"><strong>Repeat End Date:</strong></label>
+                                        <label for="RepeatEndDate" class="control-label"><strong>Repeat End Date*</strong></label>
                                     </div>
                                     <div class="col-5">
                                         <input type="date" id="RepeatEndDate" name="RepeatEndDate" value="@(ViewData["RepeatEndDate"])" class="form-control" />
