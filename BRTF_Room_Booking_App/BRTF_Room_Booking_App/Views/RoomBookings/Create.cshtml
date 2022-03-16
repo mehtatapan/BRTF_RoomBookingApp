@@ -243,31 +243,31 @@
             @:<br />
             @:<div class="alert alert-danger text-left text-body">
                 @:<b>Blackout time violation:</b> Some Rooms require a minimum blackout time between consecutive Bookings for the same User. Your new Booking violates the blackout time of your existing Bookings.<br /><br />
-                @:<table style='width:100%;'>
+                @:<table style='width: 100%; padding: 5px;'>
                     @:<tr>
-                        @:<th>Room</th>
+                        @:<th>Room&nbsp;&nbsp;</th>
                         @:<th colspan='4'>Your New Bookings</th>
                         @:<th style="width: 3%;"></th> @* Space between New bookings and Existing bookings *@
                         @:<th colspan='6'>Your Existing Bookings</th>
                     @:</tr>
                     @:<tr>
                         @:<th></th>
-                        @:<th>Start&nbsp;Date&nbsp;</th>
-                        @:<th>Start&nbsp;Time&nbsp;</th>
-                        @:<th>End&nbsp;Date&nbsp;</th>
-                        @:<th>End&nbsp;Time&nbsp;</th>
+                        @:<th>Start&nbsp;Date&nbsp;&nbsp;</th>
+                        @:<th>Start&nbsp;Time&nbsp;&nbsp;</th>
+                        @:<th>End&nbsp;Date&nbsp;&nbsp;</th>
+                        @:<th>End&nbsp;Time</th>
                         @:<th></th>
-                        @:<th>Start&nbsp;Date&nbsp;</th>
-                        @:<th>Start&nbsp;Time&nbsp;</th>
-                        @:<th>End&nbsp;Date&nbsp;</th>
-                        @:<th>End&nbsp;Time&nbsp;</th>
+                        @:<th>Start&nbsp;Date&nbsp;&nbsp;</th>
+                        @:<th>Start&nbsp;Time&nbsp;&nbsp;</th>
+                        @:<th>End&nbsp;Date&nbsp;&nbsp;</th>
+                        @:<th>End&nbsp;Time&nbsp;&nbsp;</th>
                         @:<th>Time Between Your Bookings</th>
                         @:<th>Minimum Required Blackout</th>
                     @:</tr>
 
                     List<RoomBooking> yourBookings = TempData["YourBookings"] as List<RoomBooking>;
                     List<RoomBooking> conflictBookings = TempData["BlackoutTimeViolation"] as List<RoomBooking>;
-                    List<double> blackoutTimes = TempData["BlackoutTimeValues"] as List<double>;
+                    List<int> blackoutTimes = TempData["BlackoutTimeValues"] as List<int>;
                     int yourBookingsCount = yourBookings.Count;
 
                     string previousRoomName = yourBookings[0].Room.RoomName;  // Used to bold text where the room name changes
@@ -292,7 +292,7 @@
                                 @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))&nbsp;</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortDateString()))&nbsp;</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))&nbsp;</td>
-                                @:<td>@(Html.Raw((yourBookings[i].StartDate - conflictBookings[i].EndDate).TotalHours.ToString("0.##"))) hours&nbsp;</td>
+                                @:<td>@(Html.Raw(Math.Abs((yourBookings[i].StartDate - conflictBookings[i].EndDate).TotalHours).ToString("0.##"))) hours&nbsp;</td>
                                 @:<td>@(Html.Raw(blackoutTimes[i].ToString("0.##"))) hours&nbsp;</td>
                             }
                             else
