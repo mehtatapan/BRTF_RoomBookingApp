@@ -30,7 +30,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edit 13 BRTF1435 & 3yr TV",
-                        Description = "Max Booking 4 hours\r\nThis suite contains:\r\nMedia Composer, Adobe Suite, DaVinci Resolve, Pro Tools\r\n4th Term Film/TV or 5th Term TV students",
+                        Description = "You can book up to 4 hours at a time and have up to 3 future bookingss.\r\nThis suite contains:\r\nMedia Composer, Adobe Suite, DaVinci Resolve, Pro Tools.\r\nBookable by 4th Term Film/TV or 5th Term TV.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
@@ -40,7 +40,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edit 15 BRTF1435, Term 5",
-                        Description = "Max Booking 4 hours\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools\r\n4th Term Film/TV or 5th Term TV students",
+                        Description = "You can book up to 4 hours at a time.\r\nThis suite contains:\r\nMedia Composer, Pro Tools, DaVinci Resolve, Creative Suite.\r\nBookable by 4th Term Film/TV or 5th Term TV.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
@@ -50,7 +50,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edit 6, 3rd Year only",
-                        Description = "Max Booking 6 hours\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools",
+                        Description = "You can book up to 6 hours at a time and have up to 2 future bookings.\r\nThis suite contains:\r\nMedia Composer, Pro Tools, Resolve, Creative Suite.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
@@ -60,7 +60,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edit 8 Inside Niagara",
-                        Description = "Max Booking 2 hours\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve\r\n3rd Term Presentation or 4th Term TV",
+                        Description = "You can book up to 2 hours at a time.\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve.\r\nBookable by 3rd term Presentation and 4th term TV.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
@@ -70,7 +70,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edit 9, 10 and 14, 2nd Years",
-                        Description = "Max Booking 6 hours\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools\r\n2nd Year students and 3rd Year Presentation",
+                        Description = "You can book up to 6 hours at a time.\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools.\r\nBookable by 2nd Year students and 3rd Year Presentation.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
@@ -80,7 +80,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Edits 1-5, 3rd Year Film",
-                        Description = "Max Booking 6 hours\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools\r\n3rd Year Film only. Other students won't be approved without a signed building pass.",
+                        Description = "You can book up to 6 hours at a time and have up to 3 future bookings.\r\nThis suite contains:\r\nCreative Suite, Media Composer, DaVinci Resolve, Pro Tools.\r\nBookable by 3rd Year Film only. All others won't be approved without a signed building pass.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
                         MaxHoursTotal = Int32.MaxValue,
@@ -100,7 +100,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Green Room",
-                        Description = "Max Booking 12 hours\r\nRoom typically for teams preparing for a TV or film shoot",
+                        Description = "Max bookable time is 12 hours.\r\nRoom typically for teams preparing for a TV or film shoot.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 12,
                         MaxHoursTotal = Int32.MaxValue,
@@ -110,27 +110,27 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "MAC Lab V106",
-                        Description = "Max Booking 6 hours\r\nAll MACs Contain:\r\nMS Office, Adobe Suite, Media Composer, DaVinci Resolve, Pro Tools\r\n17 computers",
+                        Description = "Max bookable time is 6 hours.\r\nAll MACs Contain:\r\nMS Office, Adobe Suite, Media Composer, DaVinci Resolve, Pro Tools.\r\n17 computers.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 6,
-                        MaxHoursTotal = Int32.MaxValue,
+                        MaxHoursTotal = 6,
                         MaxNumberOfBookings = Int32.MaxValue,
                         Enabled = true
                     },
                     new RoomGroup()
                     {
                         AreaName = "Mixing Theatre V105",
-                        Description = "Max Booking 8 hours\r\nAvailable after class until midnight Monday to Friday. Weekends off limits. Approval from Luke Hutton before use.",
+                        Description = "Max bookable time is 8 hours.\r\nAvailable after class until midnight Monday to Friday. Weekends off limits.\r\nApproval from Luke Hutton before use.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 8,
-                        MaxHoursTotal = Int32.MaxValue,
+                        MaxHoursTotal = 8,
                         MaxNumberOfBookings = Int32.MaxValue,
                         Enabled = true
                     },
                     new RoomGroup()
                     {
                         AreaName = "Radio Edit Suites V109",
-                        Description = "Max Booking 4 hours\r\n8 computers",
+                        Description = "You can book up to 4 hours at a time.\r\n8 audio editing computers.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 4,
                         MaxHoursTotal = Int32.MaxValue,
@@ -140,7 +140,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "Radio Recording Studios V109",
-                        Description = "Max Booking 2 hours\r\nAll studios have:\r\nAccess for phone interviews. Announce booth 1 is used for news and sports. Announce booth 2 is used for voice tracking.",
+                        Description = "You can book up to 2 hours in a studio.\r\nAll studios have:\r\nPhone access for interviews.\r\nAnnounce booth 1 is used for news and sports.\r\nAnnounce booth 2 is used for voice tracking.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
@@ -150,10 +150,10 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "TV Studio V002",
-                        Description = "Max Booking 18-hours\r\nDifferent rooms have varying booking times. Please check to confirm:\r\n1st year students may reserve the studio as per instructor instructors.\r\nAll others can obtain approval through Alysha Henderson",
+                        Description = "You can book up to 18 hours.\r\nDifferent rooms have varying booking times. Please check to confirm:\r\nV2 TV Studio, Max Bookable Hours 2.\r\nV2 GreenRoom, Max Bookable Hours 6.\r\nV1 (Old Studio), Max Bookable Hours 2.\r\n1st year students may reserve the studio as per instructor instructions.\r\nAll others must obtain approval through Alysha Henderson.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 18,
-                        MaxHoursTotal = Int32.MaxValue,
+                        MaxHoursTotal = 18,
                         MaxNumberOfBookings = Int32.MaxValue,
                         Enabled = true
                     },
@@ -170,7 +170,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "V110 Acting Lab",
-                        Description = "Max Booking 2-hours\r\nBookings is off-limits from 12:30am to the end of classes, Monday-Friday.\r\nFor exceptions, approval must be granted by Lori Ravensborg.",
+                        Description = "You can book up to 2 hours at a time.\r\nBookings is off-limits from 12:30 A.M. to the end of classes, Monday-Friday.\r\nFor exceptions, approval must be granted by Lori Ravensborg.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 2,
                         MaxHoursTotal = Int32.MaxValue,
@@ -190,10 +190,10 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "V204p Production Planning",
-                        Description = "Max Booking 1-hour\r\nBRTF Project Meeting Room\r\nOnly available Monday-Friday between 8:30am-5:30pm.",
+                        Description = "You can book up to 1 hour.\r\nBRTF Project Meeting Room.\r\nOnly available Monday-Friday between 8:30 A.N. - 5:30 P.M.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 1,
-                        MaxHoursTotal = Int32.MaxValue,
+                        MaxHoursTotal = 1,
                         MaxNumberOfBookings = Int32.MaxValue,
                         Enabled = true
                     },
@@ -646,10 +646,14 @@ namespace BRTF_Room_Booking_App.Data
                         permissionsDict.Add(roomGroupID, userPermissions);
                     }
 
-                    // Add a Room Booking 3 bookings for each Room
-                    for (int j = 0; j < 3; j++)
+                    // Loop through every room
+                    for (int i = 0; i < roomCount; i++)
                     {
-                        for (int i = 0; i < roomCount; i++)
+                        // Initialize the hour of the first booking in every room to 8 o'clock
+                        int latestHour = 8;
+
+                        // Add 6 bookings to every room
+                        for (int j = 0; j < 6; j++)
                         {
                             // Get a valid User
                             int userID;
@@ -662,11 +666,13 @@ namespace BRTF_Room_Booking_App.Data
                                 userID = users[index].ID;   // Get a random User's ID
                             } while (!roomPermissions.Contains(users[index].UserGroupID));  // Loop if permissions does not contain that User's Group
 
+                            int bookingEndHour = latestHour + random.Next(1, 3);
+
                             // Construct Room Booking details
                             RoomBooking roomBooking = new RoomBooking()
                             {
-                                StartDate = DateTime.Now.AddDays((i + 1) * (j + 1)),
-                                EndDate = DateTime.Now.AddDays((i + 1) * (j + 1)).AddHours(random.Next(1, 3)),
+                                StartDate = DateTime.Today.AddDays(1).AddHours(latestHour),
+                                EndDate = DateTime.Today.AddDays(1).AddHours(bookingEndHour).AddMinutes(-1),
                                 RoomID = rooms[i].ID,
                                 UserID = userID
                             };
@@ -681,9 +687,15 @@ namespace BRTF_Room_Booking_App.Data
                                 var m = e.Message;
                                 // So skip it and go on to the next
                             }
+
+                            // Update latest hour for next loop
+                            latestHour = bookingEndHour;
                         }
                     }
+
                 }
+
+
 
             }
         }

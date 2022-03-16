@@ -335,7 +335,13 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-2 text-right pt-2">
+                        <div class="col-1 text-right" style="padding:0px">
+                            <button type="button" title="Booking Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                                    data-content="This time selection to the right sets the beginning and end time for a SINGLE booking. The date picker lets you make a booking that crosses over midnight into the next morning. This does NOT make repeat bookings. If you want to repeat a booking over several days, please use the Repeat settings on the bottom of this page.">
+                                <img src="~/img/questionmark.png" width="30" height="30" />
+                            </button>
+                        </div>
+                        <div class="col-1 text-right pt-2">
                             <label asp-for="StartDate" class="control-label"><strong>Start *</strong></label>
                         </div>
                         <div class="col-5">
