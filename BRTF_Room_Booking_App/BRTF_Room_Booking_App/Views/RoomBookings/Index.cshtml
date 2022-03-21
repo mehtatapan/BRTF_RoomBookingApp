@@ -84,6 +84,9 @@
                         </div>
                     </div>
                 </div>
+                <button class="btn btn-outline-secondary" type="button" onclick="pageSize()">
+                    View All Bookings
+                </button>
             </div>
             <table class="table">
                 <thead>
@@ -134,6 +137,7 @@
 </body>
 @section Scripts {
     <script src="~/js/refreshDDL.js"></script>
+
     <script type="text/javascript">
         // Refresh DDL of available rooms when Area is changed
         $('#RoomGroupID').change(function () {
@@ -142,6 +146,12 @@
             refreshDDL('RoomID', URL, true, "All Rooms", true, "All Rooms", true);
         });
     </script>
+    <script>
+        function pageSize() {
+            document.cookie = "RoomBookingspageSizeValue=10000";
+            location.reload();
+        }
+    </script>
     <script src='~/fullcalendar/main.js'></script>
     <script>
 
@@ -149,6 +159,8 @@
 
             var rooms = @Html.Raw(ViewBag.RoomList);
             var bookings = @Html.Raw(ViewBag.BookingList);
+            var today = new Date;
+            var time = today.getHours() + ":" + today.getMinutes()
 
             console.log(bookings);
 
@@ -161,11 +173,11 @@
                 selectable: false,
                 nowIndicator: true,
                 aspectRatio: 1.8,
-                scrollTime: '00:00',
+                scrollTime: time,
                 headerToolbar: {
                     left: 'today prev,next',
                     center: 'title',
-                    right: 'resourceTimelineDay,resourceTimelineThreeDays,timeGridWeek,dayGridMonth'
+                    right: 'resourceTimelineDay,resourceTimelineThreeDays'
                 },
                 initialView: 'resourceTimelineDay',
                 views: {
