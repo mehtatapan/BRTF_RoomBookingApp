@@ -413,11 +413,11 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("Admin") || User.IsInRole("User"))
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to delete other users.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -447,11 +447,11 @@ namespace BRTF_Room_Booking_App.Controllers
                 ModelState.AddModelError("", "Unable to delete. You cannot delete your own account.");
             }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("Admin") || User.IsInRole("User"))
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
+                    TempData["Message"] = "You are not authorized to delete other users.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
