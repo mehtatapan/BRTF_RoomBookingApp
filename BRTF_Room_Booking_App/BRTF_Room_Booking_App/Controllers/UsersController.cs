@@ -427,6 +427,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // POST: Users/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -494,11 +495,10 @@ namespace BRTF_Room_Booking_App.Controllers
         {
             //URL with the last filter, sort and page parameters for this controller
             ViewDataReturnURL();
-
             if (User.IsInRole("Admin"))
             {
-                    TempData["Message"] = "You are not authorized to delete other users.";
-                    return Redirect(ViewData["returnURL"].ToString());
+                TempData["Message"] = "You are not authorized to delete other users.";
+                return Redirect(ViewData["returnURL"].ToString());
             }
             else
             {
@@ -511,7 +511,6 @@ namespace BRTF_Room_Booking_App.Controllers
         // POST: Users/DeleteBulk
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Top-Level Admin")]
         public async Task<IActionResult> DeleteBulk(string[] selectedRoles, int[] selectedGroups)
         {
             // Track counts to output message at the end
