@@ -421,6 +421,11 @@ namespace BRTF_Room_Booking_App.Controllers
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
+            if (User.Identity.Name == user.Username)
+            {
+                TempData["AlertMessage"] = "You cannot delete your own account.";
+                return Redirect(ViewData["returnURL"].ToString());
+            }
 
             ViewData["Role"] = _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault();
             return View(user);
