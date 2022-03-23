@@ -157,4 +157,9 @@
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
+</script>
 }
