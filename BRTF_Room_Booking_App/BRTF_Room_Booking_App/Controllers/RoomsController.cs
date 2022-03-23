@@ -335,6 +335,12 @@ namespace BRTF_Room_Booking_App.Controllers
 
         public IActionResult BookingSummary(DateTime? start, DateTime? end, string? SearchRoom, int? RoomGroupID)
         {
+            //Clear the sort/filter/paging URL Cookie for Controller
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
+            //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered initially
+
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
 
             var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
@@ -343,13 +349,13 @@ namespace BRTF_Room_Booking_App.Controllers
                .AsNoTracking()
                .ToList();
 
+            //  Filtering
             if (start == null && end == null)
             {
                 filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
                 .OrderBy(p => p.Room.RoomName)
                 .AsNoTracking()
                 .ToList();
-
             }
             else if (start == null && end != null)
             {
@@ -358,6 +364,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .OrderBy(p => p.Room.RoomName)
                 .AsNoTracking()
                 .ToList();
+                ViewData["Filtering"] = " show ";
             }
             else if (start != null && end == null)
             {
@@ -366,6 +373,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .OrderBy(p => p.Room.RoomName)
                 .AsNoTracking()
                 .ToList();
+                ViewData["Filtering"] = " show ";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
             {
@@ -374,6 +382,7 @@ namespace BRTF_Room_Booking_App.Controllers
                .OrderBy(p => p.Room.RoomName)
                .AsNoTracking()
                .ToList();
+                ViewData["Filtering"] = " show ";
 
             }
             if (RoomGroupID.HasValue)
@@ -383,6 +392,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .OrderBy(p => p.Room.RoomName)
                 .AsNoTracking()
                 .ToList();
+                ViewData["Filtering"] = " show ";
 
             }
 

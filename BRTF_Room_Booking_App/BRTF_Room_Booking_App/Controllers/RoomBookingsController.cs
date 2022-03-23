@@ -59,6 +59,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
             {
                 roombookings = roombookings.Where(r => afterDate <= r.StartDate);
+                
                 ViewData["Filtering"] = "show";
             }
             if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
