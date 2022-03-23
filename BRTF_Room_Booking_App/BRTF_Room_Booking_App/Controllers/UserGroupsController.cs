@@ -33,7 +33,10 @@ namespace BRTF_Room_Booking_App.Controllers
 
             //Toggle the Open/Closed state of the collapse depending on if we are filtering
             ViewData["Filtering"] = ""; //Asume not filtering
-            //Then in each "test" for filtering, add ViewData["Filtering"] = " show" if true;
+                                        //Then in each "test" for filtering, add ViewData["Filtering"] = " show" if true;
+
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
 
             string[] sortOptions = new[] { "User Group" };
 
@@ -46,6 +49,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 userGroups = userGroups.Where(u => u.UserGroupName.ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting

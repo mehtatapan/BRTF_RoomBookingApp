@@ -31,6 +31,9 @@ namespace BRTF_Room_Booking_App.Controllers
 
             ViewData["Filtering"] = "";
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             PopulateDropDownLists(); //data for User Filter DDL
 
             var roomGroups = from u in _context.RoomGroups.Where(u =>
@@ -41,11 +44,13 @@ namespace BRTF_Room_Booking_App.Controllers
             if (EnabledFilterString != "All")
             {
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchName))
             {
                 roomGroups = roomGroups.Where(r => r.AreaName.ToUpper().Contains(SearchName.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting

@@ -46,6 +46,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             PopulateDropDownLists(); //data for User Filter DDL
 
             // Start with Includes but make sure your expression returns an
@@ -61,6 +64,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 users = users.Where(u => u.TermAndProgram.UserGroupID == UserGroupID);
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchName))
             {
@@ -68,11 +72,13 @@ namespace BRTF_Room_Booking_App.Controllers
                                     u.MiddleName.ToUpper().Contains(SearchName.ToUpper()) ||
                                     u.FirstName.ToUpper().Contains(SearchName.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchEmail))
             {
                 users = users.Where(u => u.Email.ToUpper().Contains(SearchEmail.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before sorting, you need to check to see if there has been a change to of filter/sort

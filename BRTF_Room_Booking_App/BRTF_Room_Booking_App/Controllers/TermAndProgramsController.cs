@@ -32,6 +32,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
             // options later.
@@ -44,16 +47,19 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramCode.ToUpper().Contains(SearchProgCode.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchProgName))
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramName.ToUpper().Contains(SearchProgName.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchLevel))
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramLevel.Equals(Convert.ToInt32(SearchLevel)));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before sorting, you need to check to see if there has been a change to of filter/sort

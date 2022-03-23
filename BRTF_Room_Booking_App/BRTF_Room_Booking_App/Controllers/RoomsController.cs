@@ -38,6 +38,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered initially
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             PopulateDropDownLists(); //data for Room Filter DDL
 
             // Start with Includes but make sure your expression returns an
@@ -53,16 +56,19 @@ namespace BRTF_Room_Booking_App.Controllers
             if (EnabledFilterString != "All")
             {
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (RoomGroupID.HasValue)
             {
                 rooms = rooms.Where(r => r.RoomGroupID == RoomGroupID);
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
             {
                 rooms = rooms.Where(r => r.RoomName.ToUpper().Contains(SearchRoom.ToUpper()));
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting
@@ -341,6 +347,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered initially
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
 
             var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
@@ -365,6 +374,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .AsNoTracking()
                 .ToList();
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             else if (start != null && end == null)
             {
@@ -374,6 +384,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .AsNoTracking()
                 .ToList();
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
             {
@@ -383,6 +394,7 @@ namespace BRTF_Room_Booking_App.Controllers
                .AsNoTracking()
                .ToList();
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
 
             }
             if (RoomGroupID.HasValue)
@@ -393,6 +405,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .AsNoTracking()
                 .ToList();
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
 
             }
 

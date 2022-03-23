@@ -39,6 +39,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Toggle the open/closed state of the collapse depending on if something is being filtered
             ViewData["Filtering"] = ""; //Assume nothing is filtered
 
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
             //NOTE: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "Start Date" };
 
@@ -61,32 +64,38 @@ namespace BRTF_Room_Booking_App.Controllers
                 roombookings = roombookings.Where(r => afterDate <= r.StartDate);
                 
                 ViewData["Filtering"] = "show";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
             {
                 roombookings = roombookings.Where(r => r.StartDate <= beforeDate);
                 ViewData["Filtering"] = "show";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchUsername))
             {
                 roombookings = roombookings.Where(r => r.User.Username.ToUpper().Contains(SearchUsername.ToUpper()));
                 ViewData["Filtering"] = "show";
+                ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchFullName))
             {
                 roombookings = roombookings.Where(r => (r.User.FirstName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper())
                                                     || (r.User.FirstName + " " + r.User.MiddleName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper()));
                 ViewData["Filtering"] = "show";
+                ViewData["Filter"] = "btn-danger";
             }
             if (RoomGroupID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.Room.RoomGroupID == RoomGroupID);
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
             if (RoomID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.RoomID == RoomID);
                 ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting
