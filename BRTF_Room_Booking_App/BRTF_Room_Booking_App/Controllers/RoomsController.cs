@@ -15,6 +15,7 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using Newtonsoft.Json;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -421,6 +422,15 @@ namespace BRTF_Room_Booking_App.Controllers
                     RoomGroup = grp.Key.AreaName
 
                 });
+
+            List<ChartJSON> chartList = new List<ChartJSON>();
+
+            foreach (BookingSummary r in sumQ)
+            {
+                chartList.Add(new ChartJSON { id = r.ID, room = r.RoomName, numBookings = r.NumberOfAppointments, hrsBookings = r.TotalHours });
+            }
+
+            ViewData["RoomList"] = JsonConvert.SerializeObject(chartList);
 
             return View(sumQ.ToList());
 
