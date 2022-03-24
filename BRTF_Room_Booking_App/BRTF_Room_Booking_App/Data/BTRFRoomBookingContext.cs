@@ -44,6 +44,8 @@ namespace BRTF_Room_Booking_App.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<BookingSummary> BookingSummaries { get; set; }
+        public DbSet<RoomGroupApprover> RoomGroupApprovers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -119,6 +121,7 @@ namespace BRTF_Room_Booking_App.Data
                 .HasIndex(p => p.Username)
                 .IsUnique();
 
+
             //Add a unique index to the RoomGroup Name
             modelBuilder.Entity<RoomGroup>()
                 .HasIndex(p => p.AreaName)
@@ -129,6 +132,23 @@ namespace BRTF_Room_Booking_App.Data
                 .HasIndex(p => new { p.RoomGroupID, p.RoomName })
                 .IsUnique();
 
+            modelBuilder.Entity<RoomGroupApprover>()
+                .HasKey(p => new { p.RoomGroupID, p.UserID });
+
+            modelBuilder.Entity<RoomGroup>()
+                .HasMany(p => p.RoomGroupApprovers)
+                .WithOne(p => p.RoomGroup)
+                .HasForeignKey(p => p.RoomGroupID);
+
+            //modelBuilder.Entity<RoomGroupApprover>()
+            //    .HasOne<RoomGroup>(p => p.RoomGroup)
+            //    .WithMany(p => p.RoomGroupApprovers)
+            //    .HasForeignKey(p => p.RoomGroupID);
+
+            //modelBuilder.Entity<RoomGroupApprover>()
+            //    .HasOne<User>(p => p.User)
+            //    .WithMany(p => p.RoomGroupApprovers)
+            //    .HasForeignKey(p => p.UserID);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

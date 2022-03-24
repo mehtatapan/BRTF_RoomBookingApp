@@ -12,6 +12,7 @@ namespace BRTF_Room_Booking_App.Models
         {
             this.Rooms = new HashSet<Room>();
             this.RoomUserGroupPermissions = new HashSet<RoomUserGroupPermission>();
+            this.RoomGroupApprovers = new HashSet<RoomGroupApprover>();
         }
 
         public int ID { get; set; }
@@ -59,8 +60,14 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Area is Enabled")]
         public bool Enabled { get; set; }
 
+        [Display(Name = "Bookings in this Area need Approval")]
+        public bool NeedsApproval { get; set; }
+
         [Display(Name = "Rooms")]
         public ICollection<Room> Rooms { get; set; }
+
+        [Display(Name = "Users that are allowed to approve Bookings in this Area")]
+        public ICollection<RoomGroupApprover> RoomGroupApprovers { get; set; }
 
         [Display(Name = "Room User Group Permissions")]
         public ICollection<RoomUserGroupPermission> RoomUserGroupPermissions { get; set; }

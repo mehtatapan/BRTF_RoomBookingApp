@@ -77,6 +77,26 @@
                             <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="label">Needs Approval</label>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" asp-for="NeedsApproval" /> @Html.DisplayNameFor(model => model.NeedsApproval)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label for="selectedOptions" class="control-label"><strong>Current Approvers</strong></label> <button type="button" title="Remove Approvers from Area" id="btnRight" class="btn btn-danger btn-sm">
+                                <strong>➖</strong>
+                            </button>
+                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="availOptions" class="control-label"><strong>Add Approvers to Area</strong></label> <button type="button" title="Add Approvers to Area" id="btnLeft" class="btn btn-success btn-sm">
+                                <strong>➕</strong>
+                            </button>
+                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                        </div>
+                    </div>
                 </div>
             </div>
             <br />
@@ -96,40 +116,61 @@
             $('[data-toggle="popover"]').popover()
         })
     </script>
+    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/refreshListbox.js"></script>
+    <script>
+        $("#areaNameInput").on("input", function () {
+            if ($("#areaNameInput").val().length == 0) {
+                $("#areaNameError").html("Please enter an area name, up to a maximum of 100 characters.");
+            }
+            else {
+                $("#areaNameInputError").html("");
+            }
+        });
+        $("#blackoutTimeInput").on("input", function () {
+            if ($("#blackoutTimeInput").val().length == 0) {
+                $("#blackoutTimeError").html("Please enter a blackout time, in hours.");
+            }
+            else {
+                $("#blackoutTimeError").html("");
+            }
+        });
+        $("#earliestTimeInput").change(function () {
+            console.log($("#earliestTimeInput").val())
+            if ($("#earliestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00") > new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00")) {
+                $("#earliestTimeError").html("The earliest time cannot be after the latest time. Please select a new time.");
+            }
+            else {
+                $("#earliestTimeError").html("");
+            }
+        });
+        $("#latestTimeInput").change(function () {
+            if ($("#latestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00") < new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00")) {
+                $("#latestTimeError").html("The latest time must occur after the selected earliest start time. Please select a new time.");
+            }
+            else {
+                $("#latestTimeError").html("");
+            }
+        });
+    </script>
+    <script>
+        $("#userGroupInput").on("input", function () {
+            if ($("#userGroupInput").val().length == 0) {
+                $("#userGroupError").html("Please enter a User Group name, up to a maximum of 20 characters.");
+            }
+            else {
+                $("#userGroupError").html("");
+            }
+        });
+        $("#btnRight").click(function () {
+            console.log($("#selectedOptions").val().length)
+            if ($("#selectedOptions").val().length == 1) {
+                console.log("hi!")
+                $("#selectedOptionsError").html("User Groups need at least 1 Room Group for a permission.");
+            }
+            else {
+                $("#selectedOptionsError").html("");
+            }
+        });
+    </script>
 }
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script>
-    $("#areaNameInput").on("input", function () {
-        if ($("#areaNameInput").val().length == 0) {
-            $("#areaNameError").html("Please enter an area name, up to a maximum of 100 characters.");
-        }
-        else {
-            $("#areaNameInputError").html("");
-        }
-    });
-    $("#blackoutTimeInput").on("input", function () {
-        if ($("#blackoutTimeInput").val().length == 0) {
-            $("#blackoutTimeError").html("Please enter a blackout time, in hours.");
-        }
-        else {
-            $("#blackoutTimeError").html("");
-        }
-    });
-    $("#earliestTimeInput").change(function () {
-        console.log($("#earliestTimeInput").val())
-        if ($("#earliestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00") > new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00")) {
-            $("#earliestTimeError").html("The earliest time cannot be after the latest time. Please select a new time.");
-        }
-        else {
-            $("#earliestTimeError").html("");
-        }
-    });
-    $("#latestTimeInput").change(function () {
-        if ($("#latestTimeInput").val().length == 0 || new Date("2000-01-01T" + $("#latestTimeInput").val() + ":00") < new Date("2000-01-01T" + $("#earliestTimeInput").val() + ":00")) {
-            $("#latestTimeError").html("The latest time must occur after the selected earliest start time. Please select a new time.");
-        }
-        else {
-            $("#latestTimeError").html("");
-        }
-    });
-</script>

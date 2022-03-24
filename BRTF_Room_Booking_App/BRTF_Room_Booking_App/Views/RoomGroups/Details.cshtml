@@ -113,6 +113,27 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-6 text-right pt-2">
+                                <label class="label">Needs Approval</label>
+                            </div>
+                            <div class="col-6 py-2">
+                                <div class="form-group form-check">
+                                    <input class="form-check-input align-content-end" asp-for="NeedsApproval" disabled /> @Html.DisplayNameFor(model => model.NeedsApproval)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-right pt-2">
+                                <label class="label">Approvers</label>
+                            </div>
+                            <div class="col-6 pt-2">
+                                @foreach (var a in Model.RoomGroupApprovers)
+                                {
+                                    @a.User.FullName <br />
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <br />

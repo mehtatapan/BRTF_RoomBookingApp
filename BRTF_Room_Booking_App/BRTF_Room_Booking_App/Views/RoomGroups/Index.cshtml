@@ -66,15 +66,17 @@
                 <thead>
                     <tr>
                         <th>
-                            <input type="submit" name="actionButton" value="Area" class="btn btn-link" style="font-weight:700"/>
+                            <input type="submit" name="actionButton" value="Area" class="btn btn-link" style="font-weight:700" />
                         </th>
                         <th>
                             <input type="submit" disabled="disabled" value="Description" class="btn btn-link" style="font-weight:700" />
                         </th>
                         <th>
-                            <input type="submit" name="actionButton" value="Is Enabled" class="btn btn-link" style="font-weight:700"/>
+                            <input type="submit" name="actionButton" value="Is Enabled" class="btn btn-link" style="font-weight:700" />
                         </th>
-                        <th></th>
+                        <th>
+                            <input type="submit" name="actionButton" value="Needs Approval" class="btn btn-link" style="font-weight:700" />
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,6 +91,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Enabled)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NeedsApproval)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
