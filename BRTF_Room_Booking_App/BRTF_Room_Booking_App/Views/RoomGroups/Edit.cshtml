@@ -80,31 +80,43 @@
                     <div class="form-group">
                         <label class="label">Needs Approval</label>
                         <div class="form-group form-check">
-                            <input class="form-check-input" asp-for="NeedsApproval" /> @Html.DisplayNameFor(model => model.NeedsApproval)
+                            <input class="form-check-input" id="chkApproval" asp-for="NeedsApproval" data-toggle="collapse" data-target="#collapseApprovers" aria-expanded="true" aria-controls="collapseApprovers" /> @Html.DisplayNameFor(model => model.NeedsApproval)
                         </div>
                     </div>
-                    <div class="row form-group">
-                        <div class="col-md-6">
-                            <label for="selectedOptions" class="control-label"><strong>Current Approvers</strong></label> <button type="button" title="Remove Approvers from Area" id="btnRight" class="btn btn-danger btn-sm">
-                                <strong>➖</strong>
-                            </button>
-                            @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                    <div class="collapse @ViewData["collapseApprovers"]" id="collapseApprovers">
+                        <div class="row form-group">
+                            <div class="col-1 text-right" style="padding:0px">
+                                <button type="button" title="Area Approval Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                                        data-content="To allow an Admin to approve Bookings in this Area, select them from the right box and press the ➕ button. To remove an Admin from this Area, select them on the left and click the ➖ button. If no Admins are selected, only Topadmins will be able to approve bookings in this Area.">
+                                    <img src="~/img/questionmark.png" width="30" height="30" />
+                                </button>
+                            </div>
+                            <div class="col-11 text-left" style="padding-top:5px">
+                                <h5>Who can approve bookings in this area? </h5>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="availOptions" class="control-label"><strong>Add Approvers to Area</strong></label> <button type="button" title="Add Approvers to Area" id="btnLeft" class="btn btn-success btn-sm">
-                                <strong>➕</strong>
-                            </button>
-                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                        <div class="row form-group text-center">
+                            <div class="col-md-6">
+                                <label for="selectedOptions" class="control-label"><strong>Current Approvers</strong></label> <button type="button" title="Remove Approvers from Area" id="btnRight" class="btn btn-danger btn-sm">
+                                    <strong>➖</strong>
+                                </button>
+                                @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="availOptions" class="control-label"><strong>Add Approvers to Area</strong></label> <button type="button" title="Add Approvers to Area" id="btnLeft" class="btn btn-success btn-sm">
+                                    <strong>➕</strong>
+                                </button>
+                                @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control", @style = "height: 90%;" })
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <div class="d-flex justify-content-center">
-                <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
-                <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
-            </div>
-            <br />
+                <br />
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Save" class="btn btn-primary mx-2" style="width:100px;" />
+                    <a href='@ViewData["returnURL"]' role="button" class="btn btn-secondary mx-2">Back to Room Groups</a>
+                </div>
+                <br />
         </form>
     </section>
 </body>

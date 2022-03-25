@@ -49,6 +49,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (EnabledFilterString != "All")
             {
                 ViewData["Filtering"] = " show ";
+                ViewData["Filtering"] = " show ";
                 ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchName))
@@ -215,6 +216,8 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 return NotFound();
             }
+            
+            ViewData["collapseApprovers"] = roomGroup.NeedsApproval ? " show " : "";
 
             PopulateAdminList(roomGroup);
             return View(roomGroup);
