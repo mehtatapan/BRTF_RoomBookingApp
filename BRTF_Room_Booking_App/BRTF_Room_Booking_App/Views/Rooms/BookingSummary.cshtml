@@ -14,38 +14,46 @@
     <h4 class="text-center">Booking Summary</h4>
     <br />
     <form asp-action="BookingSummary" method="get">
-        <div class="form-horizontal align-items-start text-left justify-content-start my-3">
+        <div class="row">
             @if (User.IsInRole("Top-level Admin"))
             {
-                <a asp-action="DownloadBookings" class="btn btn-info float-right mb-3">Download Bookings Report</a>
-            }
-            <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Filter/Search
-            </button>
-            <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
-                <div class="card card-body bg-light">
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Bookings From:</label>
-                            @Html.TextBox("start", null, new { @class = "form-control", @type = "date" })
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Bookings Before:</label>
-                            @Html.TextBox("end", null, new { @class = "form-control", @type = "date" })
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Search Room:</label>
-                            @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="control-label">Search by Room Group:</label>
-                            @Html.DropDownList("RoomGroupID", null, "All Room Groups", htmlAttributes: new { @class = "form-control" })
-                        </div>
+                <div class="col-12">
+                    <div class="form-horizontal align-items-start text-left justify-content-start my-3">
+                        <a asp-action="DownloadBookings" class="btn btn-info mb-3">Download Bookings Report</a>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-4 align-self-end">
-                            <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                            <a asp-action="BookingSummary" class="btn btn-outline-dark">Clear</a>
+                </div>
+            }
+            <div class="col-12">
+                <div class="form-horizontal align-items-start text-left justify-content-start my-3">
+                    <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        Filter/Search
+                    </button>
+                    <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+                        <div class="card card-body bg-light">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Bookings From:</label>
+                                    @Html.TextBox("start", null, new { @class = "form-control", @type = "date" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Bookings Before:</label>
+                                    @Html.TextBox("end", null, new { @class = "form-control", @type = "date" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search Room:</label>
+                                    @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search by Room Group:</label>
+                                    @Html.DropDownList("RoomGroupID", null, "All Room Groups", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4 align-self-end">
+                                    <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                                    <a asp-action="BookingSummary" class="btn btn-outline-dark">Clear</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -53,9 +61,9 @@
         </div>
         <div id="chartHolder">
             <!-- HTML -->
-        <div id="chartdiv"></div>
+            <div id="chartdiv"></div>
         </div>
-        
+
 
     </form>
     <table class="table">
@@ -100,10 +108,11 @@
 </section>
 
 <style>
-    #chartHolder{
-        height:500px;
+    #chartHolder {
+        height: 500px;
         overflow: scroll;
     }
+
     #chartdiv {
         width: 100%;
     }

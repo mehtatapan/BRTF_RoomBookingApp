@@ -4,12 +4,12 @@
 @*For Cookies*@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<ul class="navbar-nav">
+<ul>
     @if (SignInManager.IsSignedIn(User))
     {
         var userName = HttpContextAccessor.HttpContext.Request.Cookies["userName"] ?? UserManager.GetUserName(User);
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarIDDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #E4E6E6">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarIDDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #E4E6E6">
                 Hello&nbsp;@userName!&nbsp;<b class="caret"></b>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarIDDropdown">
@@ -20,7 +20,7 @@
                 }
                 <li>
                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button type="submit" class="dropdown-item" style="color: #E4E6E6">Logout</button>
+                        <button type="submit" class="dropdown-item my-2" style="color: #E4E6E6">Logout</button>
                     </form>
                 </li>
             </ul>
@@ -28,9 +28,6 @@
     }
     else
     {
-        @*<li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>*@
         <li class="nav-item">
             <a class="nav-link" asp-area="Identity" asp-page="/Account/Login" style="color: #E4E6E6">Login</a>
         </li>
