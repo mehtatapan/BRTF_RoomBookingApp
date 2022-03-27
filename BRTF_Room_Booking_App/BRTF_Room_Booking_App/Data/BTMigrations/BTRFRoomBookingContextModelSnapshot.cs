@@ -143,12 +143,30 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<int?>("MaxNumberOfBookings")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("NeedsApproval")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
                     b.HasIndex("AreaName")
                         .IsUnique();
 
                     b.ToTable("RoomGroups");
+                });
+
+            modelBuilder.Entity("BRTF_Room_Booking_App.Models.RoomGroupApprover", b =>
+                {
+                    b.Property<int>("RoomGroupID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("RoomGroupID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RoomGroupApprovers");
                 });
 
             modelBuilder.Entity("BRTF_Room_Booking_App.Models.RoomUserGroupPermission", b =>
@@ -285,6 +303,21 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
                     b.HasOne("BRTF_Room_Booking_App.Models.User", "User")
                         .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BRTF_Room_Booking_App.Models.RoomGroupApprover", b =>
+                {
+                    b.HasOne("BRTF_Room_Booking_App.Models.RoomGroup", "RoomGroup")
+                        .WithMany("RoomGroupApprovers")
+                        .HasForeignKey("RoomGroupID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BRTF_Room_Booking_App.Models.User", "User")
+                        .WithMany("RoomGroupApprovers")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

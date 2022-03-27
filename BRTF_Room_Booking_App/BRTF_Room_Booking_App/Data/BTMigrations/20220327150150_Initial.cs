@@ -40,7 +40,8 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     MaxNumberOfBookings = table.Column<int>(nullable: true),
                     EarliestTime = table.Column<DateTime>(nullable: false),
                     LatestTime = table.Column<DateTime>(nullable: false),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    NeedsApproval = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,6 +184,30 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RoomGroupApprovers",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(nullable: false),
+                    RoomGroupID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomGroupApprovers", x => new { x.RoomGroupID, x.UserID });
+                    table.ForeignKey(
+                        name: "FK_RoomGroupApprovers_RoomGroups_RoomGroupID",
+                        column: x => x.RoomGroupID,
+                        principalTable: "RoomGroups",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoomGroupApprovers_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_RoomBookings_RoomID",
                 table: "RoomBookings",
@@ -191,6 +216,11 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
             migrationBuilder.CreateIndex(
                 name: "IX_RoomBookings_UserID",
                 table: "RoomBookings",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomGroupApprovers_UserID",
+                table: "RoomGroupApprovers",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
@@ -237,7 +267,6 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 table: "Users",
                 column: "Username",
                 unique: true);
-
             ExtraMigration.Steps(migrationBuilder);
         }
 
@@ -248,6 +277,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
             migrationBuilder.DropTable(
                 name: "RoomBookings");
+
+            migrationBuilder.DropTable(
+                name: "RoomGroupApprovers");
 
             migrationBuilder.DropTable(
                 name: "RoomUserGroupPermissions");
