@@ -347,6 +347,20 @@
                             <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
                     </div>
+                        <div class="row form-group">
+                        <div class="col-2 text-right pt-2">
+
+                            <label asp-for="ApprovalStatus" class="label">Approval Status *</label>
+                        </div>
+                        <div class="col-10">
+                            @Html.DropDownList("ApprovalStatus", new List<SelectListItem>
+                           {   new SelectListItem { Text="Empty", Value=""},
+                               new SelectListItem { Text="Pending", Value="Pending"},
+                               new SelectListItem { Text="Approved", Value="Approved"},
+                               new SelectListItem { Text="Declined", Value="Declined"}
+                           }, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        </div>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <br />
                     <div class="d-flex justify-content-center">
