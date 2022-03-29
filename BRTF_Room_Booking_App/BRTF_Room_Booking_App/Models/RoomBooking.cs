@@ -16,6 +16,9 @@ namespace BRTF_Room_Booking_App.Models
         [DisplayFormat(NullDisplayText = "None.")]
         public string SpecialNotes { get; set; }
 
+        [Display(Name = "Approval Notes")]
+        [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
+        public string ApprovalStatus { get; set; }
 
         [Display(Name = "Start Date")]
         [Required(ErrorMessage = "Cannot be blank.")]
