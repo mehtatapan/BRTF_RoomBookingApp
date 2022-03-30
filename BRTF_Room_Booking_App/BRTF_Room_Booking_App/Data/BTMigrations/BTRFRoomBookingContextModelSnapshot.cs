@@ -82,6 +82,10 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApprovalStatus")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 

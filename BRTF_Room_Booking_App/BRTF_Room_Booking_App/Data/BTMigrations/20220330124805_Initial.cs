@@ -162,6 +162,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SpecialNotes = table.Column<string>(maxLength: 1000, nullable: true),
+                    ApprovalStatus = table.Column<string>(maxLength: 50, nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     RoomID = table.Column<int>(nullable: false),
@@ -267,6 +268,7 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                 table: "Users",
                 column: "Username",
                 unique: true);
+
             ExtraMigration.Steps(migrationBuilder);
         }
 

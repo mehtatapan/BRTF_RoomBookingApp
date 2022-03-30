@@ -6147,9 +6147,6 @@ C:\Users\DT\Desktop\Working\130.2\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRT
 C:\Users\DT\Desktop\Working\130.2\PROG1440-Prototype_2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
-C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\BRTF_Room_Booking_App.StaticWebAssets.xml
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\BRTF_Room_Booking_App.exe
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\BRTF_Room_Booking_App.deps.json
@@ -6306,7 +6303,6 @@ C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Book
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.csprojAssemblyReference.cache
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.AssemblyInfoInputs.cache
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.AssemblyInfo.cs
 C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.csproj.CoreCompileInputs.cache
@@ -6837,3 +6833,6 @@ C:\Users\mehta\Downloads\Prototype_3_v2\BRTF_Room_Booking_App\BRTF_Room_Booking_
 C:\Users\mehta\Downloads\Prototype_3_v2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.dll
 C:\Users\mehta\Downloads\Prototype_3_v2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\mehta\Downloads\Prototype_3_v2\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
+C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.csproj.AssemblyReference.cache
+C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\emmaa\Desktop\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\scopedcss\bundle\BRTF_Room_Booking_App.styles.css

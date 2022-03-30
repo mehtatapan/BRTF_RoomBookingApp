@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
         /* Change hover-over colour for Bootstrap dropdown-menu list items. */
-        .dropdown-menu > li > a:hover, .dropdown-menu > li > form > button:hover {
+        .dropdown-menu > li > a:hover, .dropdown-menu > li > form > button:hover, .nav-item a:hover {
             background-image: none;
             background-color: dodgerblue;
         }
@@ -17,63 +17,63 @@
 </head>
 <body>
     <header>
-        <nav class="navbar">
+        <nav class="navbar navbar-expand-sm">
             <a class="brand-title" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="~/img/Logo.png" alt="Logo of BRTF" /></a>
             <a href="#" class="toggle-button">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+                @*<span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>*@
             </a>
-            <div class="navbar-links">
-                    <ul >
-                        <li><a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Create" style="color: #E4E6E6">Book a Room</a></li>
-                        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a></li>
-                        @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-                        {
-                            <li>
-                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" asp-area="" asp-controller="Rooms" asp-action="BookingSummary" style="color: #E4E6E6">Admin Reports</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
-                            <li>
-                                <a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-                        {
 
-                            <li class="nav-link dropdown">
-                                <a class="nav dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #E4E6E6">
-                                    Lists<b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6">Users</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6">User&nbsp;Groups</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6">Terms&nbsp;and&nbsp;Programs</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6">Room&nbsp;Groups</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6">Rooms</a></li>
-                                    @if (User.IsInRole("Top-level Admin"))
-                                    {
-                                        <li class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="GlobalSettings" asp-action="Details" asp-route-id="1" style="color: #E4E6E6">Global Settings</a></li>
-                                    }
-                                </ul>
-                            </li>
-                        }
-                        <li><partial name="_LoginPartial" /></li>
+            <ul class="navbar-nav">
+                <li><a class="nav-link mx-2" asp-area="" asp-controller="RoomBookings" asp-action="Create" style="color: #E4E6E6">Book a Room</a></li>
+                <li><a class="nav-link mx-2" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a></li>
+                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                {
+                    <li>
+                        <a class="nav-link mx-2" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
+                    </li>
+                    <li>
+                        <a class="nav-link mx-2" asp-area="" asp-controller="Rooms" asp-action="BookingSummary" style="color: #E4E6E6">Admin Reports</a>
+                    </li>
+                }
+                @if (User.IsInRole("User"))
+                {
+                    <li>
+                        <a class="nav-link mx-2" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6">Bookings</a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                {
 
-                </ul>
-            </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle mx-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" style="color: #E4E6E6">
+                            Lists<b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index" style="color: #E4E6E6;">Users</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="UserGroups" asp-action="Index" style="color: #E4E6E6;">User&nbsp;Groups</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="TermAndPrograms" asp-action="Index" style="color: #E4E6E6;">Terms&nbsp;and&nbsp;Programs</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="RoomBookings" asp-action="Index" style="color: #E4E6E6;">Bookings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="RoomGroups" asp-action="Index" style="color: #E4E6E6;">Room&nbsp;Groups</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index" style="color: #E4E6E6;">Rooms</a>
+                            @if (User.IsInRole("Top-level Admin"))
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="GlobalSettings" asp-action="Details" asp-route-id="1" style="color: #E4E6E6;">Global Settings</a>
+                            }
+                        </div>
+                    </li>
+                }
+                <li class="ml-2 mr-5"><partial name="_LoginPartial" /></li>
+
+            </ul>
+
         </nav>
         @*<nav class="navbar navbar-expand-sm border-bottom box-shadow mb-3">
             <a class="navbar-link" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="~/img/Logo.png" alt="Logo of BRTF" /></a>
@@ -137,9 +137,9 @@
             </div>
             </nav>*@
     </header>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container" style="text-align: center;">
@@ -155,7 +155,7 @@
         const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 
         toggleButton.addEventListener('click', () => {
-        navbarLinks.classList.toggle('active')
+            navbarLinks.classList.toggle('active')
         })
     </script>
     @RenderSection("Scripts", required: false)
