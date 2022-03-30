@@ -37,7 +37,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
         [Authorize(Roles = "Top-level Admin, Admin")]
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID, 
+        public async Task<IActionResult> Index(string SearchName, string SearchEmail, int? UserGroupID, int? page, int? pageSizeID, string sortDirectionCheck, string sortFieldID,
             string actionButton, string sortDirection = "asc", string sortField = "Full Name")
         {
             //Clear the sort/filter/paging URL Cookie for Controller
@@ -49,6 +49,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Change colour of the button when filtering by setting this default
             ViewData["Filter"] = "btn-outline-secondary";
 
+            //note: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "Full Name", "User Group", };
+
             PopulateDropDownLists(); //data for User Filter DDL
 
             // Start with Includes but make sure your expression returns an
@@ -57,7 +60,7 @@ namespace BRTF_Room_Booking_App.Controllers
             var users = from u in _context.Users
                 .Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup)
                 .AsNoTracking()
-                select u;
+                        select u;
 
             //adding filters
             if (UserGroupID.HasValue)
@@ -92,6 +95,11 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                     sortField = actionButton; //sorting by the button that was clicked
                 }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
+                }
             }
             //now the sort field and direction is known
             if (sortField == "Full Name")
@@ -106,7 +114,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     users = users
                         .OrderByDescending(u => u.FirstName)
-                        .ThenByDescending(u => u.LastName); 
+                        .ThenByDescending(u => u.LastName);
                 }
             }
             else //sorting by Term and Program
@@ -120,11 +128,13 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     users = users
                         .OrderByDescending(u => u.TermAndProgram.UserGroup.UserGroupName);
-                }  
+                }
             }
             //now to set the sort for the next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            //SelectList for Sorting Options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
@@ -134,6 +144,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
             return View(pagedData);
         }
+
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
