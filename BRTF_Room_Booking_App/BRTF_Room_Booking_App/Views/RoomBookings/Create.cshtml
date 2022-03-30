@@ -724,8 +724,56 @@
         });
     </script>
     <script type="text/javascript">
+        // Load initial booking time when page loads
+        $('document').ready(function () {
+            // Grab initial start datetime from the true Start Datetime picker
+            var startDatetime = new Date(document.getElementById("startDateInput").value);
+            var startDay = parseInt(startDatetime.getDate());
+            var startMonth = parseInt(startDatetime.getMonth() + 1);
+            var startYear = parseInt(startDatetime.getFullYear());
+
+            // Construct string and set datepicker by plain string
+            var startDateString = startYear + "-";
+            if (startMonth < 10) { startDateString = startDateString + "0" }
+            startDateString = startDateString + startMonth + "-";
+            if (startDay < 10) { startDateString = startDateString + "0" }
+            startDateString = startDateString + startDay;
+
+            document.getElementById('startDatePicker').value = startDateString;
+
+            // Grab starting Time from the true Start Datetime picker
+            var startHour = startDatetime.getHours();
+            var startMinute = startDatetime.getMinutes();
+
+            // Construct string and set time select list using plain string
+            var startTimeString = "";
+            if (startHour < 10) { startTimeString = startTimeString + "0"; }
+            startTimeString = startTimeString + startHour + ":";
+            if (startMinute < 10) { startTimeString = startTimeString + "0"; }
+            startTimeString = startTimeString + startMinute;
+
+            document.getElementById("startTimePicker").value = startTimeString;
+
+            // Grab initial end datetime from the true End Datetime picker
+            var endDatetime = new Date(document.getElementById("endDateInput").value);
+
+            // Get the difference
+            var startEndDifference = Math.abs(endDatetime - startDatetime); // Difference between start and end time in milliseconds
+            var differenceInMinutes = (startEndDifference / 1000) / 60;
+            var differenceInHours = differenceInMinutes / 60;
+            var differenceInHoursRounded = Math.round(differenceInHours * 10) / 10;
+
+            // Set duration select list using plain string
+            var textToFind = differenceInHoursRounded + " hours";
+            var dd = document.getElementById('durationPicker');
+            dd.selectedIndex = [...dd.options].findIndex(option => option.text === textToFind);
+
+            // After setting all controls using values from the true Start/End datetime pickers, update displays
+            updateStartEndDatetimes(false);
+        });
+
         // Update start and end time using sub controls
-        function updateStartEndDatetimes() {
+        function updateStartEndDatetimes(flashDisplays) {
             // Update startDateInput by a plain string
             var startDatetimeString = document.getElementById('startDatePicker').value + 'T' + document.getElementById("startTimePicker").value;;
             document.getElementById('startDateInput').value = startDatetimeString;   // Actual start datetime input
@@ -739,7 +787,7 @@
             var endHour = startHour + parseInt(durationTime[0]);
             var endMinute = startMinute + parseInt(durationTime[1]);
             if (endMinute > 60) {
-                startHour = startHour + 1;
+                endHour = endHour + 1;
                 endMinute = endMinute - 60;
             }
 
@@ -753,29 +801,31 @@
             document.getElementById('endDateDisplay').value = endDatetimeString;   // End datetime Display only
 
             // Flash displays
-            $("#startDateDisplay").fadeToggle(400, function () {
-                $("#startDateDisplay").fadeToggle(400);
-            });
-            $("#endDateDisplay").fadeToggle(400, function () {
-                $("#endDateDisplay").fadeToggle(400);
-            });
+            if (flashDisplays != false) {
+                $("#startDateDisplay").fadeToggle(400, function () {
+                    $("#startDateDisplay").fadeToggle(400);
+                });
+                $("#endDateDisplay").fadeToggle(400, function () {
+                    $("#endDateDisplay").fadeToggle(400);
+                });
+            }
 
             updateSelectedDatetimeErrorMsg();
         }
 
         // Update start and end time when start Date picker changes
         function startDatePickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
 
         // Update start and end time when start Time picker changes
         function startTimePickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
 
         // Update start and end time when Duration picker changes
         function durationPickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
     </script>
     <script type="text/javascript">

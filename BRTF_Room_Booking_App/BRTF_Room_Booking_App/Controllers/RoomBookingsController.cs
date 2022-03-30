@@ -1047,7 +1047,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("User") || User.IsInRole("Admin"))
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {
@@ -1075,7 +1075,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("User") || User.IsInRole("Admin"))
             {
                 if (User.Identity.Name != roomBooking.User.Username)
                 {

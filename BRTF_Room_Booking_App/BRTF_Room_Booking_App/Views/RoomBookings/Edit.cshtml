@@ -609,7 +609,7 @@
             var endHour = startHour + parseInt(durationTime[0]);
             var endMinute = startMinute + parseInt(durationTime[1]);
             if (endMinute > 60) {
-                startHour = startHour + 1;
+                endHour = endHour + 1;
                 endMinute = endMinute - 60;
             }
 
@@ -637,17 +637,17 @@
 
         // Update start and end time when start Date picker changes
         function startDatePickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
 
         // Update start and end time when start Time picker changes
         function startTimePickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
 
         // Update start and end time when Duration picker changes
         function durationPickerHandler(e) {
-            updateStartEndDatetimes();
+            updateStartEndDatetimes(true);
         }
     </script>
     <script type="text/javascript">
