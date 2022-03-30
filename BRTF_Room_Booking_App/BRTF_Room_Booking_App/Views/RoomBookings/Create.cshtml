@@ -1,12 +1,14 @@
 ﻿@model BRTF_Room_Booking_App.Models.RoomBooking
 
 @{ ViewData["Title"] = "Create Booking"; }
+
 <body style="background-color:#E4E6E6" class="align-items-center text-center justify-content-center">
+    <div class="container">
     <br />
     <h1 class="mb-4">Book a Room</h1>
     <br />
 
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); padding:5%;" class="booking_block align-items-center text-center justify-content-center">
 
         @if (TempData["TimeConflictedBookings"] != null)
         {
@@ -310,11 +312,11 @@
 
         <div>
             <br />
-            <h4>Create New Booking</h4>
+            <h2>Create New Booking</h2>
             <br />
         </div>
         <div>
-            <div class="container">
+            <div class="container mt-0">
                 <form asp-action="Create">
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
@@ -335,13 +337,11 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-1 text-right" style="padding:0px">
-                            <button type="button" title="Booking Time Help" class="btn btn-sm" data-container="body" data-toggle="popover" data-placement="left"
+                        <div class="col-2 text-right pt-2">
+                            <button type="button" title="Booking Time Help" class="btn btn-sm mr-1" data-container="body" data-toggle="popover" data-placement="left"
                                     data-content="This time selection to the right sets the beginning and end time for a SINGLE booking. The date picker lets you make a booking that crosses over midnight into the next morning. This does NOT make repeat bookings. If you want to repeat a booking over several days, please use the Repeat settings on the bottom of this page.">
                                 <img src="~/img/questionmark.png" width="30" height="30" />
                             </button>
-                        </div>
-                        <div class="col-1 text-right pt-2">
                             <label asp-for="StartDate" class="control-label"><strong>Start *</strong></label>
                         </div>
                         <div class="col-5">
@@ -528,7 +528,15 @@
             </div>
         </div>
     </section>
+    </div>
 </body>
+
+<style>
+    .booking_block{
+
+    }
+</style>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/multiselect.js"></script>
