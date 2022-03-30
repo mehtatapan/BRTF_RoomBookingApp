@@ -28,7 +28,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
 
         // GET: RoomGroups
-        public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID,
+        public async Task<IActionResult> Index(string SearchName, string sortFieldID, string sortDirectionCheck, int? page, int? pageSizeID,
             string actionButton, string sortDirection = "asc", string sortField = "Is Enabled", string EnabledFilterString = "All")
         {
             //Clear the sort/filter/paging URL Cookie for Controller
@@ -38,6 +38,9 @@ namespace BRTF_Room_Booking_App.Controllers
 
             //Change colour of the button when filtering by setting this default
             ViewData["Filter"] = "btn-outline-secondary";
+
+            //array for string options
+            string[] sortOptions = new[] { "AreaName", "Enabled", "NeedsApproval" };
 
             PopulateDropDownLists(); //data for User Filter DDL
 
@@ -70,6 +73,11 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                     sortField = actionButton;//Sort by the button clicked
                 }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
+                }
             }
 
             if (sortField == "Area") //Sorting by Area
@@ -101,6 +109,9 @@ namespace BRTF_Room_Booking_App.Controllers
 
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
