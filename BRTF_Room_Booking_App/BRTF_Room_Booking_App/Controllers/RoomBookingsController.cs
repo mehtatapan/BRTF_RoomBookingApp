@@ -223,6 +223,7 @@ namespace BRTF_Room_Booking_App.Controllers
             ViewData["chkRepeat"] = "";
             ViewData["RepeatContainer"] = "";
             ViewData["RepeatInterval"] = "";
+            ViewData["DaysOfWeekContainer"] = "";
             ViewData["Monday"] = "";
             ViewData["Tuesday"] = "";
             ViewData["Wednesday"] = "";
@@ -239,6 +240,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 ViewData["chkRepeat"] = "checked";
                 ViewData["RepeatContainer"] = "show";
                 ViewData["RepeatInterval"] = RepeatInterval;
+                if (RepeatType == "Weeks") ViewData["DaysOfWeekContainer"] = "show";
                 if (Monday == "on") ViewData["Monday"] = "checked";
                 if (Tuesday == "on") ViewData["Tuesday"] = "checked";
                 if (Wednesday == "on") ViewData["Wednesday"] = "checked";
@@ -261,6 +263,17 @@ namespace BRTF_Room_Booking_App.Controllers
                 else if (t < 1)
                 {
                     ModelState.AddModelError("", "Repeat Interval cannot be less than 1.");
+                }
+                else if (RepeatInterval == "Weeks"
+                    && (Monday != "on")
+                    && (Tuesday != "on")
+                    && (Wednesday != "on")
+                    && (Thursday != "on")
+                    && (Friday != "on")
+                    && (Saturday != "on")
+                    && (Sunday != "on"))
+                {
+                    ModelState.AddModelError("", "You must check \"On\" the days of the week upon which you want to repeat your booking.");
                 }
 
                 if (RepeatEndDate == null)
@@ -450,7 +463,8 @@ namespace BRTF_Room_Booking_App.Controllers
                                 StartDate = roomBooking.StartDate,
                                 EndDate = roomBooking.EndDate,
                                 RoomID = Convert.ToInt32(roomID),
-                                Room = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault()
+                                Room = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault(),
+                                ApprovalStatus = "Pending"
                             };
 
                             timeAddedByNewBookings = newBookingForThisRoom.EndDate - newBookingForThisRoom.StartDate;   // Track how much time was added by this new Booking
@@ -708,6 +722,16 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
 
+            // Disable Approval Status select
+            if (!User.IsInRole("Top-level Admin") || roomBooking.ApprovalStatus == "Approved")
+            {
+                ViewData["DisableSelectApprovalStatus"] = true;
+            }
+            else
+            {
+                ViewData["DisableSelectApprovalStatus"] = false;
+            }
+
             ViewData["RoomGroupID"] = PermittedRoomGroupSelectList(roomBooking.Room.RoomGroupID);
             ViewData["RoomID"] = RoomSelectList(roomBooking.Room.RoomGroupID, roomBooking.RoomID);
             PopulateDropDownLists(roomBooking);
@@ -746,6 +770,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(p => p.ID == id);
 
+            // Check that you got it or exit with a not found error
+            if (id != roomBookingToUpdate.ID)
+            {
+                return NotFound();
+            }
+
             // Make a copy of the old Booking for comparison later
             RoomBooking roomBookingPreviousState = new RoomBooking();
             roomBookingPreviousState.ID = roomBookingToUpdate.ID;
@@ -757,13 +787,6 @@ namespace BRTF_Room_Booking_App.Controllers
             roomBookingPreviousState.UserID = roomBookingToUpdate.UserID;
             roomBookingPreviousState.User = roomBookingToUpdate.User;
 
-
-            // Check that you got it or exit with a not found error
-            if (id != roomBookingToUpdate.ID)
-            {
-                return NotFound();
-            }
-
             if (User.IsInRole("User"))
             {
                 if (User.Identity.Name != roomBookingToUpdate.User.Username)
@@ -773,9 +796,19 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
 
+            // Disable Approval Status select
+            if (!User.IsInRole("Top-level Admin") || roomBookingToUpdate.ApprovalStatus == "Approved")
+            {
+                ViewData["DisableSelectApprovalStatus"] = true;
+            }
+            else
+            {
+                ViewData["DisableSelectApprovalStatus"] = false;
+            }
+
             // Try updating it with the values posted
             if (await TryUpdateModelAsync<RoomBooking>(roomBookingToUpdate, "",
-                p => p.SpecialNotes, p => p.StartDate, p => p.EndDate, p => p.RoomID, p => p.UserID))
+                p => p.SpecialNotes, p => p.StartDate, p => p.EndDate, p => p.RoomID, p => p.UserID, p => p.ApprovalStatus))
             {
                 try
                 {
@@ -1137,13 +1170,14 @@ namespace BRTF_Room_Booking_App.Controllers
                 totalTimeOfGeneratedBookings += duration;   // Track the tally of time added
 
                 // Check that this day of the week is checked "On" before adding booking
-                if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)
+                if ((day.DayOfWeek == DayOfWeek.Monday && IncludeMonday)    // Generate booking if the variable day of the week is one of the included days of the week
                     || (day.DayOfWeek == DayOfWeek.Tuesday && IncludeTuesday)
                     || (day.DayOfWeek == DayOfWeek.Wednesday && IncludeWednesday)
                     || (day.DayOfWeek == DayOfWeek.Thursday && IncludeThursday)
                     || (day.DayOfWeek == DayOfWeek.Friday && IncludeFriday)
                     || (day.DayOfWeek == DayOfWeek.Saturday && IncludeSaturday)
-                    || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday))
+                    || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday)
+                    || (RepeatType == "Days"))  // Generate booking if the RepeatType is Days, since it includes all days of the week
                 {
                     // Generate booking
                     RoomBooking newBooking = new RoomBooking
@@ -1153,7 +1187,8 @@ namespace BRTF_Room_Booking_App.Controllers
                         StartDate = day,
                         EndDate = day + duration,
                         RoomID = RoomID,
-                        Room = _context.Rooms.Where(r => r.ID == RoomID).FirstOrDefault()
+                        Room = _context.Rooms.Where(r => r.ID == RoomID).FirstOrDefault(),
+                        ApprovalStatus = "Pending"
                     };
 
                     // Check for booking time conflicts

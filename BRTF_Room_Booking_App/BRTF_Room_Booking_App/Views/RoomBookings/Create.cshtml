@@ -13,7 +13,7 @@
         @if (TempData["TimeConflictedBookings"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Time conflict:</b> Your Booking times overlap with the following existing Bookings.<br /><br />
                 @:<table style='width:100%;'>
                     @:<tr>
@@ -49,7 +49,13 @@
                             @:<tr><td>&nbsp;</td></tr>
                             previousRoomName = yourBookings[i].Room.RoomName;
                         }
-                        @:<tr>
+                        @:<tr
+                              if (conflictBookings[i] != null)
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))&nbsp;</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))</td>
@@ -80,7 +86,7 @@
         @if (TempData["AreaHoursViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Maximum Area hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Areas.<br /><br />
                 @:<table style='width:100%;'>
                     @:<tr>
@@ -97,7 +103,13 @@
 
                     for (int i = 0; i < hourViolationsCount; i++)
                     {
-                        @:<tr>
+                        @:<tr
+                              if (Convert.ToDouble(hourViolations[i]["NewTotalHoursForArea"]) > Convert.ToDouble(hourViolations[i]["MaxHoursForArea"]))
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(hourViolations[i]["AreaName"]))&nbsp;</td>
                             @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["ExistingHoursForArea"]).ToString("0.##"))) hours</td>
                             @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewHoursForArea"]).ToString("0.##"))) hours</td>
@@ -118,7 +130,7 @@
         @if (TempData["RoomHoursViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Maximum Room hours violation:</b> Your new Booking exceeds the maximum hours you are allowed to book for these Rooms.<br /><br />
                 @:<table style='width:100%;'>
                     @:<tr>
@@ -135,7 +147,13 @@
 
                     for (int i = 0; i < hourViolationsCount; i++)
                     {
-                        @:<tr>
+                        @:<tr
+                              if (Convert.ToDouble(hourViolations[i]["NewTotalHoursForRoom"]) > Convert.ToDouble(hourViolations[i]["MaxHoursForRoom"]))
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))&nbsp;</td>
                             @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["ExistingHoursForRoom"]).ToString("0.##"))) hours</td>
                             @:<td>@(Html.Raw(Convert.ToDouble(hourViolations[i]["NewHoursForRoom"]).ToString("0.##"))) hours</td>
@@ -156,7 +174,7 @@
         @if (TempData["SingleBookingLengthViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Booking length violation:</b> Your following Bookings exceed the maximum allowed uninterrupted time for Booking lengths in these Rooms.<br /><br />
                 @:<table style='width:100%;'>
                     @:<tr>
@@ -182,7 +200,13 @@
                             @:<tr><td>&nbsp;</td></tr>
                             previousRoomName = hourViolations[i]["RoomName"];
                         }
-                        @:<tr>
+                        @:<tr
+                              if (Convert.ToDouble(hourViolations[i]["HoursBooked"]) > Convert.ToDouble(hourViolations[i]["MaxHoursSingleBooking"]))
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(hourViolations[i]["RoomName"]))&nbsp;</td>
                             @:<td>@(Html.Raw(hourViolations[i]["BookingStartDate"]))</td>
                             @:<td>@(Html.Raw(hourViolations[i]["BookingStartTime"]))</td>
@@ -205,7 +229,7 @@
         @if (TempData["AreaBookingCountViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Maximum Booking count violation:</b> Your new Booking exceeds the maximum number of separate Bookings you are allowed to have for these Areas.<br /><br />
                 @:<table style='width:100%;'>
                     @:<tr>
@@ -222,7 +246,13 @@
 
                     for (int i = 0; i < bookingViolationsCount; i++)
                     {
-                        @:<tr>
+                        @:<tr
+                              if (Convert.ToInt32(bookingViolations[i]["NewTotalBookingsForArea"]) > Convert.ToInt32(bookingViolations[i]["MaxBookingsForArea"]))
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(bookingViolations[i]["AreaName"]))&nbsp;</td>
                             @:<td>@(Html.Raw(bookingViolations[i]["ExistingBookingsForArea"])) bookings</td>
                             @:<td>@(Html.Raw(bookingViolations[i]["NewBookingsForArea"])) bookings</td>
@@ -243,7 +273,7 @@
         @if (TempData["BlackoutTimeViolation"] != null)
         {
             @:<br />
-            @:<div class="alert alert-danger text-left text-body">
+            @:<div class="alert alert-warning text-left text-body">
                 @:<b>Blackout time violation:</b> Some Rooms require a minimum blackout time between consecutive Bookings for the same User. Your new Booking violates the blackout time of your existing Bookings.<br /><br />
                 @:<table style='width: 100%; padding: 5px;'>
                     @:<tr>
@@ -281,7 +311,13 @@
                             @:<tr><td>&nbsp;</td></tr>
                             previousRoomName = yourBookings[i].Room.RoomName;
                         }
-                        @:<tr>
+                        @:<tr
+                              if (conflictBookings[i] != null)
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
                             @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))&nbsp;</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))&nbsp;</td>
                             @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))&nbsp;</td>
@@ -337,27 +373,155 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-2 text-right pt-2">
+                        <div class="col-1 text-right" style="padding:0px">
                             <button type="button" title="Booking Time Help" class="btn btn-sm mr-1" data-container="body" data-toggle="popover" data-placement="left"
-                                    data-content="This time selection to the right sets the beginning and end time for a SINGLE booking. The date picker lets you make a booking that crosses over midnight into the next morning. This does NOT make repeat bookings. If you want to repeat a booking over several days, please use the Repeat settings on the bottom of this page.">
+                                    data-content="This time selection to the right sets the beginning and end time for a SINGLE booking. If you want to create MULTIPLE repeat bookings over several days, please use the Repeat settings on the bottom of this page.">
                                 <img src="~/img/questionmark.png" width="30" height="30" />
                             </button>
-                            <label asp-for="StartDate" class="control-label"><strong>Start *</strong></label>
                         </div>
-                        <div class="col-5">
-                            <input textmode="DateTime" id="startDateInput" asp-for="StartDate" class="form-control" />
-                            <span id="startDateError" class="text-danger"></span>
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        <div class="col-1 text-right pt-2">
+                            <label asp-for="StartDate" class="control-label"><strong>Booking Time *</strong></label>
+                        </div>
+                        @* First row contains separate pickers for Date, Time, Duration. Javascript updates the datetimes in Third row using these pickers in First row *@
+                        <div class="col-4">
+                            Select Booking Date
+                            <input type="date" class="form-control" id="startDatePicker" onchange="startDatePickerHandler(event);" />
+                        </div>
+                        <div class="col-3">
+                            Select Booking Time
+                            @Html.DropDownList("startTimePicker", new List<SelectListItem>
+                           {
+                               new SelectListItem { Value="00:00", Text="12:00 A.M."},
+                               new SelectListItem { Value="00:30", Text="12:30 A.M."},
+                               new SelectListItem { Value="01:00", Text="1:00 A.M."},
+                               new SelectListItem { Value="01:30", Text="1:30 A.M."},
+                               new SelectListItem { Value="02:00", Text="2:00 A.M."},
+                               new SelectListItem { Value="02:30", Text="2:30 A.M."},
+                               new SelectListItem { Value="03:00", Text="3:00 A.M."},
+                               new SelectListItem { Value="03:30", Text="3:30 A.M."},
+                               new SelectListItem { Value="04:00", Text="4:00 A.M."},
+                               new SelectListItem { Value="04:30", Text="4:30 A.M."},
+                               new SelectListItem { Value="05:00", Text="5:00 A.M."},
+                               new SelectListItem { Value="05:30", Text="5:30 A.M."},
+                               new SelectListItem { Value="06:00", Text="6:00 A.M."},
+                               new SelectListItem { Value="06:30", Text="6:30 A.M."},
+                               new SelectListItem { Value="07:00", Text="7:00 A.M."},
+                               new SelectListItem { Value="07:30", Text="7:30 A.M."},
+                               new SelectListItem { Value="08:00", Text="8:00 A.M."},
+                               new SelectListItem { Value="08:30", Text="8:30 A.M."},
+                               new SelectListItem { Value="09:00", Text="9:00 A.M."},
+                               new SelectListItem { Value="09:30", Text="9:30 A.M."},
+                               new SelectListItem { Value="10:00", Text="10:00 A.M."},
+                               new SelectListItem { Value="10:30", Text="10:30 A.M."},
+                               new SelectListItem { Value="11:00", Text="11:00 A.M."},
+                               new SelectListItem { Value="11:30", Text="11:30 A.M."},
+                               new SelectListItem { Value="12:00", Text="12:00 P.M."},
+                               new SelectListItem { Value="12:30", Text="12:30 P.M."},
+                               new SelectListItem { Value="13:00", Text="1:00 P.M."},
+                               new SelectListItem { Value="13:30", Text="1:30 P.M."},
+                               new SelectListItem { Value="14:00", Text="2:00 P.M."},
+                               new SelectListItem { Value="14:30", Text="2:30 P.M."},
+                               new SelectListItem { Value="15:00", Text="3:00 P.M."},
+                               new SelectListItem { Value="15:30", Text="3:30 P.M."},
+                               new SelectListItem { Value="16:00", Text="4:00 P.M."},
+                               new SelectListItem { Value="16:30", Text="4:30 P.M."},
+                               new SelectListItem { Value="17:00", Text="5:00 P.M."},
+                               new SelectListItem { Value="17:30", Text="5:30 P.M."},
+                               new SelectListItem { Value="18:00", Text="6:00 P.M."},
+                               new SelectListItem { Value="18:30", Text="6:30 P.M."},
+                               new SelectListItem { Value="19:00", Text="7:00 P.M."},
+                               new SelectListItem { Value="19:30", Text="7:30 P.M."},
+                               new SelectListItem { Value="20:00", Text="8:00 P.M."},
+                               new SelectListItem { Value="20:30", Text="8:30 P.M."},
+                               new SelectListItem { Value="21:00", Text="9:00 P.M."},
+                               new SelectListItem { Value="21:30", Text="9:30 P.M."},
+                               new SelectListItem { Value="22:00", Text="10:00 P.M."},
+                               new SelectListItem { Value="22:30", Text="10:30 P.M."},
+                               new SelectListItem { Value="23:00", Text="11:00 P.M."},
+                               new SelectListItem { Value="23:30", Text="11:30 P.M."}
+                           }, htmlAttributes: new { @class = "form-control", @onchange = "startTimePickerHandler(event);" })
+                        </div>
+                        <div class="col-3">
+                            Select Duration
+                            @Html.DropDownList("durationPicker", new List<SelectListItem>
+                           {
+                               new SelectListItem { Value="00:29", Text="0.5 hours"},
+                               new SelectListItem { Value="00:59", Text="1 hours"},
+                               new SelectListItem { Value="01:29", Text="1.5 hours"},
+                               new SelectListItem { Value="01:59", Text="2 hours"},
+                               new SelectListItem { Value="02:29", Text="2.5 hours"},
+                               new SelectListItem { Value="02:59", Text="3 hours"},
+                               new SelectListItem { Value="03:29", Text="3.5 hours"},
+                               new SelectListItem { Value="03:59", Text="4 hours"},
+                               new SelectListItem { Value="04:29", Text="4.5 hours"},
+                               new SelectListItem { Value="04:59", Text="5 hours"},
+                               new SelectListItem { Value="05:29", Text="5.5 hours"},
+                               new SelectListItem { Value="05:59", Text="6 hours"},
+                               new SelectListItem { Value="06:29", Text="6.5 hours"},
+                               new SelectListItem { Value="06:59", Text="7 hours"},
+                               new SelectListItem { Value="07:29", Text="7.5 hours"},
+                               new SelectListItem { Value="07:59", Text="8 hours"},
+                               new SelectListItem { Value="08:29", Text="8.5 hours"},
+                               new SelectListItem { Value="08:59", Text="9 hours"},
+                               new SelectListItem { Value="09:29", Text="9.5 hours"},
+                               new SelectListItem { Value="09:59", Text="10 hours"},
+                               new SelectListItem { Value="10:29", Text="10.5 hours"},
+                               new SelectListItem { Value="10:59", Text="11 hours"},
+                               new SelectListItem { Value="11:29", Text="11.5 hours"},
+                               new SelectListItem { Value="11:59", Text="12 hours"},
+                               new SelectListItem { Value="12:29", Text="12.5 hours"},
+                               new SelectListItem { Value="12:59", Text="13 hours"},
+                               new SelectListItem { Value="13:29", Text="13.5 hours"},
+                               new SelectListItem { Value="13:59", Text="14 hours"},
+                               new SelectListItem { Value="14:29", Text="14.5 hours"},
+                               new SelectListItem { Value="14:59", Text="15 hours"},
+                               new SelectListItem { Value="15:29", Text="15.5 hours"},
+                               new SelectListItem { Value="15:59", Text="16 hours"},
+                               new SelectListItem { Value="16:29", Text="16.5 hours"},
+                               new SelectListItem { Value="16:59", Text="17 hours"},
+                               new SelectListItem { Value="17:29", Text="17.5 hours"},
+                               new SelectListItem { Value="17:59", Text="18 hours"},
+                               new SelectListItem { Value="18:29", Text="18.5 hours"},
+                               new SelectListItem { Value="18:59", Text="19 hours"},
+                               new SelectListItem { Value="19:29", Text="19.5 hours"},
+                               new SelectListItem { Value="19:59", Text="20 hours"},
+                               new SelectListItem { Value="20:29", Text="20.5 hours"},
+                               new SelectListItem { Value="20:59", Text="21 hours"},
+                               new SelectListItem { Value="21:29", Text="21.5 hours"},
+                               new SelectListItem { Value="21:59", Text="22 hours"},
+                               new SelectListItem { Value="22:29", Text="22.5 hours"},
+                               new SelectListItem { Value="22:59", Text="23 hours"},
+                               new SelectListItem { Value="23:29", Text="23.5 hours"},
+                               new SelectListItem { Value="23:59", Text="24 hours"}
+                           }, htmlAttributes: new { @class = "form-control", @onchange = "durationPickerHandler(event);" })
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-2 text-right pt-2">
-                            <label asp-for="EndDate" class="control-label"><strong>End *</strong></label>
                         </div>
-                        <div class="col-5">
-                            <input textmode="DateTime" asp-for="EndDate" id="endDateInput" class="form-control" />
+                        @* Second row contains the REAL inputs for the start and end time, but they are hidden from the user.
+                           User does not edit directly. Javascript on First row edits these.
+                           Also Error Messages for the datetime inputs get displayed here. *@
+                        <div class="col-10 text-left">
+                            <input type="hidden" id="startDateInput" asp-for="StartDate" class="form-control" runat="server" />
+                            <input type="hidden" asp-for="EndDate" id="endDateInput" class="form-control" runat="server" />
+                            <span id="startDateError" class="text-danger"></span>
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
                             <span id="endDateError" class="text-danger"></span>
                             <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-2 text-right pt-2">
+                        </div>
+                        @* Third row shows the start and end datetimes FOR DISPLAY. User does not edit directly. Javascript on First row edits these *@
+                        <div class="col-5">
+                            Your Chosen Booking Starts At
+                            <input type="datetime-local" id="startDateDisplay" class="form-control" disabled />
+                        </div>
+                        <div class="col-5">
+                            Your Chosen Booking Ends At
+                            <input type="datetime-local" id="endDateDisplay" class="form-control" disabled />
                         </div>
                     </div>
                     <br />
@@ -458,57 +622,59 @@
                                 </div>
                             </div>
                             <div class="container mt-3">
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="checkbox" id="Monday" name="Monday" @Html.Raw(ViewBag.Monday) style="width: 20px; height: 20px;" />
+                                <div class="collapse @(ViewData["DaysOfWeekContainer"])" id="collapseDaysOfWeekSelection">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="checkbox" id="Monday" name="Monday" @Html.Raw(ViewBag.Monday) style="width: 20px; height: 20px;" />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Tuesday" name="Tuesday" @Html.Raw(ViewBag.Tuesday) style="width: 20px; height: 20px;" />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Wednesday" name="Wednesday" @Html.Raw(ViewBag.Wednesday) style="width: 20px; height: 20px; " />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Thursday" name="Thursday" @Html.Raw(ViewBag.Thursday) style="width: 20px; height: 20px; " />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Friday" name="Friday" @Html.Raw(ViewBag.Friday) style="width: 20px; height: 20px; " />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Saturday" name="Saturday" @Html.Raw(ViewBag.Saturday) style="width: 20px; height: 20px; " />
+                                        </div>
+                                        <div class="col">
+                                            <input type="checkbox" id="Sunday" name="Sunday" @Html.Raw(ViewBag.Sunday) style="width: 20px; height: 20px; " />
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Tuesday" name="Tuesday" @Html.Raw(ViewBag.Tuesday) style="width: 20px; height: 20px;" />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Wednesday" name="Wednesday" @Html.Raw(ViewBag.Wednesday) style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Thursday" name="Thursday" @Html.Raw(ViewBag.Thursday) style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Friday" name="Friday" @Html.Raw(ViewBag.Friday) style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Saturday" name="Saturday" @Html.Raw(ViewBag.Saturday) style="width: 20px; height: 20px; " />
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" id="Sunday" name="Sunday" @Html.Raw(ViewBag.Sunday) style="width: 20px; height: 20px; " />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="Monday" class="control-label">Mon</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Tuesday" class="control-label">Tue</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Wednesday" class="control-label">Wed</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Thursday" class="control-label">Thu</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Friday" class="control-label">Fri</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Saturday" class="control-label">Sat</label>
-                                    </div>
-                                    <div class="col">
-                                        <label for="Sunday" class="control-label">Sun</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Monday" class="control-label">Mon</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Tuesday" class="control-label">Tue</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Wednesday" class="control-label">Wed</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Thursday" class="control-label">Thu</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Friday" class="control-label">Fri</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Saturday" class="control-label">Sat</label>
+                                        </div>
+                                        <div class="col">
+                                            <label for="Sunday" class="control-label">Sun</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-2 text-right pt-2">
-                                        <label for="RepeatEndDate" class="control-label"><strong>Repeat End Date*</strong></label>
+                                        <label for="RepeatEndDate" class="control-label"><strong>Repeat End Date *</strong></label>
                                     </div>
                                     <div class="col-5">
                                         <input type="date" id="RepeatEndDate" name="RepeatEndDate" value="@(ViewData["RepeatEndDate"])" class="form-control" />
@@ -546,6 +712,71 @@
         $(function () {
             $('[data-toggle="popover"]').popover()
         })
+    </script>
+    <script type="text/javascript">
+        // Expand Day-of-week checkboxes when repeat type is Weeks
+        $('#RepeatType').change(function () {
+            if ($('#RepeatType').val() == "Days") {
+                $('#collapseDaysOfWeekSelection').collapse('hide');
+            } else if ($('#RepeatType').val() == "Weeks") {
+                $('#collapseDaysOfWeekSelection').collapse('show');
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        // Update start and end time using sub controls
+        function updateStartEndDatetimes() {
+            // Update startDateInput by a plain string
+            var startDatetimeString = document.getElementById('startDatePicker').value + 'T' + document.getElementById("startTimePicker").value;;
+            document.getElementById('startDateInput').value = startDatetimeString;   // Actual start datetime input
+            document.getElementById('startDateDisplay').value = startDatetimeString;   // Start datetime Display only
+
+            // Calculate end time using input from select list
+            var startTime = document.getElementById("startTimePicker").value.split(":");
+            var startHour = parseInt(startTime[0]);
+            var startMinute = parseInt(startTime[1]);
+            var durationTime = document.getElementById("durationPicker").value.split(":");
+            var endHour = startHour + parseInt(durationTime[0]);
+            var endMinute = startMinute + parseInt(durationTime[1]);
+            if (endMinute > 60) {
+                startHour = startHour + 1;
+                endMinute = endMinute - 60;
+            }
+
+            // Generate string and update endDateInput by plain string
+            var endDatetimeString = document.getElementById('startDatePicker').value + 'T';
+            if (endHour < 10) {
+                endDatetimeString = endDatetimeString + "0";
+            }
+            endDatetimeString = endDatetimeString + endHour + ":" + endMinute;
+            document.getElementById('endDateInput').value = endDatetimeString;   // Actual end datetime input
+            document.getElementById('endDateDisplay').value = endDatetimeString;   // End datetime Display only
+
+            // Flash displays
+            $("#startDateDisplay").fadeToggle(400, function () {
+                $("#startDateDisplay").fadeToggle(400);
+            });
+            $("#endDateDisplay").fadeToggle(400, function () {
+                $("#endDateDisplay").fadeToggle(400);
+            });
+
+            updateSelectedDatetimeErrorMsg();
+        }
+
+        // Update start and end time when start Date picker changes
+        function startDatePickerHandler(e) {
+            updateStartEndDatetimes();
+        }
+
+        // Update start and end time when start Time picker changes
+        function startTimePickerHandler(e) {
+            updateStartEndDatetimes();
+        }
+
+        // Update start and end time when Duration picker changes
+        function durationPickerHandler(e) {
+            updateStartEndDatetimes();
+        }
     </script>
     <script type="text/javascript">
         // Refresh User DDL of available rooms when Area is changed
@@ -599,23 +830,30 @@
         });
     </script>
     <script>
-        $("#startDateInput").change(function () {
-            console.log($("#startDateInput").val());
+        // Javascript updates live error message beneath datetime selector
+        function updateSelectedDatetimeErrorMsg() {
+            console.log("Selected Start Datetime: " + $("#startDateInput").val());
             if ($("#startDateInput").val().length == 0 || new Date($("#startDateInput").val()) < new Date($.now())) {
-                $("#startDateError").html("The start date cannot be in the past. Please select a new date/time.");
+                $("#startDateError").html("Booking start cannot be in the past. Please select a new date/time.");
             }
             else {
                 $("#startDateError").html("");
             }
-        });
-        $("#endDateInput").change(function () {
-            console.log($("#endDateInput").val());
+
+            console.log("Selected End Datetime: " + $("#endDateInput").val());
             if ($("#endDateInput").val().length == 0 || new Date($("#endDateInput").val()) < new Date($("#startDateInput").val())) {
                 $("#endDateError").html("The end date/time must occur after the selected start date/time. Please select a new date/time.");
             }
             else {
                 $("#endDateError").html("");
             }
+        }
+
+        $("#startDateInput").change(function () {
+            updateSelectedDatetimeErrorMsg();
+        });
+        $("#endDateInput").change(function () {
+            updateSelectedDatetimeErrorMsg();
         });
     </script>
 }

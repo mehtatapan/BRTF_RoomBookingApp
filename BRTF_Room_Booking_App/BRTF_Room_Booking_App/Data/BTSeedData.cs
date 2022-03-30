@@ -190,7 +190,7 @@ namespace BRTF_Room_Booking_App.Data
                     new RoomGroup()
                     {
                         AreaName = "V204p Production Planning",
-                        Description = "You can book up to 1 hour.\r\nBRTF Project Meeting Room.\r\nOnly available Monday-Friday between 8:30 A.N. - 5:30 P.M.",
+                        Description = "You can book up to 1 hour.\r\nBRTF Project Meeting Room.\r\nOnly available Monday-Friday between 8:30 A.M. - 5:30 P.M.",
                         BlackoutTime = 1,
                         MaxHoursPerSingleBooking = 1,
                         MaxHoursTotal = 1,
@@ -632,7 +632,7 @@ namespace BRTF_Room_Booking_App.Data
                 if (!context.RoomBookings.Any())
                 {
                     // Gets User IDs and Room IDs to seed Bookings with
-                    var users = context.Users.Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup).Select(u => new { u.ID, u.TermAndProgram.UserGroupID }).ToArray();
+                    var users = context.Users.Include(u => u.TermAndProgram).ThenInclude(t => t.UserGroup).Select(u => new { u.ID, u.TermAndProgram.UserGroupID, u.TermAndProgram.UserGroup.UserGroupName }).ToArray();
                     var rooms = context.Rooms.Include(r => r.RoomGroup).Where(r => r.Enabled == true && r.RoomGroup.Enabled == true).Select(r => new { r.ID, r.RoomGroupID }).ToArray();
                     int userCount = users.Count();
                     int roomCount = rooms.Count();
@@ -652,6 +652,9 @@ namespace BRTF_Room_Booking_App.Data
                         // Initialize the hour of the first booking in every room to 8 o'clock
                         int latestHour = 8;
 
+                        // Keep track of previous user ID so users don't have 2 bookings in a row
+                        int lastUserID = 0;
+
                         // Add 6 bookings to every room
                         for (int j = 0; j < 6; j++)
                         {
@@ -664,7 +667,13 @@ namespace BRTF_Room_Booking_App.Data
                             {
                                 index = random.Next(userCount);
                                 userID = users[index].ID;   // Get a random User's ID
-                            } while (!roomPermissions.Contains(users[index].UserGroupID));  // Loop if permissions does not contain that User's Group
+                            } while (
+                                        (!roomPermissions.Contains(users[index].UserGroupID)) // Loop to another index if permissions does not contain that User's Group
+                                     || (userID == lastUserID) // Loop to another index if we are about to make 2 bookings in a row for the same user
+                                     || (!users[index].UserGroupName.ToLower().Contains("admin") ? (random.Next(100) > 5) : false)  // Only create bookings for non-admin's 5% of the time, to avoid breaking room time limits
+                                     );
+
+                            lastUserID = userID;    // Keep track of previous user ID so users don't have 2 bookings in a row
 
                             int bookingEndHour = latestHour + random.Next(1, 3);
 
@@ -674,7 +683,8 @@ namespace BRTF_Room_Booking_App.Data
                                 StartDate = DateTime.Today.AddDays(1).AddHours(latestHour),
                                 EndDate = DateTime.Today.AddDays(1).AddHours(bookingEndHour).AddMinutes(-1),
                                 RoomID = rooms[i].ID,
-                                UserID = userID
+                                UserID = userID,
+                                ApprovalStatus = "Approved"
                             };
                             try
                             {

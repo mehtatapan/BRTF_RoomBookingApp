@@ -16,21 +16,21 @@ namespace BRTF_Room_Booking_App.Models
         [DisplayFormat(NullDisplayText = "None.")]
         public string SpecialNotes { get; set; }
 
-        [Display(Name = "Approval Notes")]
+        [Display(Name = "Approval Status")]
         [StringLength(50, ErrorMessage = "Cannot be more than 50 characters long.")]
         public string ApprovalStatus { get; set; }
 
         [Display(Name = "Start Date")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddThh:mm}", HtmlEncode = false, ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", HtmlEncode = false, ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
 
         [Display(Name = "End Date")]
         [Required(ErrorMessage = "Cannot be blank.")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddThh:mm}", HtmlEncode = false, ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", HtmlEncode = false, ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
 

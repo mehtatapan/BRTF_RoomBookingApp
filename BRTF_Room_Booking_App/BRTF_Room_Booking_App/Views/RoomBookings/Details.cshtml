@@ -88,6 +88,14 @@
                         @Html.DisplayFor(model => model.Room.RoomName)
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6 text-right pt-2">
+                        <label asp-for="ApprovalStatus" class="label">Approval Status</label>
+                    </div>
+                    <div class="col-6 pt-2">
+                        @Html.DisplayFor(model => model.ApprovalStatus)
+                    </div>
+                </div>
             </div>
         </div>
             <br />

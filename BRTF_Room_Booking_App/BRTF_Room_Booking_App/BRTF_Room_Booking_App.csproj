@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BRTFRoomBooking.db-shm\**" />
+    <Content Remove="BRTFRoomBooking.db-shm\**" />
+    <EmbeddedResource Remove="BRTFRoomBooking.db-shm\**" />
+    <None Remove="BRTFRoomBooking.db-shm\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="BRTFRoomBooking.db-wal" />
   </ItemGroup>
 
