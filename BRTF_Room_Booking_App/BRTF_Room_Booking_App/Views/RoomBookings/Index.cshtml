@@ -161,7 +161,10 @@
             var rooms = @Html.Raw(ViewBag.RoomList);
             var bookings = @Html.Raw(ViewBag.BookingList);
             var today = new Date;
-            var time = today.getHours() + ":" + today.getMinutes()
+            var time = today.getHours() + ":" + today.getMinutes();
+            var height = 50 + rooms.length * 50;
+
+            if (height > 600) { height = 600;}
 
             console.log(bookings);
 
@@ -173,7 +176,7 @@
                 editable: false,
                 selectable: false,
                 nowIndicator: true,
-                aspectRatio: 1.8,
+                contentHeight: height,
                 scrollTime: time,
                 headerToolbar: {
                     left: 'today prev,next',

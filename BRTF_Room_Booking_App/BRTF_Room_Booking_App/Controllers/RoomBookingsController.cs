@@ -47,8 +47,6 @@ namespace BRTF_Room_Booking_App.Controllers
 
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
             ViewData["RoomID"] = RoomSelectList(RoomGroupID, RoomID);
-            GetRoomsJSON();
-            GetBookingsJSON();
 
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
@@ -58,6 +56,8 @@ namespace BRTF_Room_Booking_App.Controllers
                                .Include(r => r.User)
                                select r;
 
+            bool filtered = false;
+
             //Add as many filters as needed
             if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
             {
@@ -65,18 +65,21 @@ namespace BRTF_Room_Booking_App.Controllers
                 
                 ViewData["Filtering"] = "show";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
             {
                 roombookings = roombookings.Where(r => r.StartDate <= beforeDate);
                 ViewData["Filtering"] = "show";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchUsername))
             {
                 roombookings = roombookings.Where(r => r.User.Username.ToUpper().Contains(SearchUsername.ToUpper()));
                 ViewData["Filtering"] = "show";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchFullName))
             {
@@ -84,19 +87,24 @@ namespace BRTF_Room_Booking_App.Controllers
                                                     || (r.User.FirstName + " " + r.User.MiddleName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper()));
                 ViewData["Filtering"] = "show";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
             if (RoomGroupID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.Room.RoomGroupID == RoomGroupID);
                 ViewData["Filtering"] = " show ";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
             if (RoomID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.RoomID == RoomID);
                 ViewData["Filtering"] = " show ";
                 ViewData["Filter"] = "btn-danger";
+                filtered = true;
             }
+            GetRoomsJSON(roombookings, filtered);
+            GetBookingsJSON(roombookings);
 
             //Before we sort, see if we have called for a change of filtering or sorting
             if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
@@ -1378,11 +1386,20 @@ namespace BRTF_Room_Booking_App.Controllers
 
 
         // Get a list of all rooms and return them as a JSON array
-        public void GetRoomsJSON()
+        public void GetRoomsJSON(IQueryable<RoomBooking> bookings, bool filtered)
         {
-            var rooms = from r in _context.Rooms
+            var rooms = bookings
+                .Include(r => r.Room)
+                .ThenInclude(r => r.RoomGroup)
+                .Select(r => r.Room)
+                .Distinct();
+
+            if (!filtered)
+            {
+                rooms = from r in _context.Rooms
                         .Include(r => r.RoomGroup)
                         select r;
+            }
 
             List<RoomJSON> roomList = new List<RoomJSON>();
 
@@ -1395,13 +1412,8 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // Get a list of all bookings and return them as a JSON array
-        public void GetBookingsJSON()
-        {
-            var bookings = from r in _context.RoomBookings
-                        .Include(r => r.Room)
-                        .Include(r => r.User)
-                           select r;
-
+        public void GetBookingsJSON(IQueryable<RoomBooking> bookings)
+        {        
             List<BookingJSON> bookingList = new List<BookingJSON>();
 
             foreach (RoomBooking r in bookings)
