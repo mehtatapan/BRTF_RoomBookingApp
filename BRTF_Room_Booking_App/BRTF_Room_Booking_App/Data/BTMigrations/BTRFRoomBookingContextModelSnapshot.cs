@@ -150,6 +150,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
                     b.Property<bool>("NeedsApproval")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("TimeOfDayRestrictions")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
                     b.HasIndex("AreaName")

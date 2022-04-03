@@ -229,6 +229,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
             
             ViewData["collapseApprovers"] = roomGroup.NeedsApproval ? " show " : "";
+            ViewData["collapseTimeRestrictions"] = roomGroup.TimeOfDayRestrictions ? " show " : "";
 
             PopulateAdminList(roomGroup);
             return View(roomGroup);
@@ -260,7 +261,7 @@ namespace BRTF_Room_Booking_App.Controllers
             if (await TryUpdateModelAsync<RoomGroup>(roomGroupToUpdate, "",
                 r => r.AreaName, r => r.Description, r => r.BlackoutTime,
                 r => r.MaxHoursPerSingleBooking, r => r.MaxHoursTotal,
-                r => r.MaxNumberOfBookings, r => r.EarliestTime, r => r.LatestTime,
+                r => r.MaxNumberOfBookings, r => r.TimeOfDayRestrictions, r => r.EarliestTime, r => r.LatestTime,
                 r => r.Enabled, r => r.NeedsApproval))
             {
                 try

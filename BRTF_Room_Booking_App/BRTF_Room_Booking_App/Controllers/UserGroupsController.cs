@@ -25,7 +25,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: UserGroups
-        public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchString,
+        public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchString, string sortDirectionCheck, string sortFieldID,
             string actionButton, string sortDirection = "asc", string sortField = "UserGroup")
         {
             //Clear the sort/filter/paging URL Cookie for Controller
@@ -63,6 +63,11 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                     sortField = actionButton;//Sort by the button clicked
                 }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
+                }
             }
             //Now we know which field and direction to sort by
             if (sortField == "User Group")
@@ -81,6 +86,8 @@ namespace BRTF_Room_Booking_App.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+            //SelectList for Sorting Options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

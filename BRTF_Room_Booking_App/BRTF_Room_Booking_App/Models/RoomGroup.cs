@@ -40,16 +40,19 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Maximum Number of Separate Bookings in This Area")]
         public int? MaxNumberOfBookings { get; set; }
 
+        [Display(Name = "Time of Day Restrictions")]
+        public bool TimeOfDayRestrictions { get; set; }
+
         [Required(ErrorMessage = "Cannot be blank.")]
-        [Display(Name = "Earliest Time a Booking Can be Made in This Area")]
+        [Display(Name = "Earliest Allowed Start Time in This Area")]
         [DataType(DataType.Time)]
         public DateTime EarliestTime { get; set; }
 
         [DataType(DataType.Time)]
-        private DateTime _latestTime = new DateTime(3000, 1, 1, 23, 59, 0); //this enables us to set the LatestTime to default to 11:30pm
+        private DateTime _latestTime = new DateTime(3000, 1, 1, 23, 59, 0); //this enables us to set the LatestTime to default to 11:59pm
 
         [Required(ErrorMessage = "Cannot be blank.")]
-        [Display(Name = "Latest Time a Booking Can be Made in This Area")]
+        [Display(Name = "Latest Allowed End Time in This Area")]
         [DataType(DataType.Time)]
         public DateTime LatestTime
         {
