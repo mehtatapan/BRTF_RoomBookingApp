@@ -393,7 +393,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     foreach (string roomID in selectedOptions)
                     {
                         // Get User's pre-existing booked time in this Room
-                        var thisRoom = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault();
+                        var thisRoom = _context.Rooms.Include(r => r.RoomGroup).Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault();
                         var existingBookingsForThisRoom = _context.RoomBookings
                             .Where(b => (b.UserID == roomBooking.UserID) && (b.RoomID == Convert.ToInt32(roomID)) && (b.EndDate >= DateTime.Today));
 
@@ -472,7 +472,7 @@ namespace BRTF_Room_Booking_App.Controllers
                                 EndDate = roomBooking.EndDate,
                                 RoomID = Convert.ToInt32(roomID),
                                 Room = _context.Rooms.Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault(),
-                                ApprovalStatus = "Pending"
+                                ApprovalStatus = (thisRoom.RoomGroup.NeedsApproval ? "Pending" : "Approved")
                             };
 
                             timeAddedByNewBookings = newBookingForThisRoom.EndDate - newBookingForThisRoom.StartDate;   // Track how much time was added by this new Booking
@@ -1187,6 +1187,9 @@ namespace BRTF_Room_Booking_App.Controllers
                     || (day.DayOfWeek == DayOfWeek.Sunday && IncludeSunday)
                     || (RepeatType == "Days"))  // Generate booking if the RepeatType is Days, since it includes all days of the week
                 {
+                    // Get Room data
+                    var thisRoom = _context.Rooms.Include(r => r.RoomGroup).Where(r => r.ID == RoomID).FirstOrDefault();
+
                     // Generate booking
                     RoomBooking newBooking = new RoomBooking
                     {
@@ -1195,8 +1198,8 @@ namespace BRTF_Room_Booking_App.Controllers
                         StartDate = day,
                         EndDate = day + duration,
                         RoomID = RoomID,
-                        Room = _context.Rooms.Where(r => r.ID == RoomID).FirstOrDefault(),
-                        ApprovalStatus = "Pending"
+                        Room = thisRoom,
+                        ApprovalStatus = (thisRoom.RoomGroup.NeedsApproval ? "Pending" : "Approved")
                     };
 
                     // Check for booking time conflicts
