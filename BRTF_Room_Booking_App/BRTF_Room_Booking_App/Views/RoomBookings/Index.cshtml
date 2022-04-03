@@ -33,107 +33,112 @@
     <h1 class="mb-4">Bookings</h1>
     <br />
     <div class="container">
-    <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
+        <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
 
-        <h4 class="text-left">
-            <a asp-action="Create" class="btn btn-primary">Book a Room</a>
-        </h4>
-        <form asp-action="Index" method="get">
+            <h4 class="text-left">
+                <a asp-action="Create" class="btn btn-primary">Book a Room</a>
+            </h4>
+            <form asp-action="Index" method="get">
+                <div class="text-left pb-2">
+                    <input type="date" id="calendarDatePicker" onchange="refreshCalendar();" />
+                </div>
+                <div id='calendar'></div>
 
-            <div id='calendar'></div>
-
-            <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-            <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-            <div class="form-horizontal align-items-start text-left justify-content-start mt-3">
-                <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                    Filter/Search
-                </button>
-                <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
-                    <div class="card card-body bg-light">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search After Date:</label>
-                                @Html.TextBox("SearchAfterDate", null, new { @class = "form-control", @type = "date" })
+                <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+                <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+                <div class="form-horizontal align-items-start text-left justify-content-start mt-3">
+                    <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        Filter/Search
+                    </button>
+                    <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+                        <div class="card card-body bg-light">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search After Date:</label>
+                                    @Html.TextBox("SearchAfterDate", null, new { @class = "form-control", @type = "date" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search Before Date:</label>
+                                    @Html.TextBox("SearchBeforeDate", null, new { @class = "form-control", @type = "date" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search Username:</label>
+                                    @Html.TextBox("SearchUserName", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search User's Full Name:</label>
+                                    @Html.TextBox("SearchFullName", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search by Area:</label>
+                                    @Html.DropDownList("RoomGroupID", null, "All Areas", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Search by Room:</label>
+                                    @Html.DropDownList("RoomID", null, "Select an Area first", htmlAttributes: new { @class = "form-control" })
+                                </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search Before Date:</label>
-                                @Html.TextBox("SearchBeforeDate", null, new { @class = "form-control", @type = "date" })
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search Username:</label>
-                                @Html.TextBox("SearchUserName", null, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search User's Full Name:</label>
-                                @Html.TextBox("SearchFullName", null, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search by Area:</label>
-                                @Html.DropDownList("RoomGroupID", null, "All Areas", htmlAttributes: new { @class = "form-control" })
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label">Search by Room:</label>
-                                @Html.DropDownList("RoomID", null, "Select an Area first", htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4 align-self-end">
-                                <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
-                                <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                            <div class="row">
+                                <div class="form-group col-md-4 align-self-end">
+                                    <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                                    <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <button class="btn btn-outline-secondary" type="button" onclick="pageSize()">
-                    View All Bookings
-                </button>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <button type="submit" class="btn btn-link" name="actionButton" value="Start Date"><b>Date</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Time</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
+                    @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
-                        <tr>
-                            <td>
-                                @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
-                            </td>
-                            <td>
-                                @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Room.RoomName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.User.FullName)
-                            </td>
-                            <td style="width: 310px">
-                                <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                            </td>
-                        </tr>
+                        <button class="btn btn-outline-secondary" type="button" onclick="pageSize()">
+                            View All Bookings
+                        </button>
                     }
-                </tbody>
-            </table>
-            <partial name="_PagingNavBar" />
-        </form>
-    </section>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button type="submit" class="btn btn-link" name="actionButton" value="Start Date"><b>Date</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Time</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Room.RoomName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.FullName)
+                                </td>
+                                <td style="width: 310px">
+                                    <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <partial name="_PagingNavBar" />
+            </form>
+        </section>
     </div>
 </body>
 @section Scripts {
@@ -209,6 +214,57 @@
 
             calendar.render();
         });
+
+        function refreshCalendar() {
+            var testdate = $("#calendarDatePicker").val();
+            var calendar = document.getElementById('calendar');
+            var rooms = @Html.Raw(ViewBag.RoomList);
+            var bookings = @Html.Raw(ViewBag.BookingList);
+            var today = new Date;
+            var time = today.getHours() + ":" + today.getMinutes();
+            var height = 50 + rooms.length * 50;
+
+            if (height > 600) { height = 600;}
+
+            calendar = new FullCalendar.Calendar(calendar, {
+                schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                initialDate: testdate,
+                editable: false,
+                selectable: false,
+                nowIndicator: true,
+                contentHeight: height,
+                scrollTime: time,
+                headerToolbar: {
+                    left: 'today prev,next',
+                    center: 'title',
+                    right: 'resourceTimelineDay,resourceTimelineThreeDays'
+                },
+                initialView: 'resourceTimelineDay',
+                views: {
+                    resourceTimelineThreeDays: {
+                        type: 'resourceTimeline',
+                        duration: { days: 3 },
+                        buttonText: '3 days'
+                    }
+                },
+                resourceAreaWidth: '40%',
+                resourceAreaColumns: [
+                    {
+                        group: true,
+                        headerContent: 'Area',
+                        field: 'building'
+                    },
+                    {
+                        headerContent: 'Room',
+                        field: 'title'
+                    },
+                ],
+                resources: rooms,
+                events: bookings
+            });
+
+            calendar.render();
+        };
 
 
     </script>
