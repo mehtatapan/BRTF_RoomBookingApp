@@ -28,9 +28,10 @@
                         <li class="nav-item ml-4"><a class="nav-link" asp-area="" asp-controller="RoomBookings" asp-action="Create" style="color: #E4E6E6">Book a Room</a></li>
                         <li class="dropdown-divider d-lg-none"></li>
                         <li class="nav-item ml-4"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Help" style="color: #E4E6E6">Help</a></li>
-                        <li class="dropdown-divider d-lg-none"></li>
+
                         @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                         {
+                            <li class="dropdown-divider d-lg-none"></li>
                             <li class="nav-item ml-4">
                                 <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Create" style="color: #E4E6E6">Register User</a>
                             </li>
@@ -74,7 +75,7 @@
                             </li>
                         }
                         <li class="dropdown-divider d-lg-none"></li>
-                        <li class="nav-item mr-lg-5"><partial name="_LoginPartial" /></li>
+                        <li class="nav-item mr-lg-5 ml-4"><partial name="_LoginPartial" /></li>
                     </ul>
                 </div>
         </nav>

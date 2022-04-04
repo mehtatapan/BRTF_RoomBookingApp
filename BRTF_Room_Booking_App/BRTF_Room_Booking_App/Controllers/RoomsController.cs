@@ -37,13 +37,10 @@ namespace BRTF_Room_Booking_App.Controllers
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 
             //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
-            ViewData["Filtering"] = ""; //Assume nothing is filtered initially
-
-            //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
+            ViewData["Filtering"] = "btn-outline-secondary"; //Assume nothing is filtered initially
 
             //Array for sort options
-            string[] sortOptions = new[] { "Rooms", "RoomGroup" };
+            string[] sortOptions = new[] { "Room", "Room Group", "Is Enabled" };
 
             PopulateDropDownLists(); //data for Room Filter DDL
 
@@ -59,26 +56,23 @@ namespace BRTF_Room_Booking_App.Controllers
             //  Filtering
             if (EnabledFilterString != "All")
             {
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (RoomGroupID.HasValue)
             {
                 rooms = rooms.Where(r => r.RoomGroupID == RoomGroupID);
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
             {
                 rooms = rooms.Where(r => r.RoomName.ToUpper().Contains(SearchRoom.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting
             if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
             {
-                if (actionButton != "Filter")//Change of sort is requested
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
                 {
                     if (actionButton == sortField) //Reverse order on same field
                     {

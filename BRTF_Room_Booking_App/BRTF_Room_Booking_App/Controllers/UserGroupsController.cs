@@ -32,11 +32,11 @@ namespace BRTF_Room_Booking_App.Controllers
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 
             //Toggle the Open/Closed state of the collapse depending on if we are filtering
-            ViewData["Filtering"] = ""; //Asume not filtering
+            ViewData["Filtering"] = "btn-outline-secondary"; //Asume not filtering
                                         //Then in each "test" for filtering, add ViewData["Filtering"] = " show" if true;
 
-            //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
+            ////Change colour of the button when filtering by setting this default
+            //ViewData["Filter"] = "btn-outline-secondary";
 
             string[] sortOptions = new[] { "User Group" };
 
@@ -48,14 +48,14 @@ namespace BRTF_Room_Booking_App.Controllers
             if (!String.IsNullOrEmpty(SearchString))
             {
                 userGroups = userGroups.Where(u => u.UserGroupName.ToUpper().Contains(SearchString.ToUpper()));
-                ViewData["Filtering"] = " show";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
+                //ViewData["Filter"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting
             if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
             {
-                if (actionButton != "Filter")//Change of sort is requested
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
                 {
                     if (actionButton == sortField) //Reverse order on same field
                     {

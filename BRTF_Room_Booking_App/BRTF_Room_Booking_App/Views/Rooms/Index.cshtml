@@ -34,26 +34,27 @@
                 <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
                 <div class="form-horizontal">
 
-                    <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="margin-bottom:20px;">
+                    <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="margin-bottom:20px;">
                         <text class="d-none d-lg-inline">Filter/Search</text><text class="d-inline d-lg-none">Filter/Sort</text>
                     </button>
                     <div class="collapse " id="collapseFilter" style="margin-bottom:20px;">
-                        <div class="d-block d-lg-none">
-                            <div class="form-group">
-                                <label class="control-label">Sort By:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" class="" value="desc"
-                                                   @((ViewData["sortDirection"].ToString() != "asc" ? "checked=\"checked\"" : ""))
-                                                   name="sortDirectionCheck" />&nbsp;&nbsp;Descending
+                        <div class="card card-body bg-light">
+                            <div class="d-block d-lg-none">
+                                <div class="form-group">
+                                    <label class="control-label">Sort By:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox" class="" value="desc"
+                                                       @((ViewData["sortDirection"].ToString() != "asc" ? "checked=\"checked\"" : ""))
+                                                       name="sortDirectionCheck" />&nbsp;&nbsp;Descending
+                                            </div>
                                         </div>
+                                        <select name="sortFieldID" class="form-control" asp-items="ViewBag.sortFieldID"></select>
                                     </div>
-                                    <select name="sortFieldID" class="form-control" asp-items="ViewBag.sortFieldID"></select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card card-body bg-light">
+
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Filter by Is Enabled:</label>
@@ -80,7 +81,7 @@
                     </div>
                 </div>
 
-                <table class=" table d-none d-lg-table">
+                <table class="table d-none d-lg-table">
                     <thead>
                         <tr>
                             <th>

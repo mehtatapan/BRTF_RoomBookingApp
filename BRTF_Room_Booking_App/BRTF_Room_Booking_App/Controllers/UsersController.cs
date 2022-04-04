@@ -44,10 +44,7 @@ namespace BRTF_Room_Booking_App.Controllers
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 
             //Toggle the open/closed state of the collapse depending on if something is being filtered
-            ViewData["Filtering"] = ""; //Assume nothing is filtered
-
-            //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
+            ViewData["Filtering"] = "btn-outline-secondary"; //Assume nothing is filtered
 
             //note: make sure this array has matching values to the column headings
             string[] sortOptions = new[] { "Full Name", "User Group", };
@@ -66,28 +63,25 @@ namespace BRTF_Room_Booking_App.Controllers
             if (UserGroupID.HasValue)
             {
                 users = users.Where(u => u.TermAndProgram.UserGroupID == UserGroupID);
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchName))
             {
                 users = users.Where(u => u.LastName.ToUpper().Contains(SearchName.ToUpper()) ||
                                     u.MiddleName.ToUpper().Contains(SearchName.ToUpper()) ||
                                     u.FirstName.ToUpper().Contains(SearchName.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchEmail))
             {
                 users = users.Where(u => u.Email.ToUpper().Contains(SearchEmail.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
 
             //Before sorting, you need to check to see if there has been a change to of filter/sort
             if (!String.IsNullOrEmpty(actionButton)) //the form has been submitted
             {
-                if (actionButton != "Filter")
+                if (sortOptions.Contains(actionButton))
                 {
                     if (actionButton == sortField) //reversing on the same field
                     {

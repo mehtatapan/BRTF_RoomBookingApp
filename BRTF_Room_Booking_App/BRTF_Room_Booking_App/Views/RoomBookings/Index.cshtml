@@ -27,30 +27,30 @@
     </div>
     <br />
 }
-<body class="align-items-center text-center justify-content-center">
+<body class="align-items-center justify-content-center">
 
     <br />
-    <h1 class="mb-4">Bookings</h1>
+    <h1 class="mb-4 text-center">Bookings</h1>
     <br />
     <div class="container">
         <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-5 py-2 my-3">
 
             <h4 class="text-left">
-                <a asp-action="Create" class="btn btn-primary">Book a Room</a>
+                <a asp-action="Create" class="btn btn-primary mt-3">Book a Room</a>
             </h4>
             <form asp-action="Index" method="get">
-                <div class="text-left pb-2">
+                <div class="text-center pb-2 ml-5 d-none d-lg-block">
                     <input type="date" id="calendarDatePicker" onchange="refreshCalendar();" />
                 </div>
-                <div id='calendar'></div>
+                <div class="d-none d-lg-block" id='calendar'></div>
 
                 <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
                 <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
                 <div class="form-horizontal align-items-start text-left justify-content-start mt-3">
-                    <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                    <button class="btn @(ViewData["Filter"]) mb-3" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                         Filter/Search
                     </button>
-                    <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+                    <div class="collapse @(ViewData["Filtering"]) mb-3" id="collapseFilter">
                         <div class="card card-body bg-light">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -88,12 +88,41 @@
                     </div>
                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                     {
-                        <button class="btn btn-outline-secondary" type="button" onclick="pageSize()">
+                        <button class="btn btn-outline-secondary ml-2 mb-3" type="button" onclick="pageSize()">
                             View All Bookings
                         </button>
                     }
                 </div>
-                <table class="table">
+
+                <div class="container-fluid d-block d-lg-none">
+                    <div class="card-deck-wrapper">
+                        <div class="card-deck">
+                            @foreach (var item in Model)
+                            {
+                            <div class="card mb-sm-3" style="min-width: 18rem;">
+                                <h5 class="card-header">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
+                                <div class="card-body">
+                                        <div class="media-body ml-2">
+                                            <p class="card-text">
+                                                <strong>Date:</strong> @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")<br />
+                                                <strong>Time:</strong> @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()<br />
+                                                <strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.RoomName)<br />
+                                                <strong>User:</strong> @Html.DisplayFor(modelItem => item.User.FullName)<br />
+                                                <br />
+                                            </p>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                            <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                            <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                        </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <table class="table d-none d-lg-table">
                     <thead>
                         <tr>
                             <th>

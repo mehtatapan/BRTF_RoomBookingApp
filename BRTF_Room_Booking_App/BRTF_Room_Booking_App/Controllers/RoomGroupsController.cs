@@ -34,13 +34,10 @@ namespace BRTF_Room_Booking_App.Controllers
             //Clear the sort/filter/paging URL Cookie for Controller
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 
-            ViewData["Filtering"] = "";
-
-            //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
+            ViewData["Filtering"] = "btn-outline-secondary";
 
             //array for string options
-            string[] sortOptions = new[] { "AreaName", "Enabled", "NeedsApproval" };
+            string[] sortOptions = new[] { "Area", "Is Enabled", "Needs Approval" };
 
             PopulateDropDownLists(); //data for User Filter DDL
 
@@ -51,21 +48,18 @@ namespace BRTF_Room_Booking_App.Controllers
             //  Filtering
             if (EnabledFilterString != "All")
             {
-                ViewData["Filtering"] = " show ";
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchName))
             {
                 roomGroups = roomGroups.Where(r => r.AreaName.ToUpper().Contains(SearchName.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
             }
 
             //Before we sort, see if we have called for a change of filtering or sorting
             if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
             {
-                if (actionButton != "Filter")//Change of sort is requested
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
                 {
                     if (actionButton == sortField) //Reverse order on same field
                     {
@@ -91,6 +85,19 @@ namespace BRTF_Room_Booking_App.Controllers
                 {
                     roomGroups = roomGroups
                         .OrderByDescending(r => r.AreaName);
+                }
+            }
+            else if (sortField == "Needs Approval") //Sorting by Area
+            {
+                if (sortDirection == "asc")
+                {
+                    roomGroups = roomGroups
+                        .OrderBy(r => r.NeedsApproval);
+                }
+                else
+                {
+                    roomGroups = roomGroups
+                        .OrderByDescending(r => r.NeedsApproval);
                 }
             }
             else //Sorting by Enabled
