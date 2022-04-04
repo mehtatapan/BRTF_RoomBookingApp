@@ -4,7 +4,7 @@
 @*For Cookies*@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<ul>
+<ul style="list-style-type: none;">
     @if (SignInManager.IsSignedIn(User))
     {
         var userName = HttpContextAccessor.HttpContext.Request.Cookies["userName"] ?? UserManager.GetUserName(User);

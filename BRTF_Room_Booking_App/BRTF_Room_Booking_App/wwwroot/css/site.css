@@ -33,13 +33,6 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-.logo {
-    height: 50%;
-    width: 250px;
-    /*position: relative;
-    left: -200px;*/
-}
-
 .nav-item1, .nav-item2, .nav-item3, .nav-item4, .nav-item5 {
     color: #E4E6E6;
     margin-left: 40px;
@@ -76,43 +69,9 @@ html {
     font-family: 'Roboto', sans-serif;
     color: #282828;
 }
-
-.login_logo {
-    width: 30%;
-}
-
-.login_block {
-    width: 35%;
-    margin: auto;
-}
-
-@media (max-width: 1080px) {
+@media (min-width: 768px) {
     html {
         font-size: 16px;
-    }
-    .login_logo {
-        width: 50%;
-    }
-
-    .login_block {
-        width: 50%;
-        margin: auto;
-    }
-    .create_user{
-        width:90%;
-    }
-}
-
-@media (max-width: 600px) {
-    html {
-        font-size: 16px;
-    }
-    .login_logo{
-        width:90%;
-    }
-    .login_block{
-        width: 70%;
-        margin: auto;
     }
 }
 
@@ -154,98 +113,3 @@ body {
     width: 100%;
     line-height: 60px; /* Vertically center the text there */
 }
-
-
-/*experiment*/
-
-.navbar {
-    display: flex;
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2F7DBB;
-    color: white;
-}
-
-.brand-title {
-    font-size: 1.5rem;
-    margin: .5rem;
-}
-
-.navbar-links {
-    height: 100%;
-}
-
-    .navbar-links ul {
-        display: flex;
-        margin: 0;
-        padding: 0;
-    }
-
-    .navbar-links li {
-        list-style: none;
-    }
-
-        .navbar-links li a {
-            display: block;
-            text-decoration: none;
-            color: white;
-            padding: 1rem;
-        }
-
-        .navbar-links li:hover {
-            background-color: #555;
-        }
-
-.toggle-button {
-    position: absolute;
-    top: .75rem;
-    right: 1rem;
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
-}
-
-    .toggle-button .bar {
-        height: 3px;
-        width: 100%;
-        background-color: white;
-        border-radius: 10px;
-    }
-
-@media (max-width: 800px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .toggle-button {
-        display: flex;
-    }
-
-    .navbar-links {
-        display: none;
-        width: 100%;
-    }
-
-        .navbar-links ul {
-            width: 100%;
-            flex-direction: column;
-        }
-
-            .navbar-links ul li {
-                text-align: center;
-            }
-
-                .navbar-links ul li a {
-                    padding: .5rem 1rem;
-                }
-
-        .navbar-links.active {
-            display: flex;
-        }
-}
-
-
