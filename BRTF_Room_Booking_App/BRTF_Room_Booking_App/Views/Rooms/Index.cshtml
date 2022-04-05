@@ -129,10 +129,10 @@
                                     <div class="card-body">
 
                                         <div class="media-body ml-2 mb-3">
-                                            <p class="card-text">
-                                                <strong>Area Name: </strong>@Html.DisplayFor(modelItem => item.RoomGroup.AreaName) <br />
-                                                <strong>Is Enabled: </strong>@Html.DisplayFor(modelItem => item.Enabled)
-                                            </p>
+                                            @*<p class="card-text">*@
+                                                <div class="card-text mb-2"><strong>Area Name: </strong>@Html.DisplayFor(modelItem => item.RoomGroup.AreaName) </div>
+                                                <div class="card-text"><strong>Is Enabled: </strong>@Html.DisplayFor(modelItem => item.Enabled)</div>
+                                            @*</p>*@
                                         </div>
                                         <div class="card-footer d-flex justify-content-center">
                                             <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>

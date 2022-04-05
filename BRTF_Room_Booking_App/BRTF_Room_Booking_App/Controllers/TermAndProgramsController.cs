@@ -23,17 +23,20 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: TermAndPrograms
-        public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchProgCode, string SearchProgName, string SearchLevel,
+        public async Task<IActionResult> Index(int? page, int? pageSizeID, string SearchProgCode, string SearchProgName, string SearchLevel, string sortDirectionCheck, string sortFieldID,
             string actionButton, string sortDirection = "asc", string sortField = "Program Code")
         {
             //URL with the last filter, sort and page parameters for this controller
             ViewDataReturnURL();
 
-            //Toggle the open/closed state of the collapse depending on if something is being filtered
-            ViewData["Filtering"] = ""; //Assume nothing is filtered
-
             //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
+            ViewData["Filtering"] = "btn-outline-secondary";
+
+            ////Change colour of the button when filtering by setting this default
+            //ViewData["Filter"] = "btn-outline-secondary";
+
+            //note: make sure this array has matching values to the column headings
+            string[] sortOptions = new[] { "Program Code", "Program Name", "Term", "User Group"};
 
             // Start with Includes but make sure your expression returns an
             // IQueryable<> so we can add filter and sort 
@@ -46,32 +49,37 @@ namespace BRTF_Room_Booking_App.Controllers
             if (!String.IsNullOrEmpty(SearchProgCode))
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramCode.ToUpper().Contains(SearchProgCode.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
+                //ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchProgName))
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramName.ToUpper().Contains(SearchProgName.ToUpper()));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
+                //ViewData["Filter"] = "btn-danger";
             }
             if (!String.IsNullOrEmpty(SearchLevel))
             {
                 termAndPrograms = termAndPrograms.Where(u => u.ProgramLevel.Equals(Convert.ToInt32(SearchLevel)));
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
+                //ViewData["Filter"] = "btn-danger";
             }
 
             //Before sorting, you need to check to see if there has been a change to of filter/sort
             if (!String.IsNullOrEmpty(actionButton)) //the form has been submitted
             {
-                if (actionButton != "Filter")
+                if (sortOptions.Contains(actionButton))
                 {
                     if (actionButton == sortField) //reversing on the same field
                     {
                         sortDirection = sortDirection == "asc" ? "desc" : "asc";
                     }
                     sortField = actionButton; //sorting by the button that was clicked
+                }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
                 }
             }
             //now the sort field and direction is known
@@ -134,7 +142,8 @@ namespace BRTF_Room_Booking_App.Controllers
             //now to set the sort for the next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
-
+            //SelectList for Sorting Options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());

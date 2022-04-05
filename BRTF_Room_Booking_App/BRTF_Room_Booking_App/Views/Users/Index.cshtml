@@ -130,12 +130,12 @@
                                     <h5 class="card-header">@Html.DisplayFor(modelItem => item.FullName)</h5>
                                     <div class="card-body">
                                         <div class="media-body ml-2">
-                                            <p class="card-text">
-                                                <strong>Username:</strong> @Html.DisplayFor(modelItem => item.Username)<br />
-                                                <strong>Email:</strong> @Html.DisplayFor(modelItem => item.Email)<br />
-                                                <strong>User Group:</strong> @Html.DisplayFor(modelItem => item.TermAndProgram.UserGroup.UserGroupName)<br />
+                                            @*<p class="card-text">*@
+                                                <div class="card-text mb-2"><strong>Username:</strong> @Html.DisplayFor(modelItem => item.Username)</div>
+                                                <div class="card-text mb-2"><strong>Email:</strong> @Html.DisplayFor(modelItem => item.Email)</div>
+                                                <div class="card-text"><strong>User Group:</strong> @Html.DisplayFor(modelItem => item.TermAndProgram.UserGroup.UserGroupName)</div>
                                                 <br />
-                                            </p>
+                                            @*</p>*@
 
                                         </div>
                                         <div class="card-footer d-flex justify-content-center">

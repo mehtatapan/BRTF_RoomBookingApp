@@ -92,6 +92,7 @@
                             View All Bookings
                         </button>
                     }
+                    <a role="button" class="btn btn-outline-secondary ml-2 mb-3" asp-area="" asp-controller="Home" asp-action="UsersBookings" asp-route-id="">Your Bookings</a>
                 </div>
 
                 <div class="container-fluid d-block d-lg-none">
@@ -103,13 +104,13 @@
                                 <h5 class="card-header">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
                                 <div class="card-body">
                                         <div class="media-body ml-2">
-                                            <p class="card-text">
-                                                <strong>Date:</strong> @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")<br />
-                                                <strong>Time:</strong> @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()<br />
-                                                <strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.RoomName)<br />
-                                                <strong>User:</strong> @Html.DisplayFor(modelItem => item.User.FullName)<br />
+                                            @*<p class="card-text">*@
+                                                <div class="card-text mb-2"><strong>Date:</strong> @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")</div>
+                                                <div class="card-text mb-2"><strong>Time:</strong> @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()</div>
+                                                <div class="card-text mb-2"><strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.RoomName)</div>
+                                                <div class="card-text"><strong>User:</strong> @Html.DisplayFor(modelItem => item.User.FullName)</div>
                                                 <br />
-                                            </p>
+                                            @*</p>*@
                                         </div>
                                         <div class="card-footer d-flex justify-content-center">
                                             <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>

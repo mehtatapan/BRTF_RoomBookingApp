@@ -135,6 +135,22 @@ namespace BRTF_Room_Booking_App.Controllers
             return View();
         }
 
+        public async Task<IActionResult> UsersBookings()
+        {
+            User currentUser = await _context.Users
+                .Where(u => u.Username == this.HttpContext.User.Identity.Name)
+                .FirstOrDefaultAsync();
+
+            var bookings = from r in _context.RoomBookings
+                           .Include(r => r.Room)
+                           .ThenInclude(r => r.RoomGroup)
+                           .Include(r => r.User)
+                           .Where(r => r.User == currentUser && r.StartDate > DateTime.Now)
+                           select r;
+
+            return View(await bookings.ToListAsync());
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
