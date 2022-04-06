@@ -442,13 +442,81 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         [Authorize(Roles = "Top-level Admin")]
-        public IActionResult DownloadBookings()
+        public IActionResult DownloadBookings(DateTime? start, DateTime? end, string? SearchRoom, int? RoomGroupID)
         {
-            //Get the bookings
+            ////Get the bookings
+            //var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+            //   .OrderBy(p => p.Room.RoomName).OrderBy(p => p.Room.RoomGroup)
+            //   .AsNoTracking()
+            //   .ToList();
+
+            //Clear the sort/filter/paging URL Cookie for Controller
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
+            //Toggle the open/closed state of the 'Filter/Sort' button based on if something is currently being filtered
+            ViewData["Filtering"] = ""; //Assume nothing is filtered initially
+
+            //Change colour of the button when filtering by setting this default
+            ViewData["Filter"] = "btn-outline-secondary";
+
+            ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);
+
             var filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
-               .OrderBy(p => p.Room.RoomName).OrderBy(p => p.Room.RoomGroup)
+               .Where(a => a.StartDate >= start && a.EndDate <= end)
+               .OrderBy(p => p.Room.RoomName)
                .AsNoTracking()
                .ToList();
+
+            //  Filtering
+            if (start == null && end == null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
+            }
+            else if (start == null && end != null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .Where(a => a.EndDate <= end)
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
+                ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
+            }
+            else if (start != null && end == null)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .Where(a => a.StartDate >= start)
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
+                ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
+            }
+            if (!String.IsNullOrEmpty(SearchRoom))
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+               .Where(r => r.Room.RoomName.ToUpper().Contains(SearchRoom.ToUpper()))
+               .OrderBy(p => p.Room.RoomName)
+               .AsNoTracking()
+               .ToList();
+                ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
+
+            }
+            if (RoomGroupID.HasValue)
+            {
+                filtered = _context.RoomBookings.Include(a => a.Room).ThenInclude(a => a.RoomGroup)
+                .Where(r => r.Room.RoomGroupID == RoomGroupID)
+                .OrderBy(p => p.Room.RoomName)
+                .AsNoTracking()
+                .ToList();
+                ViewData["Filtering"] = " show ";
+                ViewData["Filter"] = "btn-danger";
+
+            }
 
             var appts = filtered
                 .GroupBy(a => new { a.RoomID, a.Room.RoomName, a.Room.RoomGroup.AreaName })

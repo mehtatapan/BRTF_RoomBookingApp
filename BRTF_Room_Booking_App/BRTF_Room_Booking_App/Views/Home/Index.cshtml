@@ -31,6 +31,8 @@
             <a asp-area="" asp-controller="RoomBookings" asp-action="Index" role="button" class="btn mx-2" style="width:150px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Bookings</a>
         </div>
     </div>
+</div>
+<div class="row justify-content-center">
     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
     {
         <div class="flex-column m-4 text-center">
@@ -51,127 +53,127 @@
 </div>
 
 <div class="row justify-content-center">
-<div class="container">
-    <form asp-action="Index" method="get">
-        <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="my-3 mx-auto">
-            @if (User.IsInRole("User"))
-            {
-                <br />
-                <h4 class="text-center">Your Upcoming Bookings</h4>
-                <br />
-            }
-            @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-            {
-                <br />
-                <h4 class="text-center">Bookings Pending Approval</h4>
-                <br />
-            }
-            <div class="container-fluid d-block d-lg-none">
-                <div class="card-deck-wrapper">
-                    <div class="card-deck">
+    <div class="container">
+        <form asp-action="Index" method="get">
+            <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="my-3 mx-auto">
+                @if (User.IsInRole("User"))
+                {
+                    <br />
+                    <h4 class="text-center">Your Upcoming Bookings</h4>
+                    <br />
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                {
+                    <br />
+                    <h4 class="text-center">Bookings Pending Approval</h4>
+                    <br />
+                }
+                <div class="container-fluid d-block d-lg-none">
+                    <div class="card-deck-wrapper">
+                        <div class="card-deck">
+                            @foreach (var item in Model)
+                            {
+                                <div class="card mb-sm-3" style="min-width: 18rem;">
+                                    <h5 class="card-header">@Convert.ToDateTime(item.StartDate).ToString("MMMM dd, yyyy - h:mm tt")</h5>
+                                    <div class="card-body">
+                                        <div class="media-body ml-2">
+                                            @*<p class="card-text">*@
+                                            <div class="card-text mb-2"><strong>Date:</strong> @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")</div>
+                                            <div class="card-text mb-2"><strong>Time:</strong> @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()<br /></div>
+                                            <div class="card-text mb-2"><strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.RoomName)</div>
+                                            <div class="card-text mb-2"><strong>User:</strong> @Html.DisplayFor(modelItem => item.User.FullName)</div>
+                                            <div class="card-text"><strong>Approval Status:</strong> @Html.DisplayFor(modelItem => item.ApprovalStatus)</div>
+                                            <br />
+                                            @*</p>*@
+                                        </div>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
+                                        {
+                                            <div class="card-footer">
+                                                <div class="d-flex justify-content-center">
+                                                    <a asp-controller="Home" asp-action="Approve" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Approve</a>
+                                                    <a asp-controller="Home" asp-action="Deny" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Deny</a>
+                                                </div>
+                                                <div class="d-flex justify-content-center">
+                                                    <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                                    <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (User.IsInRole("User"))
+                                        {
+                                            <div class="card-footer d-flex justify-content-center">
+                                                <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                                <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                                <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <table class="table d-none d-lg-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Date</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Time</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
+                            </th>
+                            <th>
+                                <button type="submit" class="btn btn-link" disabled style="color:black"><b>Approval Status</b></button>
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var item in Model)
                         {
-                            <div class="card mb-sm-3" style="min-width: 18rem;">
-                                <h5 class="card-header">@Convert.ToDateTime(item.StartDate).ToString("MMMM dd, yyyy - h:mm tt")</h5>
-                                <div class="card-body">
-                                    <div class="media-body ml-2">
-                                        @*<p class="card-text">*@
-                                        <div class="card-text mb-2"><strong>Date:</strong> @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")</div>
-                                        <div class="card-text mb-2"><strong>Time:</strong> @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()<br /></div>
-                                        <div class="card-text mb-2"><strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.RoomName)</div>
-                                        <div class="card-text mb-2"><strong>User:</strong> @Html.DisplayFor(modelItem => item.User.FullName)</div>
-                                        <div class="card-text"><strong>Approval Status:</strong> @Html.DisplayFor(modelItem => item.ApprovalStatus)</div>
-                                        <br />
-                                        @*</p>*@
-                                    </div>
+                            <tr>
+                                <td>
+                                    @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Room.RoomName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApprovalStatus)
+                                </td>
+                                <td @*style="width: 400px"*@>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
                                     {
-                                        <div class="card-footer">
-                                            <div class="d-flex justify-content-center">
-                                                <a asp-controller="Home" asp-action="Approve" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Approve</a>
-                                                <a asp-controller="Home" asp-action="Deny" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Deny</a>
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                                <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:88px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                                            </div>
-                                        </div>
+                                        <a asp-controller="Home" asp-action="Approve" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Approve</a>
+                                        <a asp-controller="Home" asp-action="Deny" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Deny</a>
+                                        <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                        <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
                                     }
                                     @if (User.IsInRole("User"))
                                     {
-                                        <div class="card-footer d-flex justify-content-center">
-                                            <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                            <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                            <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                                        </div>
+                                        <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                        <a asp-controller="RoomBookings" asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                        <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
                                     }
-                                </div>
-                            </div>
+                                </td>
+                            </tr>
                         }
-                    </div>
-                </div>
-            </div>
-            <table class="table d-none d-lg-table">
-                <thead>
-                    <tr>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Date</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Time</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
-                        </th>
-                        <th>
-                            <button type="submit" class="btn btn-link" disabled style="color:black"><b>Approval Status</b></button>
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")
-                            </td>
-                            <td>
-                                @Convert.ToDateTime(item.StartDate).ToShortTimeString() - @Convert.ToDateTime(item.EndDate).ToShortTimeString()
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Room.RoomName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.User.FullName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ApprovalStatus)
-                            </td>
-                            <td @*style="width: 400px"*@>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Top-level Admin"))
-                                {
-                                    <a asp-controller="Home" asp-action="Approve" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Approve</a>
-                                    <a asp-controller="Home" asp-action="Deny" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Deny</a>
-                                    <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                    <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-1" style="width:86px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                                }
-                                @if (User.IsInRole("User"))
-                                {
-                                    <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                    <a asp-controller="RoomBookings" asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                    <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </section>
-    </form>
+                    </tbody>
+                </table>
+            </section>
+        </form>
     </div>
 </div>
