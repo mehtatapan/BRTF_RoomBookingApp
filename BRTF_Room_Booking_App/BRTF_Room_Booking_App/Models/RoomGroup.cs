@@ -40,7 +40,7 @@ namespace BRTF_Room_Booking_App.Models
         [Display(Name = "Maximum Number of Separate Bookings in This Area")]
         public int? MaxNumberOfBookings { get; set; }
 
-        [Display(Name = "Time of Day Restrictions")]
+        [Display(Name = "Apply Time-of-Day Restrictions")]
         public bool TimeOfDayRestrictions { get; set; }
 
         [Required(ErrorMessage = "Cannot be blank.")]

@@ -14,6 +14,78 @@
 
     <section style="background-color: #FFF; display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2); width: 80%; margin: auto " class="px-5 py-2 my-3">
         
+        @if (TempData["SimultaneousStudentBookingViolations"] != null)
+        {
+            @:<br />
+            @:<div class="alert alert-warning text-left text-body">
+                @:<b>Simultaneous Booking violation:</b> Your new Booking occurs at the same time as one of your existing Bookings. Students cannot book multiple rooms for the same time slot, since students cannot be at two places at once.<br /><br />
+                @:<table style='width:100%;'>
+                    @:<tr>
+                        @:<th colspan='5'>Edited Bookings</th>
+                        @:<th style="width: 4%;"></th> @* Space between User bookings and Existing bookings *@
+                        @:<th colspan='5'>Existing Bookings</th>
+                    @:</tr>
+                    @:<tr>
+                        @:<th>Room</th>
+                        @:<th>Start&nbsp;Date</th>
+                        @:<th>Start&nbsp;Time</th>
+                        @:<th>End&nbsp;Date</th>
+                        @:<th>End&nbsp;Time</th>
+                        @:<th></th>
+                        @:<th>Room</th>
+                        @:<th>Start&nbsp;Date</th>
+                        @:<th>Start&nbsp;Time</th>
+                        @:<th>End&nbsp;Date</th>
+                        @:<th>End&nbsp;Time</th>
+                    @:</tr>
+
+                    List<RoomBooking> yourBookings = TempData["YourBookings"] as List<RoomBooking>;
+                    List<RoomBooking> conflictBookings = TempData["SimultaneousStudentBookingViolations"] as List<RoomBooking>;
+                    int yourBookingsCount = yourBookings.Count;
+
+                    string previousRoomName = yourBookings[0].Room.RoomName;  // Used to bold text where the room name changes
+
+                    for (int i = 0; i < yourBookingsCount; i++)
+                    {
+                        if (yourBookings[i].Room.RoomName != previousRoomName)
+                        {
+                            @:<tr><td>&nbsp;</td></tr>
+                            previousRoomName = yourBookings[i].Room.RoomName;
+                        }
+                        @:<tr
+                              if (conflictBookings[i] != null)
+                              {
+                                  @:class="alert alert-danger text-left text-body"
+                                  @:style="border: 1px solid red; font-weight: bold;"
+                              }
+                        @:>
+                            @:<td>@(Html.Raw(yourBookings[i].Room.RoomName))&nbsp;</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortDateString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].StartDate.ToShortTimeString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortDateString()))</td>
+                            @:<td>@(Html.Raw(yourBookings[i].EndDate.ToShortTimeString()))</td>
+                            @:<td></td>
+                            if (conflictBookings[i] != null)
+                            {
+                                @:<td>@(Html.Raw(conflictBookings[i].Room.RoomName))&nbsp;</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortDateString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortDateString()))</td>
+                                @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))</td>
+                            }
+                            else
+                            {
+                                @:<td></td>
+                                @:<td colspan='4'>(no violation)</td>
+                            }
+                        @:</tr>
+                    }
+                @:</table><br />
+                @:Please adjust your Booking times.
+            @:</div>
+            @:<br />
+        }
+        
         @if (TempData["TimeConflictedBookings"] != null)
         {
             @:<br />
@@ -450,9 +522,9 @@
                             <input type="hidden" id="startDateInput" asp-for="StartDate" class="form-control" runat="server" />
                             <input type="hidden" asp-for="EndDate" id="endDateInput" class="form-control" runat="server" />
                             <span id="startDateError" class="text-danger"></span>
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                            <span id="aspStartDateErrorSpan" asp-validation-for="StartDate" class="text-danger"></span>
                             <span id="endDateError" class="text-danger"></span>
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                            <span id="aspEndDateErrorSpan" asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -560,7 +632,7 @@
             startDateString = startDateString + startMonth + "-";
             if (startDay < 10) { startDateString = startDateString + "0" }
             startDateString = startDateString + startDay;
-            
+
             document.getElementById('startDatePicker').value = startDateString;
 
             // Grab starting Time from the true Start Datetime picker
@@ -598,8 +670,8 @@
         function updateStartEndDatetimes(flashDisplays) {
             // Update startDateInput by a plain string
             var startDatetimeString = document.getElementById('startDatePicker').value + 'T' + document.getElementById("startTimePicker").value;;
-            document.getElementById('startDateInput').value = startDatetimeString;   // Actual start datetime input
-            document.getElementById('startDateDisplay').value = startDatetimeString;   // Start datetime Display only
+            document.getElementById('startDateInput').value = startDatetimeString;   // Set Actual start datetime input
+            document.getElementById('startDateDisplay').value = startDatetimeString;   // Set Display-only start datetime
 
             // Calculate end time using input from select list
             var startTime = document.getElementById("startTimePicker").value.split(":");
@@ -608,19 +680,32 @@
             var durationTime = document.getElementById("durationPicker").value.split(":");
             var endHour = startHour + parseInt(durationTime[0]);
             var endMinute = startMinute + parseInt(durationTime[1]);
-            if (endMinute > 60) {
+            if (endMinute >= 60) {
                 endHour = endHour + 1;
                 endMinute = endMinute - 60;
             }
 
             // Generate string and update endDateInput by plain string
-            var endDatetimeString = document.getElementById('startDatePicker').value + 'T';
-            if (endHour < 10) {
-                endDatetimeString = endDatetimeString + "0";
+            var startDatetime = new Date(document.getElementById("startDateInput").value);
+            var endDatetime = startDatetime;
+            if (endHour >= 24) {
+                endDatetime.setDate(endDatetime.getDate() + 1);
+                endHour = endHour - 24;
             }
+            var endDay = parseInt(endDatetime.getDate());
+            var endMonth = parseInt(endDatetime.getMonth() + 1);
+            var endYear = parseInt(endDatetime.getFullYear());
+
+            var endDatetimeString = endYear + "-";
+            if (endMonth < 10) { endDatetimeString = endDatetimeString + "0" }
+            endDatetimeString = endDatetimeString + endMonth + "-";
+            if (endDay < 10) { endDatetimeString = endDatetimeString + "0" }
+            endDatetimeString = endDatetimeString + endDay + "T";
+            if (endHour < 10) { endDatetimeString = endDatetimeString + "0"; }
             endDatetimeString = endDatetimeString + endHour + ":" + endMinute;
-            document.getElementById('endDateInput').value = endDatetimeString;   // Actual end datetime input
-            document.getElementById('endDateDisplay').value = endDatetimeString;   // End datetime Display only
+
+            document.getElementById('endDateInput').value = endDatetimeString;   // Set Actual end datetime input
+            document.getElementById('endDateDisplay').value = endDatetimeString;   // Set Display-only end datetime
 
             // Flash displays
             if (flashDisplays != false) {
@@ -638,17 +723,31 @@
         // Update start and end time when start Date picker changes
         function startDatePickerHandler(e) {
             updateStartEndDatetimes(true);
+            $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
+            $("#aspEndDateErrorSpan").html("");
         }
 
         // Update start and end time when start Time picker changes
         function startTimePickerHandler(e) {
             updateStartEndDatetimes(true);
+            $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
+            $("#aspEndDateErrorSpan").html("");
         }
 
         // Update start and end time when Duration picker changes
         function durationPickerHandler(e) {
             updateStartEndDatetimes(true);
+            $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
+            $("#aspEndDateErrorSpan").html("");
         }
+
+        // Refresh DDL of time durations when duration selection control is clicked
+        $('#durationPicker').click(function () {
+            var selectedRoomGroup = $("#RoomGroupID").val();
+            var selectedDuration = $("#durationPicker").val();
+            var URL = "/RoomBookings/GetDurations/?ID=" + selectedRoomGroup + "&selectedValue=" + selectedDuration;
+            refreshDDL('durationPicker', URL);
+        });
     </script>
     <script type="text/javascript">
         // Refresh DDL of available rooms when Area is changed
@@ -699,7 +798,7 @@
     <script>
         // Javascript updates live error message beneath datetime selector
         function updateSelectedDatetimeErrorMsg() {
-            console.log("Selected Start Datetime: " + $("#startDateInput").val());
+            console.log("Actual Selected Start Datetime: '" + $("#startDateInput").val()) + "'";
             if ($("#startDateInput").val().length == 0 || new Date($("#startDateInput").val()) < new Date($.now())) {
                 $("#startDateError").html("Booking start cannot be in the past. Please select a new date/time.");
             }
@@ -707,7 +806,7 @@
                 $("#startDateError").html("");
             }
 
-            console.log("Selected End Datetime: " + $("#endDateInput").val());
+            console.log("Actual Selected End Datetime: '" + $("#endDateInput").val()) + "'";
             if ($("#endDateInput").val().length == 0 || new Date($("#endDateInput").val()) < new Date($("#startDateInput").val())) {
                 $("#endDateError").html("The end date/time must occur after the selected start date/time. Please select a new date/time.");
             }
