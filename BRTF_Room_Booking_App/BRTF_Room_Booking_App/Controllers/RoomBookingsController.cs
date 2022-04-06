@@ -413,7 +413,9 @@ namespace BRTF_Room_Booking_App.Controllers
                         // Get User's pre-existing booked time in this Room
                         var thisRoom = _context.Rooms.Include(r => r.RoomGroup).Where(r => r.ID == Convert.ToInt32(roomID)).FirstOrDefault();
                         var existingBookingsForThisRoom = _context.RoomBookings
-                            .Where(b => (b.UserID == roomBooking.UserID) && (b.RoomID == Convert.ToInt32(roomID)) && (b.EndDate >= DateTime.Today));
+                            .Where(b => (b.UserID == roomBooking.UserID) && (b.RoomID == Convert.ToInt32(roomID))
+                            && (b.EndDate >= DateTime.Today)
+                            && (b.ApprovalStatus != "Declined"));
 
                         // Tally up the User's existing time
                         TimeSpan existingTotalTimeInThisRoom = GetTotalDurationOfBookings(existingBookingsForThisRoom.ToList());
@@ -600,7 +602,9 @@ namespace BRTF_Room_Booking_App.Controllers
                         // Get User's pre-existing booked time in this Area
                         var thisArea = _context.RoomGroups.Where(r => r.ID == areaID).FirstOrDefault();
                         var existingBookingsForThisArea = _context.RoomBookings.Include(b => b.Room)
-                            .Where(b => (b.UserID == roomBooking.UserID) && (b.Room.RoomGroupID == areaID) && (b.EndDate >= DateTime.Today));
+                            .Where(b => (b.UserID == roomBooking.UserID) && (b.Room.RoomGroupID == areaID)
+                            && (b.EndDate >= DateTime.Today)
+                            && (b.ApprovalStatus != "Declined"));
 
                         // Tally User's existing booked time in this area
                         TimeSpan existingTotalTimeInThisArea = GetTotalDurationOfBookings(existingBookingsForThisArea.ToList());
@@ -963,6 +967,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         .Where(b => (b.UserID == roomBookingToUpdate.UserID)
                                && (b.Room.RoomGroupID == thisArea.ID)
                                && (b.EndDate >= DateTime.Today)
+                               && (b.ApprovalStatus != "Declined")
                                && (b.ID != roomBookingToUpdate.ID) /* Exclude this updated booking from the query, since we will compare using local variables */
                               );
 
@@ -997,6 +1002,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         .Where(b => (b.UserID == roomBookingToUpdate.UserID)
                                && (b.RoomID == roomBookingToUpdate.RoomID)
                                && (b.EndDate >= DateTime.Today)
+                               && (b.ApprovalStatus != "Declined")
                                && (b.ID != roomBookingToUpdate.ID) /* Exclude this updated booking from the query, since we will compare using local variables */
                               );
 
@@ -1610,7 +1616,8 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(b => b.Room)
                 .Include(b => b.User)
                 .Where(b => (b.RoomID == newBooking.RoomID)
-                            && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)));
+                            && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
+                            && (b.ApprovalStatus != "Declined")));
 
             foreach (RoomBooking existingBooking in existingBookings)
             {
@@ -1655,7 +1662,8 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(b => b.User)
                 .Where(b => (b.RoomID == newBooking.RoomID)
                        && (b.UserID == currentUserID)
-                        && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)));
+                        && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
+                        && (b.ApprovalStatus != "Declined")));
 
             // Compare bookings the same way we do for booking conflicts, but add the blackout time to the end date
             foreach (RoomBooking existingBooking in existingBookings)
@@ -1687,7 +1695,8 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(b => b.Room)
                 .Include(b => b.User)
                 .Where(b => (b.UserID == newBooking.UserID)
-                            && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)));
+                            && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
+                            && (b.ApprovalStatus != "Declined")));
 
             foreach (RoomBooking existingBooking in existingBookings)
             {
