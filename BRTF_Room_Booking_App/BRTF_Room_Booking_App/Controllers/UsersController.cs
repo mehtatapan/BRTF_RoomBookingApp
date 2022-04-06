@@ -217,8 +217,10 @@ namespace BRTF_Room_Booking_App.Controllers
 
                     if (!result.Succeeded)
                     {
-                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                        throw new Exception("Error creating User in Identity.");
+                        //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        //throw new Exception("Error creating User in Identity.");
+                        TempData["Message"] = "Error creating User in Identity,  A User with these Credentials already exists.";
+                        return Redirect(ViewData["returnURL"].ToString());
                     }
                     else
                     {
@@ -226,8 +228,10 @@ namespace BRTF_Room_Booking_App.Controllers
 
                         if (!addRoleResult.Succeeded)
                         {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                            throw new Exception("Error adding User to new Role.");
+                            TempData["Message"] = "Error adding User to new Role.";
+                            return Redirect(ViewData["returnURL"].ToString());
+                            // ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            // throw new Exception("Error adding User to new Role.");
                         }
                     }
 
@@ -240,11 +244,21 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.Username"))
                 {
-                    ModelState.AddModelError("Username", "Unable to save changes. A User with this Username already exists.");
+                    // ModelState.AddModelError("Username", "Unable to save changes. A User with this Username already exists.");
+                    TempData["Message"] = "Unable to save changes. A User with this Username already exists.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                }
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.Email"))
+                {
+                    // ModelState.AddModelError("Username", "Unable to save changes. A User with this Username already exists.");
+                    TempData["Message"] = "Unable to save changes. A User with this Email already exists.";
+                    return Redirect(ViewData["returnURL"].ToString());
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    TempData["Message"] = "Unable to save changes. Try again, and if the problem persists, see your system administrator.";
+                    return Redirect(ViewData["returnURL"].ToString());
+                    //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
             //Get the full TermAndProgram object for the User and then populate DDL
@@ -961,6 +975,17 @@ namespace BRTF_Room_Booking_App.Controllers
         //DDL Data at a later date.
         private SelectList RoleSelectList(string selectedId = null)
         {
+            //string[] validList = { "Admin", "User" };
+            //List<string> validRoleList = new List<string>(validList);
+
+            if (User.IsInRole("Admin"))
+            {
+                return new SelectList(_identityContext.Roles
+                .Where(r => r.Name != "Top-level Admin")
+                .OrderBy(r => r.Name), "Name", "Name", selectedId);
+            }
+            //return new SelectList(validRoleList, "Name", "Name", selectedId);
+
             return new SelectList(_identityContext.Roles
                 .OrderBy(r => r.Name), "Name", "Name", selectedId);
         }
