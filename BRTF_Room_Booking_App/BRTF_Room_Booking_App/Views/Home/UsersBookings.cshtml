@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
         <div class="container">
         <form asp-action="Index" method="get">
-            <section style="background-color: #FFF; display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-2 my-3 mx-auto">
+            <section style="background-color: #FFF; display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-1 my-3 mx-auto">
                 <br />
                 <h4 class="text-center">Your Upcoming Bookings</h4>
                 <br />
@@ -67,7 +67,7 @@
                                 </th>
                             }
                             <th></th>
-                            <th></th>
+                            @*<th></th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -93,9 +93,9 @@
                                     </td>
                                 }
                                 <td>
-                                    <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
-                                    <a asp-controller="RoomBookings" asp-action="Details" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                    <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                    <a asp-controller="RoomBookings" asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:73px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                    <a asp-controller="RoomBookings" asp-action="Details" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:73px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
+                                    <a asp-controller="RoomBookings" asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn m-lg-1" style="width:73px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
                                 </td>
                             </tr>
                         }
