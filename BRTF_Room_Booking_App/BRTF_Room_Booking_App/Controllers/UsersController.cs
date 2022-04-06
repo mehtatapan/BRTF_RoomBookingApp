@@ -219,7 +219,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     {
                         //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                         //throw new Exception("Error creating User in Identity.");
-                        TempData["Message"] = "Error creating User in Identity,  A User with these Credentials already exists.";
+                        TempData["AlertMessage"] = "Error creating User in Identity,  A User with these Credentials already exists.";
                         return Redirect(ViewData["returnURL"].ToString());
                     }
                     else
@@ -228,7 +228,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
                         if (!addRoleResult.Succeeded)
                         {
-                            TempData["Message"] = "Error adding User to new Role.";
+                            TempData["AlertMessage"] = "Error adding User to new Role.";
                             return Redirect(ViewData["returnURL"].ToString());
                             // ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                             // throw new Exception("Error adding User to new Role.");
@@ -236,7 +236,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-                    TempData["AlertMessage"] = "User Created Successfully!";
+                    TempData["Message"] = "User Created Successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -245,18 +245,18 @@ namespace BRTF_Room_Booking_App.Controllers
                 if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.Username"))
                 {
                     // ModelState.AddModelError("Username", "Unable to save changes. A User with this Username already exists.");
-                    TempData["Message"] = "Unable to save changes. A User with this Username already exists.";
+                    TempData["AlertMessage"] = "Unable to save changes. A User with this Username already exists.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
                 if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.Email"))
                 {
                     // ModelState.AddModelError("Username", "Unable to save changes. A User with this Username already exists.");
-                    TempData["Message"] = "Unable to save changes. A User with this Email already exists.";
+                    TempData["AlertMessage"] = "Unable to save changes. A User with this Email already exists.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
                 else
                 {
-                    TempData["Message"] = "Unable to save changes. Try again, and if the problem persists, see your system administrator.";
+                    TempData["AlertMessage"] = "Unable to save changes. Try again, and if the problem persists, see your system administrator.";
                     return Redirect(ViewData["returnURL"].ToString());
                     //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
@@ -294,7 +294,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -329,7 +329,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != userToUpdate.Username)
                 {
-                    TempData["Message"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -385,7 +385,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
                     await _identityContext.SaveChangesAsync();
                     await _context.SaveChangesAsync();
-                    TempData["AlertMessage"] = "User Edited Successfully!";
+                    TempData["Message"] = "User Edited Successfully!";
                     return RedirectToAction("Details", new { userToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -481,7 +481,7 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["Message"] = "You are not authorized to delete other users.";
+                    TempData["AlertMessage"] = "You are not authorized to delete other users.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -493,7 +493,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     _context.Users.Remove(user);
                     await DeleteIdentityUser(user.Username);
                     await _context.SaveChangesAsync();
-                    TempData["AlertMessage"] = "<strong>Success!</strong> User deleted successfully!";
+                    TempData["Message"] = "<strong>Success!</strong> User deleted successfully!";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -527,7 +527,7 @@ namespace BRTF_Room_Booking_App.Controllers
             ViewDataReturnURL();
             if (User.IsInRole("Admin"))
             {
-                TempData["Message"] = "You are not authorized to delete other users.";
+                TempData["AlertMessage"] = "You are not authorized to delete other users.";
                 return Redirect(ViewData["returnURL"].ToString());
             }
             else
