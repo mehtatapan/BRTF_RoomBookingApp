@@ -346,7 +346,9 @@
                                 @:<td>@(Html.Raw(conflictBookings[i].StartDate.ToShortTimeString()))&nbsp;</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortDateString()))&nbsp;</td>
                                 @:<td>@(Html.Raw(conflictBookings[i].EndDate.ToShortTimeString()))&nbsp;</td>
-                                @:<td>@(Html.Raw(Math.Abs((yourBookings[i].StartDate - conflictBookings[i].EndDate).TotalHours).ToString("0.##"))) hours&nbsp;</td>
+                                @:<td>@(Html.Raw(Math.Min(Math.Abs((yourBookings[i].StartDate - conflictBookings[i].EndDate).TotalHours),
+                                                    Math.Abs((conflictBookings[i].StartDate - yourBookings[i].EndDate).TotalHours))
+                                                .ToString("0.##"))) hours&nbsp;</td>
                                 @:<td>@(Html.Raw(blackoutTimes[i].ToString("0.##"))) hours&nbsp;</td>
                             }
                             else

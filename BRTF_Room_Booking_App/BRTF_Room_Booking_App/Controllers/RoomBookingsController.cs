@@ -1654,7 +1654,7 @@ namespace BRTF_Room_Booking_App.Controllers
             }
 
             // Get this user's bookings for this room
-            int currentUserID = _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.ID).FirstOrDefault();
+            int currentUserID = newBooking.UserID;
 
             List<RoomBooking> existingBookings =
                 new List<RoomBooking>(_context.RoomBookings
