@@ -500,7 +500,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             string approvalString = "Pending";
                             var approverUsernames = _context.RoomGroupApprovers // Get names of approvers for this Area
                                 .Include(r => r.User)
-                                .Where(r => r.RoomGroupID == roomBooking.Room.RoomGroupID)
+                                .Where(r => r.RoomGroupID == thisRoom.RoomGroupID)
                                 .Select(r => r.User.Username);
                             if (approverUsernames.Contains(User.Identity.Name) || User.IsInRole("Top-level Admin") || thisRoom.RoomGroup.NeedsApproval == false)
                             {
@@ -1250,7 +1250,7 @@ namespace BRTF_Room_Booking_App.Controllers
             // Manually generate SelectList
             List<SelectListItem> durations = new List<SelectListItem>();
 
-            for (double i = 0.5; i <= overallMaxDuration; i += 0.5)
+            for (double i = 0.5; i <= Math.Min(overallMaxDuration, 24); i += 0.5)
             {
                 DateTime t = new DateTime();
                 t = t.AddHours(i).AddMinutes(-1);

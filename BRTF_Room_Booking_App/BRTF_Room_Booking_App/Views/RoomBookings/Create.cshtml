@@ -898,21 +898,21 @@
             updateSelectedDatetimeErrorMsg();
         }
 
-        // Update start and end time when start Date picker changes
+        // Update actual start and end time when start Date picker changes
         function startDatePickerHandler(e) {
             updateStartEndDatetimes(true);
             $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
             $("#aspEndDateErrorSpan").html("");
         }
 
-        // Update start and end time when start Time picker changes
+        // Update actual start and end time when start Time picker changes
         function startTimePickerHandler(e) {
             updateStartEndDatetimes(true);
             $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
             $("#aspEndDateErrorSpan").html("");
         }
 
-        // Update start and end time when Duration picker changes
+        // Update actual start and end time when Duration picker changes
         function durationPickerHandler(e) {
             updateStartEndDatetimes(true);
             $("#aspStartDateErrorSpan").html("");//Clear error previous messages from server
@@ -925,6 +925,10 @@
             var selectedDuration = $("#durationPicker").val();
             var URL = "/RoomBookings/GetDurations/?ID=" + selectedRoomGroup + "&selectedValue=" + selectedDuration;
             refreshDDL('durationPicker', URL);
+            if (selectedDuration == null || selectedDuration.length() == 0) {
+                $("#durationPicker").val($("#durationPicker option:first").val());
+            }
+            updateStartEndDatetimes(false);
         });
     </script>
     <script type="text/javascript">

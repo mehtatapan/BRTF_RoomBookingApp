@@ -747,6 +747,10 @@
             var selectedDuration = $("#durationPicker").val();
             var URL = "/RoomBookings/GetDurations/?ID=" + selectedRoomGroup + "&selectedValue=" + selectedDuration;
             refreshDDL('durationPicker', URL);
+            if (selectedDuration == null || selectedDuration.length() == 0) {
+                $("#durationPicker").val($("#durationPicker option:first").val());
+            }
+            updateStartEndDatetimes(false);
         });
     </script>
     <script type="text/javascript">
