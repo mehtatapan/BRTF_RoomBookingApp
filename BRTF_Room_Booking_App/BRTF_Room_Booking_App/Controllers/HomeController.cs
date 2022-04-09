@@ -11,6 +11,7 @@ using BRTF_Room_Booking_App.Data;
 using BRTF_Room_Booking_App.Utilities;
 using BRTF_Room_Booking_App.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -135,8 +136,22 @@ namespace BRTF_Room_Booking_App.Controllers
             return View();
         }
 
-        public async Task<IActionResult> UsersBookings()
+        public async Task<IActionResult> UsersBookings(int? page, int? pageSizeID, /* Paging */
+            string SearchAfterDate, string SearchBeforeDate, string sortDirectionCheck, string sortFieldID, /* Filters/Search */
+            string actionButton, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
+            //Clear the sort/filter/paging URL Cookie for Controller
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
+            //Toggle the background colour of the filter button depending on if something is being filtered
+            ViewData["Filtering"] = "btn-outline-secondary"; //Assume nothing is filtered
+
+            //NOTE: make sure this array has matching values to the column headings being sorted
+            string[] sortOptions = new[] { "Start Date", "Approval Status" };
+
+            // Start with Includes but make sure your expression returns an
+            // IQueryable<> so we can add filter and sort 
+            // options later.
             User currentUser = await _context.Users
                 .Where(u => u.Username == this.HttpContext.User.Identity.Name)
                 .FirstOrDefaultAsync();
@@ -148,7 +163,91 @@ namespace BRTF_Room_Booking_App.Controllers
                            .Where(r => r.User == currentUser && r.StartDate > DateTime.Now)
                            select r;
 
-            return View(await bookings.ToListAsync());
+            //bool filtered = false;
+
+            //Add as many filters as needed
+            if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
+            {
+                bookings = bookings.Where(r => afterDate <= r.StartDate);
+
+                ViewData["Filtering"] = "btn-danger";
+            }
+            if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
+            {
+                bookings = bookings.Where(r => r.StartDate <= beforeDate);
+                ViewData["Filtering"] = "btn-danger";
+            }
+
+            //Before we sort, see if we have called for a change of filtering or sorting
+            if (!String.IsNullOrEmpty(actionButton)) //Form Submitted so lets sort!
+            {
+                if (sortOptions.Contains(actionButton))//Change of sort is requested
+                {
+                    if (actionButton == sortField) //Reverse order on same field
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;//Sort by the button clicked
+                }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
+                }
+            }
+            //Now we know which field and direction to sort by
+            if (sortField == "Start Date")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings
+                        .OrderBy(p => p.StartDate);
+                }
+                else
+                {
+                    bookings = bookings
+                        .OrderByDescending(p => p.StartDate);
+                }
+            }
+            else //Sorting by Approval Status
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings
+                        .OrderBy(p => p.ApprovalStatus);
+                }
+                else
+                {
+                    bookings = bookings
+                        .OrderByDescending(p => p.ApprovalStatus);
+                }
+            }
+
+            //Set sort for next time
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
+            //SelectList for Sorting Options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
+            //Handle Paging
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<RoomBooking>.CreateAsync(bookings.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
+
+            //return View(await bookings.ToListAsync());
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

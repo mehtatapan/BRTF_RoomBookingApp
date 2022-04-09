@@ -33,16 +33,13 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: RoomBookings
         public async Task<IActionResult> Index(int? page, int? pageSizeID, /* Paging */
-            int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, /* Filters/Search */
+            int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, string sortDirectionCheck, string sortFieldID, /* Filters/Search */
             string actionButton, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
-            //Toggle the open/closed state of the collapse depending on if something is being filtered
-            ViewData["Filtering"] = ""; //Assume nothing is filtered
+            //Toggle the background colour of the filter button depending on if something is being filtered
+            ViewData["Filtering"] = "btn-outline-secondary"; //Assume nothing is filtered
 
-            //Change colour of the button when filtering by setting this default
-            ViewData["Filter"] = "btn-outline-secondary";
-
-            //NOTE: make sure this array has matching values to the column headings
+            //NOTE: make sure this array has matching values to the column headings being sorted
             string[] sortOptions = new[] { "Start Date" };
 
             ViewData["RoomGroupID"] = RoomGroupSelectList(RoomGroupID);    // Room data is loaded separately from other dropdownlists, since it is sometimes connected to a multiselect
@@ -63,44 +60,38 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 roombookings = roombookings.Where(r => afterDate <= r.StartDate);
 
-                ViewData["Filtering"] = "show";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
             {
                 roombookings = roombookings.Where(r => r.StartDate <= beforeDate);
-                ViewData["Filtering"] = "show";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchUsername))
             {
                 roombookings = roombookings.Where(r => r.User.Username.ToUpper().Contains(SearchUsername.ToUpper()));
-                ViewData["Filtering"] = "show";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchFullName))
             {
                 roombookings = roombookings.Where(r => (r.User.FirstName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper())
                                                     || (r.User.FirstName + " " + r.User.MiddleName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper()));
-                ViewData["Filtering"] = "show";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (RoomGroupID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.Room.RoomGroupID == RoomGroupID);
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (RoomID.HasValue)
             {
                 roombookings = roombookings.Where(r => r.RoomID == RoomID);
-                ViewData["Filtering"] = " show ";
-                ViewData["Filter"] = "btn-danger";
+                ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             GetRoomsJSON(roombookings, filtered);
@@ -116,6 +107,11 @@ namespace BRTF_Room_Booking_App.Controllers
                         sortDirection = sortDirection == "asc" ? "desc" : "asc";
                     }
                     sortField = actionButton;//Sort by the button clicked
+                }
+                else //Sort by the controls in the filter area
+                {
+                    sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
+                    sortField = sortFieldID;
                 }
             }
             //Now we know which field and direction to sort by
@@ -135,6 +131,9 @@ namespace BRTF_Room_Booking_App.Controllers
             //Set sort for next time
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
+
+            //SelectList for Sorting Options
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
 
             //Handle Paging
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
