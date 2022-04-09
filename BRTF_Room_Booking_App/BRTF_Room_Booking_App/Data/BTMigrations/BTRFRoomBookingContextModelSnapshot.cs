@@ -264,6 +264,9 @@ namespace BRTF_Room_Booking_App.Data.BTMigrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("TermAndProgramID");
 
                     b.HasIndex("Username")

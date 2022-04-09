@@ -1213,7 +1213,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Booking was deleted successfully!";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(ViewData["returnURL"].ToString());
             }
 
             catch (DbUpdateException)

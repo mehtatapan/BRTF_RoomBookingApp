@@ -116,11 +116,14 @@ namespace BRTF_Room_Booking_App.Data
                 .HasIndex(p => new { p.ProgramLevel, p.ProgramCode })
                 .IsUnique();
 
-            //Add a unique index to the Username and Email
+            //Add a unique index to the Username
             modelBuilder.Entity<User>()
-               .HasIndex(p => new { p.Email, p.Username })
+               .HasIndex(p => p.Username )
                .IsUnique();
-
+            //Add a unique index to the Email
+            modelBuilder.Entity<User>()
+               .HasIndex(p => p.Email )
+               .IsUnique();
 
             //Add a unique index to the RoomGroup Name
             modelBuilder.Entity<RoomGroup>()
