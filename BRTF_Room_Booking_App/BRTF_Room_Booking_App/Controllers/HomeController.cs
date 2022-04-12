@@ -12,6 +12,11 @@ using BRTF_Room_Booking_App.Utilities;
 using BRTF_Room_Booking_App.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
+using Microsoft.AspNetCore.Http.Features;
+using System.IO;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -68,12 +73,13 @@ namespace BRTF_Room_Booking_App.Controllers
                            .ThenInclude(r => r.RoomGroupApprovers)
                            .Include(r => r.User)
                            .Where(r => r.ApprovalStatus == "Pending" && r.Room.RoomGroup.NeedsApproval)
-                           select r;
+                               select r;
 
                 List<RoomBooking> approverBookings = new List<RoomBooking>();
                 foreach (RoomBooking r in bookings)
                 {
-                    if (canApprove(currentUser.ID, r.Room.RoomGroupID)) {
+                    if (canApprove(currentUser.ID, r.Room.RoomGroupID))
+                    {
                         approverBookings.Add(r);
                     }
                 }
@@ -240,6 +246,132 @@ namespace BRTF_Room_Booking_App.Controllers
 
             //return View(await bookings.ToListAsync());
         }
+
+        public async Task<IActionResult> DownloadUsersBookings(string SearchAfterDate, string SearchBeforeDate)
+        {
+            User currentUser = await _context.Users
+                .Where(u => u.Username == this.HttpContext.User.Identity.Name)
+                .FirstOrDefaultAsync();
+
+            var _bookings = from r in _context.RoomBookings
+                           .Include(r => r.Room)
+                           .ThenInclude(r => r.RoomGroup)
+                           .Include(r => r.User)
+                           .Where(r => r.User == currentUser && r.StartDate > DateTime.Now)
+                           select r;
+
+            //bool filtered = false;
+
+            //Add as many filters as needed
+            if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
+            {
+                _bookings = _bookings.Where(r => afterDate <= r.StartDate);
+            }
+            if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
+            {
+                _bookings = _bookings.Where(r => r.StartDate <= beforeDate);
+            }
+
+            List<BookingVM> bookings = new List<BookingVM>();
+
+            foreach (RoomBooking b in _bookings){
+                bookings.Add(new BookingVM {
+                        Area = b.Room.RoomGroup.AreaName,
+                        Room = b.Room.RoomName,
+                        Start = b.StartDate.ToString("g"),
+                        End = b.EndDate.ToString("g"),
+                        Status = b.ApprovalStatus
+                    }
+                );
+            }
+
+            //How many rows?
+            int numRows = bookings.Count();
+
+            if (numRows > 0) //We have data
+            {
+                //Create a new spreadsheet from scratch.
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    var workSheet = excel.Workbook.Worksheets.Add("YourBookings");
+
+                    //Note: Cells[row, column]
+                    workSheet.Cells[3, 1].LoadFromCollection(bookings, true);
+
+                    //Set Style and backgound colour of headings
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 5])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightBlue);
+                    }
+
+                    //Autofit columns
+                    workSheet.Cells.AutoFitColumns();
+
+                    //Add a title and timestamp at the top of the report
+                    workSheet.Cells[1, 1].Value = "Your Bookings";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 5])
+                    {
+                        Rng.Merge = true; //Merge columns start and end range
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    //Since the time zone where the server is running can be different, adjust to 
+                    //Local for us.
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 9])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+
+                    //Ok, time to download the Excel
+
+                    //I usually stream the response back to avoid possible
+                    //out of memory errors on the server if you have a large spreadsheet.
+                    //NOTE: Since .NET Core 3 most Web Servers disallow sync IO so we
+                    //need to temporarily change the setting for the server.
+                    //If we can't then we will try to build the file and return a FileContentResult
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=YourBookings.xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "YourBookings.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
+
 
         private string ControllerName()
         {

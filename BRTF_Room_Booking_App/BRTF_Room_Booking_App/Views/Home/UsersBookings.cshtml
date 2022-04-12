@@ -5,9 +5,9 @@
 }
 
 <body>
-    <br/>
+    <br />
     <h1 class="text-center">Your Bookings</h1>
-    <br/>
+    <br />
     <div class="row justify-content-center">
         <div class="container">
             <section style="background-color: #FFF; display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-1 py-3 my-3 mx-auto">
@@ -22,6 +22,7 @@
                         <button class="btn @(ViewData["Filtering"]) mb-3" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                             <text class="d-none d-lg-inline">Filter/Search</text><text class="d-inline d-lg-none">Filter/Sort</text>
                         </button>
+                            <a asp-action="DownloadUsersBookings" class="btn btn-info mb-3">Download Booking List</a>
                         <div class="collapse mb-3" id="collapseFilter" style="margin-bottom:20px;">
                             <div class="card card-body bg-light">
                                 <div class="d-block d-lg-none">
@@ -102,8 +103,8 @@
                                     <button type="submit" class="btn btn-link" disabled style="color:black"><b>Room</b></button>
                                 </th>
                                 @*<th>
-                                    <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
-                                </th>*@
+                                        <button type="submit" class="btn btn-link" disabled style="color:black"><b>User</b></button>
+                                    </th>*@
                                 @if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Top-level Admin"))@*i will remove top-admin from this if statement once all top-admin bookings are automatically approved. for now i've left it for demonstration purposes'*@
                                 {
                                     <th>
@@ -128,8 +129,8 @@
                                         @Html.DisplayFor(modelItem => item.Room.RoomName)
                                     </td>
                                     @*<td>
-                                        @Html.DisplayFor(modelItem => item.User.FullName)
-                                    </td>*@
+                                            @Html.DisplayFor(modelItem => item.User.FullName)
+                                        </td>*@
                                     @if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Top-level Admin"))@*i will remove top-admin from this if statement once all top-admin bookings are automatically approved. for now i've left it for demonstration purposes'*@
                                     {
                                         <td>
