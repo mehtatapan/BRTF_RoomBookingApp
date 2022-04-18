@@ -33,6 +33,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: RoomBookings
         public async Task<IActionResult> Index(int? page, int? pageSizeID, /* Paging */
+            string[] bookingsToBulkDelete, /* Bulk deletion */
             int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, string SearchApprovalStatus, /* Filters/Search */
             string actionButton, string sortDirectionCheck, string sortFieldID, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
@@ -137,6 +138,35 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
                     sortField = actionButton;//Sort by the button clicked
                 }
+                else if (actionButton == "Delete Bookings" && User.IsInRole("Top-level Admin"))
+                {
+                    // Top-level Admin requested bulk deletion
+
+                    ViewDataReturnURL();//URL with the last filter, sort and page parameters for this controller
+
+                    // Delete based on hidden multi select of previous filter results
+                    try
+                    {
+                        int deletedCount = 0;
+                        foreach (var bookingID in bookingsToBulkDelete)
+                        {
+                            int id = Convert.ToInt32(bookingID);
+                            var bookingToDelete = await _context.RoomBookings
+                                .FirstOrDefaultAsync(m => m.ID == id);
+
+                            _context.RoomBookings.Remove(bookingToDelete);
+                            deletedCount++;
+                        }
+                        await _context.SaveChangesAsync();
+                        TempData["Message"] =  deletedCount.ToString() + " Bookings deleted successfully!";
+                        return Redirect(ViewData["returnURL"].ToString());
+                    }
+                    catch
+                    {
+                        TempData["AlertMessage"] = "Error. Unable to delete Bookings.";
+                        return Redirect(ViewData["returnURL"].ToString());
+                    }
+                }
                 else //Sort by the controls in the filter area
                 {
                     sortDirection = String.IsNullOrEmpty(sortDirectionCheck) ? "asc" : "desc";
@@ -169,6 +199,28 @@ namespace BRTF_Room_Booking_App.Controllers
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
             var pagedData = await PaginatedList<RoomBooking>.CreateAsync(roombookings.AsNoTracking(), page ?? 1, pageSize);
+
+            //Prepare modal messages in case User interacts with bulk deletion controls
+            var userCount = roombookings.Select(r => r.UserID).ToHashSet().Count();
+            ViewData["BulkDeleteMessageTitle"] = "Are you sure you want to delete " + roombookings.Count() + " Bookings?";
+            ViewData["BulkDeleteMessageBody"] = "<b>You are about to delete all Bookings that matched your last filters.<br />"
+                + "You will delete " + roombookings.Count() + " Bookings belonging to " + userCount + " Users.<br />"
+                + "Are you sure you want to delete?</b>";
+            // Make a select list of bookings that match the current filters
+            // These are the bookings that will be deleted by bulk deletion
+            // --We store these results because the User may edit the filters between the last postback,
+            // --but click "Delete" based on the results they currently see without filtering new results,
+            // --so we want to be able to delete based on previous results which are the results the user currently sees.
+            var bookingsThatMatchFilters = roombookings.ToList();
+            var idsThatMatchFilters = new List<ListOptionVM>();
+            foreach (var booking in bookingsThatMatchFilters)
+            {
+                idsThatMatchFilters.Add(new ListOptionVM
+                    {
+                        ID = booking.ID,
+                        DisplayText = "Booking ID " + booking.ID.ToString() + " - by User ID " + booking.UserID.ToString()    // This display text is useful for debugging. The User doesn't see it
+                });;
+            }ViewData["bookingsToBulkDelete"] = new MultiSelectList(idsThatMatchFilters.OrderBy(s => s.DisplayText), "ID", "DisplayText");
 
             return View(pagedData);
         }

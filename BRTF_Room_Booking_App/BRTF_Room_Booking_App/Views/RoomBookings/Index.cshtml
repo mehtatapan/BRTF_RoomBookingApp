@@ -193,6 +193,32 @@
                         }
                     </tbody>
                 </table>
+                @if (User.IsInRole("Top-level Admin"))
+                {
+                    <input onclick="$('#bulkDeleteModal').modal('show');" value="Delete Filtered Bookings" class="btn btn-danger mx-2 float-right" style="cursor: pointer;" readonly />
+                    <div class="modal fade" id="bulkDeleteModal" aria-labelledby="bulkDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="bulkDeleteModalLabel">@Html.Raw(ViewBag.BulkDeleteMessageTitle)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div id="bulkDeleteModalBody" class="modal-body">
+                                    @Html.Raw(ViewBag.BulkDeleteMessageBody)
+                                    @Html.ListBox("bookingsToBulkDelete", (MultiSelectList)ViewBag.selOpts,
+                                        new { @size = 10, @class = "form-control", @style = "height:90%; display:none;" })
+                                    @* display:none; Hides the above listbox. If you are debugging bulk deletion, you should remove this style to Show the listbox. *@
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <input onclick="$('#bookingsToBulkDelete option').prop('selected', true);" type="submit" name="actionButton" value="Delete Bookings" class="btn btn-danger mx-2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <partial name="_PagingNavBar" />
             </form>
         </section>
