@@ -33,9 +33,19 @@ namespace BRTF_Room_Booking_App.Controllers
 
         // GET: RoomBookings
         public async Task<IActionResult> Index(int? page, int? pageSizeID, /* Paging */
-            int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, string sortDirectionCheck, string sortFieldID, /* Filters/Search */
-            string actionButton, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
+            int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, string SearchApprovalStatus, /* Filters/Search */
+            string actionButton, string sortDirectionCheck, string sortFieldID, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
+            // If there are no query parameters, User is loading default version of Index
+            if (!Request.QueryString.HasValue)
+            {
+                // By default, filter the earliest date of bookings displayed by today's date
+                return RedirectToAction(nameof(Index), new
+                {
+                    SearchAfterDate = DateTime.Today.ToString("yyyy-MM-dd")
+                });
+            }
+
             //Toggle the background colour of the filter button depending on if something is being filtered
             ViewData["Filtering"] = "btn-outline-secondary"; //Assume nothing is filtered
 
@@ -59,8 +69,8 @@ namespace BRTF_Room_Booking_App.Controllers
             if (!String.IsNullOrEmpty(SearchAfterDate) && DateTime.TryParse(SearchAfterDate, out DateTime afterDate))
             {
                 roombookings = roombookings.Where(r => afterDate <= r.StartDate);
-
-                ViewData["Filtering"] = "btn-danger";
+                if (afterDate != DateTime.Today)   // Only make filter button red if start date is different than today's date, which is the default state
+                    ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
             if (!String.IsNullOrEmpty(SearchBeforeDate) && DateTime.TryParse(SearchBeforeDate, out DateTime beforeDate))
@@ -79,6 +89,25 @@ namespace BRTF_Room_Booking_App.Controllers
             {
                 roombookings = roombookings.Where(r => (r.User.FirstName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper())
                                                     || (r.User.FirstName + " " + r.User.MiddleName + " " + r.User.LastName).ToUpper().Contains(SearchFullName.ToUpper()));
+                ViewData["Filtering"] = "btn-danger";
+                filtered = true;
+            }
+            if (String.IsNullOrEmpty(SearchApprovalStatus))   // No approval status filter, so search for Approved and Pending by default
+            {
+                roombookings = roombookings.Where(b => b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending");
+                // Do not make filter button red, because this is the default state
+                filtered = true;
+            }
+            else    // Approval status filter is not empty, search by what it contains
+            {
+                if (SearchApprovalStatus == "All")
+                {
+                    // If approval status filter is "All", do not add a Where clause
+                }
+                else
+                {
+                    roombookings = roombookings.Where(b => b.ApprovalStatus == SearchApprovalStatus);
+                }
                 ViewData["Filtering"] = "btn-danger";
                 filtered = true;
             }
@@ -414,7 +443,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         var existingBookingsForThisRoom = _context.RoomBookings
                             .Where(b => (b.UserID == roomBooking.UserID) && (b.RoomID == Convert.ToInt32(roomID))
                             && (b.EndDate >= DateTime.Today)
-                            && (b.ApprovalStatus != "Declined"));
+                            && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending"));
 
                         // Tally up the User's existing time
                         TimeSpan existingTotalTimeInThisRoom = GetTotalDurationOfBookings(existingBookingsForThisRoom.ToList());
@@ -603,7 +632,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         var existingBookingsForThisArea = _context.RoomBookings.Include(b => b.Room)
                             .Where(b => (b.UserID == roomBooking.UserID) && (b.Room.RoomGroupID == areaID)
                             && (b.EndDate >= DateTime.Today)
-                            && (b.ApprovalStatus != "Declined"));
+                            && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending"));
 
                         // Tally User's existing booked time in this area
                         TimeSpan existingTotalTimeInThisArea = GetTotalDurationOfBookings(existingBookingsForThisArea.ToList());
@@ -966,7 +995,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         .Where(b => (b.UserID == roomBookingToUpdate.UserID)
                                && (b.Room.RoomGroupID == thisArea.ID)
                                && (b.EndDate >= DateTime.Today)
-                               && (b.ApprovalStatus != "Declined")
+                               && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending")
                                && (b.ID != roomBookingToUpdate.ID) /* Exclude this updated booking from the query, since we will compare using local variables */
                               );
 
@@ -1001,7 +1030,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         .Where(b => (b.UserID == roomBookingToUpdate.UserID)
                                && (b.RoomID == roomBookingToUpdate.RoomID)
                                && (b.EndDate >= DateTime.Today)
-                               && (b.ApprovalStatus != "Declined")
+                               && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending")
                                && (b.ID != roomBookingToUpdate.ID) /* Exclude this updated booking from the query, since we will compare using local variables */
                               );
 
@@ -1110,7 +1139,7 @@ namespace BRTF_Room_Booking_App.Controllers
 
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Booking was edited successfully!";
-                    return RedirectToAction("Details", new { roomBookingToUpdate.ID });
+                    return RedirectToAction(nameof(Details), new { roomBookingToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -1212,7 +1241,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Booking was deleted successfully!";
-                return RedirectToAction(ViewData["returnURL"].ToString());
+                return Redirect(ViewData["returnURL"].ToString());
             }
 
             catch (DbUpdateException)
@@ -1616,7 +1645,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(b => b.User)
                 .Where(b => (b.RoomID == newBooking.RoomID)
                             && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
-                            && (b.ApprovalStatus != "Declined")));
+                            && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending")));
 
             foreach (RoomBooking existingBooking in existingBookings)
             {
@@ -1662,7 +1691,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Where(b => (b.RoomID == newBooking.RoomID)
                        && (b.UserID == currentUserID)
                         && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
-                        && (b.ApprovalStatus != "Declined")));
+                        && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending")));
 
             // Compare bookings the same way we do for booking conflicts, but add the blackout time to the end date
             foreach (RoomBooking existingBooking in existingBookings)
@@ -1695,7 +1724,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(b => b.User)
                 .Where(b => (b.UserID == newBooking.UserID)
                             && (b.ID != bookingIdToIgnore || bookingIdToIgnore == -1)
-                            && (b.ApprovalStatus != "Declined")));
+                            && (b.ApprovalStatus == "Approved" || b.ApprovalStatus == "Pending")));
 
             foreach (RoomBooking existingBooking in existingBookings)
             {
