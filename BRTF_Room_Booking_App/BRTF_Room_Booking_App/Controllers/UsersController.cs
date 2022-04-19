@@ -217,10 +217,35 @@ namespace BRTF_Room_Booking_App.Controllers
 
                     if (!result.Succeeded)
                     {
+                        string errorCode = result.Errors.FirstOrDefault().Code;
+                        string errorDescription = result.Errors.FirstOrDefault().Description;
+
+                        if (errorCode.Contains("Microsoft.AspNetCore.Identity.IdentityError"))
+                        {
+                            TempData["AlertMessage"] = "Unable to save changes. A User with these credentials already exists.";
+                            return Redirect(ViewData["returnURL"].ToString());
+
+                        }
+                        else if(errorCode.Contains("PasswordTooShort"))
+                        {
+                            TempData["AlertMessage"] = "Unable to save changes. Password Too Short. Please enter a longer password.";
+                            return Redirect(ViewData["returnURL"].ToString());
+
+                        }
+                        else if (errorCode.Contains("DuplicateUserName"))
+                        {
+                            TempData["AlertMessage"] = "Unable to save changes. A user with this Username already exists.";
+                            return Redirect(ViewData["returnURL"].ToString());
+
+                        }
+                        else
+                        {
+                            TempData["AlertMessage"] = "Unable to save changes. Try again, and if the problem persists, see your system administrator.";//errorCode.ToString();//                           
+                            return Redirect(ViewData["returnURL"].ToString());
+                        }
                         //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                         //throw new Exception("Error creating User in Identity.");
-                        TempData["AlertMessage"] = "Error creating User in Identity,  A User with these Credentials already exists.";
-                        return Redirect(ViewData["returnURL"].ToString());
+                      
                     }
                     else
                     {
