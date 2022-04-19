@@ -37,6 +37,11 @@ namespace BRTF_Room_Booking_App.Controllers
             int? RoomGroupID, int? RoomID, string SearchAfterDate, string SearchBeforeDate, string SearchUsername, string SearchFullName, string SearchApprovalStatus, /* Filters/Search */
             string actionButton, string sortDirectionCheck, string sortFieldID, string sortDirection = "asc", string sortField = "Start Date" /*Sorting*/)
         {
+            // Ensure cookies are refreshed when user visits Bookings index
+            User loggedInUser = _context.Users.Where(u => u.Username == User.Identity.Name).FirstOrDefault();
+            CookieHelper.CookieSet(HttpContext, "userName", loggedInUser.FirstName, 3200);  // Although this cookie is called userName, it is used to store the user's first name for the welcome message to say Hello
+            CookieHelper.CookieSet(HttpContext, "userID", loggedInUser.ID.ToString(), 3200);
+
             // If there are no query parameters, User is loading default version of Index
             if (!Request.QueryString.HasValue)
             {
