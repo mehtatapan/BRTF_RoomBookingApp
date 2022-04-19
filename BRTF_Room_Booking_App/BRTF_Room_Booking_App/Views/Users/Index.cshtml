@@ -67,10 +67,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-6">
-                            <h4>Bulk Delete Users:</h4><br />
-                            <a asp-action="DeleteBulk" class="btn btn-danger">Select Groups to Delete</a>
-                        </div>
+                        @if (User.IsInRole("Top-level Admin"))
+                        {
+                            <div class="col-md-6">
+                                <h4>Bulk Delete Users:</h4><br />
+                                <a asp-action="DeleteBulk" class="btn btn-danger">Select Groups to Delete</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -141,7 +144,10 @@
                                         <div class="card-footer d-flex justify-content-center">
                                             <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
                                             <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                            <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                            @if (User.IsInRole("Top-level Admin"))
+                                            {
+                                                <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -186,7 +192,10 @@
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
                                     <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                    @if (User.IsInRole("Top-level Admin"))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                    }
                                 </td>
                             </tr>
                         }

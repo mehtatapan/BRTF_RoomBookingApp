@@ -10786,3 +10786,8 @@ C:\Users\DT\Desktop\Working\176\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_
 C:\Users\DT\Desktop\Working\176\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.dll
 C:\Users\DT\Desktop\Working\176\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\DT\Desktop\Working\176\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml.g.cs

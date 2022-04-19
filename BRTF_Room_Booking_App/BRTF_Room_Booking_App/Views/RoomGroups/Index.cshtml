@@ -29,9 +29,13 @@
     <br />
     <div class="container">
         <section style="background-color: #FFF;display: block; border-radius: 8px; box-shadow: 0 15px 25px rgba(0,0,50,0.2);" class="px-3 py-3 my-3">
-            <p>
-                <a asp-action="Create" class="btn btn-primary">Create New</a>
-            </p>
+            @if (User.IsInRole("TopTop-level Admin"))
+            {
+                <p>
+                    <a asp-action="Create" class="btn btn-primary">Create New</a>
+                </p>
+            }
+
             <form asp-action="Index" method="get">
                 <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
                 <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
@@ -114,9 +118,15 @@
                                     @Html.DisplayFor(modelItem => item.NeedsApproval)
                                 </td>
                                 <td>
-                                    <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                    @if (User.IsInRole("Top-level Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                    }
                                     <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                    @if (User.IsInRole("Top-level Admin"))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -135,19 +145,25 @@
 
                                         <div class="media-body ml-2">
                                             @*<p class="card-text">*@
-                                                    <div class="card-text mb-2"><strong>Area Name:<br/></strong>@Html.DisplayFor(modelItem => item.AreaName) </div>
-                                                    <div class="card-text mb-2"><strong>Description:</strong><textarea asp-for="@item.Description" class="form-control" disabled></textarea> </div>
-                                                    <div class="card-text mb-2"><strong>Is Enabled: </strong>@Html.DisplayFor(modelItem => item.Enabled) </div>
-                                                    <div class="card-text"><strong>Needs Approval: </strong>@Html.DisplayFor(modelItem => item.NeedsApproval) </div>
-                                                    <br/>
+                                            <div class="card-text mb-2"><strong>Area Name:<br /></strong>@Html.DisplayFor(modelItem => item.AreaName) </div>
+                                            <div class="card-text mb-2"><strong>Description:</strong><textarea asp-for="@item.Description" class="form-control" disabled></textarea> </div>
+                                            <div class="card-text mb-2"><strong>Is Enabled: </strong>@Html.DisplayFor(modelItem => item.Enabled) </div>
+                                            <div class="card-text"><strong>Needs Approval: </strong>@Html.DisplayFor(modelItem => item.NeedsApproval) </div>
+                                            <br />
                                             @*</p>*@
                                         </div>
 
                                         <div class="card-footer d-flex justify-content-center">
-                                            <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                            @if (User.IsInRole("Top-level Admin"))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
+                                            }
                                             <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
-                                            <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
-                                        </div>
+                                            @if (User.IsInRole("Top-level Admin"))
+                                            {
+                                                <a asp-action="Delete" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Delete</a>
+                                            }
+                                            </div>
                                     </div>
                                 </div>
                             }

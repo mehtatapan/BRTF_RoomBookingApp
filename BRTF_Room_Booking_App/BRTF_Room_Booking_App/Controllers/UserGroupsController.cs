@@ -122,6 +122,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: UserGroups/Create
+        [Authorize(Roles = "Top-level Admin")]
         public IActionResult Create()
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -134,6 +135,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // POST: UserGroups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,UserGroupName")] UserGroup userGroup, string[] selectedOptions)
@@ -172,6 +174,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: UserGroups/Edit/5
+        [Authorize(Roles = "Top-level Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -199,6 +202,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // POST: UserGroups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, string[] selectedOptions)
@@ -264,6 +268,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: UserGroups/Delete/5
+        [Authorize(Roles = "Top-level Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -287,6 +292,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // POST: UserGroups/Delete/5
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

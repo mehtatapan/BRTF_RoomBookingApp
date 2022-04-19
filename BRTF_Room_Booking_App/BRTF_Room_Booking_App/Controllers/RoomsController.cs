@@ -167,6 +167,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Room/Create
+        [Authorize(Roles = "Top-level Admin")]
         public IActionResult Create()
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -179,6 +180,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // POST: Room/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,RoomName,RoomMaxHoursTotal,RoomGroupID,Enabled")] Room room)
@@ -213,6 +215,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Rooms/Edit/5
+        [Authorize(Roles = "Top-level Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -235,6 +238,7 @@ namespace BRTF_Room_Booking_App.Controllers
         // POST: Rooms/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
@@ -291,6 +295,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // GET: Rooms/Delete/5
+        [Authorize(Roles = "Top-level Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             //URL with the last filter, sort and page parameters for this controller
@@ -314,6 +319,7 @@ namespace BRTF_Room_Booking_App.Controllers
         }
 
         // POST: Rooms/Delete/5
+        [Authorize(Roles = "Top-level Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
