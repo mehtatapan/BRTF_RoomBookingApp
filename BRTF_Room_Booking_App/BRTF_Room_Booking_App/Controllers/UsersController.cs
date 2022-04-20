@@ -226,7 +226,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             return Redirect(ViewData["returnURL"].ToString());
 
                         }
-                        else if(errorCode.Contains("PasswordTooShort"))
+                        else if (errorCode.Contains("PasswordTooShort"))
                         {
                             TempData["AlertMessage"] = "Unable to save changes. Password Too Short. Please enter a longer password.";
                             return Redirect(ViewData["returnURL"].ToString());
@@ -235,6 +235,12 @@ namespace BRTF_Room_Booking_App.Controllers
                         else if (errorCode.Contains("DuplicateUserName"))
                         {
                             TempData["AlertMessage"] = "Unable to save changes. A user with this Username already exists.";
+                            return Redirect(ViewData["returnURL"].ToString());
+
+                        }
+                        else if (errorCode.Contains("Password"))
+                        {
+                            TempData["AlertMessage"] = "Unable to save changes. " + errorDescription;
                             return Redirect(ViewData["returnURL"].ToString());
 
                         }
