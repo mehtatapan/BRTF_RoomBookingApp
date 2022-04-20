@@ -15,14 +15,11 @@
     <br />
     <form asp-action="BookingSummary" method="get">
         <div class="row">
-            @if (User.IsInRole("Top-level Admin"))
-            {
                 <div class="col-12">
                     <div class="form-horizontal align-items-start text-left justify-content-start my-3">
                         <a asp-action="DownloadBookings" class="btn btn-info mb-3">Download Bookings Report</a>
                     </div>
                 </div>
-            }
             <div class="col-12">
                 <div class="form-horizontal align-items-start text-left justify-content-start my-3">
                     <button class="btn @(ViewData["Filter"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">

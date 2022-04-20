@@ -447,7 +447,6 @@ namespace BRTF_Room_Booking_App.Controllers
 
         }
 
-        [Authorize(Roles = "Top-level Admin")]
         public IActionResult DownloadBookings(DateTime? start, DateTime? end, string? SearchRoom, int? RoomGroupID)
         {
             ////Get the bookings

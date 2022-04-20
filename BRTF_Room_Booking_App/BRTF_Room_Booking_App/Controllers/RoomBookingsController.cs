@@ -14,6 +14,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -23,12 +24,14 @@ namespace BRTF_Room_Booking_App.Controllers
         private readonly BTRFRoomBookingContext _context;
         private readonly ApplicationDbContext _identityContext;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public RoomBookingsController(BTRFRoomBookingContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager)
+        public RoomBookingsController(BTRFRoomBookingContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _identityContext = identityContext;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: RoomBookings
@@ -796,6 +799,14 @@ namespace BRTF_Room_Booking_App.Controllers
                         throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
                     }
 
+                    //if (roomBooking.User.EmailBookingNotifications)
+                    //{
+                    //    await _emailSender.SendEmailAsync(
+                    //           roomBooking.User.Email,
+                    //           "Booking Created",
+                    //           $"Your room booking has been created.");
+                    //}
+
                     //_context.Add(roomBooking);    // DO NOT ADD "roomBooking" variable. "roomBooking" variable is ONLY used to validate model state
                     _context.RoomBookings.AddRange(overallNewBookingsToAdd);  // Add new bookings to _context
                     await _context.SaveChangesAsync();              // Save changes to _context
@@ -1194,6 +1205,14 @@ namespace BRTF_Room_Booking_App.Controllers
                         throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
                     }
 
+                    //if (roomBookingToUpdate.User.EmailBookingNotifications)
+                    //{
+                    //    await _emailSender.SendEmailAsync(
+                    //           roomBookingToUpdate.User.Email,
+                    //           "Booking Updated",
+                    //           $"Your room booking has been updated.");
+                    //}
+
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Booking was edited successfully!";
                     return RedirectToAction(nameof(Details), new { roomBookingToUpdate.ID });
@@ -1298,6 +1317,15 @@ namespace BRTF_Room_Booking_App.Controllers
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Booking was deleted successfully!";
+
+                //if (roomBooking.User.EmailCancelNotifications)
+                //{
+                //    await _emailSender.SendEmailAsync(
+                //           roomBooking.User.Email,
+                //           "Booking Deleted",
+                //           $"Your room booking has been deleted.");
+                //}
+
                 return Redirect(ViewData["returnURL"].ToString());
             }
 

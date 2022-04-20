@@ -17,6 +17,7 @@ using OfficeOpenXml.Style;
 using System.Drawing;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -25,11 +26,13 @@ namespace BRTF_Room_Booking_App.Controllers
     {
         private readonly BTRFRoomBookingContext _context;
         private readonly ILogger<HomeController> _logger;
+        private readonly IEmailSender _emailSender;
 
-        public HomeController(ILogger<HomeController> logger, BTRFRoomBookingContext context)
+        public HomeController(ILogger<HomeController> logger, BTRFRoomBookingContext context, IEmailSender emailSender)
         {
             _logger = logger;
             _context = context;
+            _emailSender = emailSender;
         }
 
         public bool canApprove(int userID, int roomGroupID)
@@ -106,9 +109,18 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> Approve(int? id)
         {
             var roomBookingToUpdate = await _context.RoomBookings
+                .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.ID == id);
 
             roomBookingToUpdate.ApprovalStatus = "Approved";
+
+            //if (roomBookingToUpdate.User.EmailBookingNotifications)
+            //{
+            //    await _emailSender.SendEmailAsync(
+            //           roomBookingToUpdate.User.Email,
+            //           "Booking Approval",
+            //           $"Your room booking has been approved.");
+            //}
 
             await _context.SaveChangesAsync();
 
@@ -117,9 +129,18 @@ namespace BRTF_Room_Booking_App.Controllers
         public async Task<IActionResult> Deny(int? id)
         {
             var roomBookingToUpdate = await _context.RoomBookings
+                .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.ID == id);
 
             roomBookingToUpdate.ApprovalStatus = "Denied";
+
+            //if (roomBookingToUpdate.User.EmailBookingNotifications)
+            //{
+            //    await _emailSender.SendEmailAsync(
+            //           roomBookingToUpdate.User.Email,
+            //           "Booking Denied",
+            //           $"Your room booking has been denied.");
+            //}
 
             await _context.SaveChangesAsync();
 
