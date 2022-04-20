@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="card-footer d-flex justify-content-center">
                                             @{ int userID = Convert.ToInt32(HttpContextAccessor.HttpContext.Request.Cookies["userID"]);}
-                                            @if (userID == item.UserID)
+                                            @if ((userID == item.UserID) || (User.IsInRole("Admin") || User.IsInRole("Top-level Admin")))
                                             {
                                                 <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
                                                 <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-1" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>
@@ -191,7 +191,7 @@
                                 </td>
                                 <td style="width: 310px">
                                     @{ int userID = Convert.ToInt32(HttpContextAccessor.HttpContext.Request.Cookies["userID"]);}
-                                    @if (userID == item.UserID)
+                                    @if ((userID == item.UserID) || (User.IsInRole("Admin") || User.IsInRole("Top-level Admin")))
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Edit</a>
                                         <a asp-action="Details" asp-route-id="@item.ID" role="button" class="btn mx-2" style="width:75px; background:#2F7DBB; color:#E4E6E6; font-weight:400;">Details</a>

@@ -11508,3 +11508,5 @@ C:\Users\DT\Desktop\Working\186\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_
 C:\Users\DT\Desktop\Working\186\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.dll
 C:\Users\DT\Desktop\Working\186\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.pdb
 C:\Users\DT\Desktop\Working\186\PROG1440-Prototype_3\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\BRTF_Room_Booking_App.genruntimeconfig.cache
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ResetPassword.cshtml.g.cs
+C:\Users\emmaa\Desktop\PROG1440-Prototype_4\BRTF_Room_Booking_App\BRTF_Room_Booking_App\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml.g.cs
