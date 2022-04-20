@@ -957,7 +957,7 @@ namespace BRTF_Room_Booking_App.Data
                             Email = "topadmin@niagaracollege.ca"
                         };
 
-                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+                        IdentityResult result = userManager.CreateAsync(user, "Password@1").Result;
 
                         if (result.Succeeded)
                         {
@@ -970,8 +970,8 @@ namespace BRTF_Room_Booking_App.Data
                                 FirstName = "Patrick",
                                 LastName = "Topadmin",
                                 Email = "topadmin@niagaracollege.ca",
-                                EmailBookingNotifications = true,
-                                EmailCancelNotifications = true,
+                                EmailBookingNotifications = false,
+                                EmailCancelNotifications = false,
                                 TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => b.ProgramName.ToUpper() == "TOP-LEVEL ADMIN").ID
                             };
                             context.Users.Add(userDetails);
@@ -986,7 +986,7 @@ namespace BRTF_Room_Booking_App.Data
                             Email = "admin@niagaracollege.ca"
                         };
 
-                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+                        IdentityResult result = userManager.CreateAsync(user, "Password@1").Result;
 
                         if (result.Succeeded)
                         {
@@ -999,8 +999,8 @@ namespace BRTF_Room_Booking_App.Data
                                 FirstName = "Amir",
                                 LastName = "Adminbeer",
                                 Email = "admin@niagaracollege.ca",
-                                EmailBookingNotifications = true,
-                                EmailCancelNotifications = true,
+                                EmailBookingNotifications = false,
+                                EmailCancelNotifications = false,
                                 TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => b.ProgramName.ToUpper() == "ADMIN").ID
                             };
                             context.Users.Add(userDetails);
@@ -1015,7 +1015,7 @@ namespace BRTF_Room_Booking_App.Data
                             Email = "user@ncstudents.niagaracollege.ca"
                         };
 
-                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
+                        IdentityResult result = userManager.CreateAsync(user, "Password@1").Result;
 
                         if (result.Succeeded)
                         {
@@ -1028,8 +1028,8 @@ namespace BRTF_Room_Booking_App.Data
                                 FirstName = "Tyler",
                                 LastName = "Userguy",
                                 Email = "user@ncstudents.niagaracollege.ca",
-                                EmailBookingNotifications = true,
-                                EmailCancelNotifications = true,
+                                EmailBookingNotifications = false,
+                                EmailCancelNotifications = false,
                                 TermAndProgramID = context.TermAndPrograms.FirstOrDefault(b => !b.ProgramName.ToUpper().Contains("ADMIN")).ID
                             };
                             context.Users.Add(userDetails);

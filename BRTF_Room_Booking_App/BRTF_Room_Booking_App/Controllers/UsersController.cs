@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using BRTF_Room_Booking_App.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BRTF_Room_Booking_App.Controllers
 {
@@ -27,12 +28,15 @@ namespace BRTF_Room_Booking_App.Controllers
         private readonly BTRFRoomBookingContext _context;
         private readonly ApplicationDbContext _identityContext;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public UsersController(BTRFRoomBookingContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager)
+        public UsersController(BTRFRoomBookingContext context, ApplicationDbContext identityContext,
+            UserManager<IdentityUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _identityContext = identityContext;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [Authorize(Roles = "Top-level Admin, Admin")]
@@ -196,7 +200,7 @@ namespace BRTF_Room_Booking_App.Controllers
         [Authorize(Roles = "Top-level Admin, Admin")]
         public async Task<IActionResult> Create(
             [Bind("ID,Username,FirstName,MiddleName,LastName,Email,EmailBookingNotifications,EmailCancelNotifications,TermAndProgramID,RoleID")] User user,
-            string Password, string Role)
+            string Role)
         {
             //URL with the last filter, sort and page parameters for this controller
             ViewDataReturnURL();
@@ -213,45 +217,49 @@ namespace BRTF_Room_Booking_App.Controllers
                         Email = user.Email
                     };
 
-                    IdentityResult result = _userManager.CreateAsync(identityUser, Password).Result;
+                    // Generate random password for Identity
+                    Random random = new Random();
+                    char randomChar;
+                    string randomPassword = "";
+                    var passwordValidator = new PasswordValidator<IdentityUser>();
+                    bool isValidPassword = false;
+
+                    while (isValidPassword == false)    // Loop to re-generate password if it fails rules
+                    {
+                        randomPassword = "";
+                        for (int i = 0; i < 18; i++)
+                        {
+                            randomChar = (char)random.Next(48, 122);
+                            randomPassword += randomChar;
+                        }
+
+                        randomPassword += "aByZ+@";   // Append special characters to the end to ensure random string passes Identity rules
+
+                        var passwordResult = passwordValidator.ValidateAsync(_userManager, null, randomPassword).Result;
+
+                        isValidPassword = passwordResult.Succeeded;
+                    }
+
+                    // Create Identity user account with random password
+                    IdentityResult result = _userManager.CreateAsync(identityUser, randomPassword).Result;
 
                     if (!result.Succeeded)
                     {
-                        string errorCode = result.Errors.FirstOrDefault().Code;
-                        string errorDescription = result.Errors.FirstOrDefault().Description;
+                        // Add each error to the alert message
+                        string alertMessage = "Unable to save changes due to the following reasons:<br /><ul>";
 
-                        if (errorCode.Contains("Microsoft.AspNetCore.Identity.IdentityError"))
+                        foreach (var error in result.Errors)
                         {
-                            TempData["AlertMessage"] = "Unable to save changes. A User with these credentials already exists.";
-                            return Redirect(ViewData["returnURL"].ToString());
+                            string errorCode = error.Code;
+                            string errorDescription = error.Description;
 
+                            alertMessage += "<li>" + errorDescription + "</li>";
                         }
-                        else if (errorCode.Contains("PasswordTooShort"))
-                        {
-                            TempData["AlertMessage"] = "Unable to save changes. Password Too Short. Please enter a longer password.";
-                            return Redirect(ViewData["returnURL"].ToString());
 
-                        }
-                        else if (errorCode.Contains("DuplicateUserName"))
-                        {
-                            TempData["AlertMessage"] = "Unable to save changes. A user with this Username already exists.";
-                            return Redirect(ViewData["returnURL"].ToString());
+                        alertMessage += "</ul>";
 
-                        }
-                        else if (errorCode.Contains("Password"))
-                        {
-                            TempData["AlertMessage"] = "Unable to save changes. " + errorDescription;
-                            return Redirect(ViewData["returnURL"].ToString());
-
-                        }
-                        else
-                        {
-                            TempData["AlertMessage"] = "Unable to save changes. Try again, and if the problem persists, see your system administrator.";//errorCode.ToString();//                           
-                            return Redirect(ViewData["returnURL"].ToString());
-                        }
-                        //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                        //throw new Exception("Error creating User in Identity.");
-                      
+                        TempData["AlertMessage"] = alertMessage;
+                        return Redirect(ViewData["returnURL"].ToString());
                     }
                     else
                     {
@@ -267,6 +275,15 @@ namespace BRTF_Room_Booking_App.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+
+                    // Send email for user to set their Identity password
+                    string forgotPasswordUrl = $"{Request.Scheme}://{Request.Host.Value}" + "/Identity/Account/ForgotPassword";
+                    await _emailSender.SendEmailAsync(user.Email, user.FirstName + ", your BRTF Room Booking account is ready!",
+                        "Hi, " + user.FirstName + "!<br /><br />" +
+                        "Your BRTF Room Booking account was created with the following username:<br /><br />" +
+                        "Username: <b>" + user.Username + "</b><br /><br />" +
+                        "<b>Please use the <a href=" + forgotPasswordUrl + ">Forgot Password link</a> to set your password.</b>");
+
                     TempData["Message"] = "User Created Successfully!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -837,9 +854,28 @@ namespace BRTF_Room_Booking_App.Controllers
                             }
                         }
 
-                        // Using the student's DOB, we generate a password in the format of YEAR, MONTH, then DAY
-                        // Example: October 1, 1990 would be "19901001"
-                        string newPassword = dob.ToString("yyyyMMdd");
+                        // Generate random password for Identity
+                        Random random = new Random();
+                        char randomChar;
+                        string randomPassword = "";
+                        var passwordValidator = new PasswordValidator<IdentityUser>();
+                        bool isValidPassword = false;
+
+                        while (isValidPassword == false)    // Loop to re-generate password if it fails rules
+                        {
+                            randomPassword = "";
+                            for (int i = 0; i < 18; i++)
+                            {
+                                randomChar = (char)random.Next(48, 122);
+                                randomPassword += randomChar;
+                            }
+
+                            randomPassword += "aByZ+@";   // Append special characters to the end to ensure random string passes Identity rules
+
+                            var passwordResult = passwordValidator.ValidateAsync(_userManager, null, randomPassword).Result;
+
+                            isValidPassword = passwordResult.Succeeded;
+                        }
 
                         // Build User
                         User newUser = new User
@@ -862,10 +898,18 @@ namespace BRTF_Room_Booking_App.Controllers
 
                         // Insert User (Note: We don't Save Changes here. All changes will be saved at once at the end)
                         _context.Users.Add(newUser);
-                        await _userManager.CreateAsync(newIdentityUser, newPassword);
+                        await _userManager.CreateAsync(newIdentityUser, randomPassword);
 
                         // Set inserted User's role as "User"
                         _userManager.AddToRoleAsync(newIdentityUser, "User").Wait();
+
+                        // Send email for user to set their Identity password
+                        string forgotPasswordUrl = $"{Request.Scheme}://{Request.Host.Value}" + "/Identity/Account/ForgotPassword";
+                        await _emailSender.SendEmailAsync(newUser.Email, newUser.FirstName + ", your BRTF Room Booking account is ready!",
+                            "Hi, " + newUser.FirstName + "!<br /><br />" +
+                            "Your BRTF Room Booking account was created with the following username:<br /><br />" +
+                            "Username: <b>" + newUser.Username + "</b><br /><br />" +
+                            "<b>Please use the <a href=" + forgotPasswordUrl + ">Forgot Password link</a> to set your password.</b>");
 
                         insertedCount++;
                     }
