@@ -282,7 +282,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         "Hi, " + user.FirstName + "!<br /><br />" +
                         "Your BRTF Room Booking account was created with the following username:<br /><br />" +
                         "Username: <b>" + user.Username + "</b><br /><br />" +
-                        "<b>Please use the <a href=" + forgotPasswordUrl + ">Forgot Password link</a> to set your password.</b>");
+                        "<b>Please use the <a href='" + forgotPasswordUrl + "'>Forgot Password link</a> to set your password.</b>");
 
                     TempData["Message"] = "User Created Successfully!";
                     return RedirectToAction(nameof(Index));
@@ -926,7 +926,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             "Hi, " + newUser.FirstName + "!<br /><br />" +
                             "Your BRTF Room Booking account was created with the following username:<br /><br />" +
                             "Username: <b>" + newUser.Username + "</b><br /><br />" +
-                            "<b>Please use the <a href=" + forgotPasswordUrl + ">Forgot Password link</a> to set your password.</b>");
+                            "<b>Please use the <a href='" + forgotPasswordUrl + "'>Forgot Password link</a> to set your password.</b>");
 
                         insertedCount++;
                     }
@@ -1073,8 +1073,8 @@ namespace BRTF_Room_Booking_App.Controllers
             if (User.IsInRole("Admin"))
             {
                 return new SelectList(_identityContext.Roles
-                .Where(r => r.Name != "Top-level Admin")
-                .OrderBy(r => r.Name), "Name", "Name", selectedId);
+                    .Where(r => r.Name != "Top-level Admin")
+                    .OrderBy(r => r.Name), "Name", "Name", selectedId);
             }
             //return new SelectList(validRoleList, "Name", "Name", selectedId);
 
@@ -1088,6 +1088,13 @@ namespace BRTF_Room_Booking_App.Controllers
         }
         private SelectList TermAndProgramSelectList(int? selectedId)
         {
+            if (User.IsInRole("Admin"))
+            {
+                return new SelectList(_context.TermAndPrograms
+                    .Where(u => u.ProgramName != "Top-level Admin")
+                    .OrderBy(u => u.ProgramCode).ThenBy(u => u.ProgramLevel), "ID", "TermAndProgramSummary", selectedId);
+            }
+
             return new SelectList(_context.TermAndPrograms
                 .OrderBy(u => u.ProgramCode).ThenBy(u => u.ProgramLevel), "ID", "TermAndProgramSummary", selectedId);
         }

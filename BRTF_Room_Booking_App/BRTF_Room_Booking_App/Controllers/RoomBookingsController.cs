@@ -155,18 +155,50 @@ namespace BRTF_Room_Booking_App.Controllers
                     // Delete based on hidden multi select of previous filter results
                     try
                     {
+                        var globalSettings = _context.GlobalSettings.FirstOrDefault(); // Get global settings
+
                         int deletedCount = 0;
+                        HashSet<string> usersToEmail = new HashSet<string>();
+                        Dictionary<string, int> deletedCountPerEmail = new Dictionary<string, int>();
                         foreach (var bookingID in bookingsToBulkDelete)
                         {
                             int id = Convert.ToInt32(bookingID);
                             var bookingToDelete = await _context.RoomBookings
+                                .Include(r => r.User)
                                 .FirstOrDefaultAsync(m => m.ID == id);
 
                             _context.RoomBookings.Remove(bookingToDelete);
                             deletedCount++;
+
+                            if (bookingToDelete.User.EmailCancelNotifications || globalSettings.EmailCancelNotificationsOverride)
+                            {
+                                if (!globalSettings.PreventCancelNotificationsOverride)
+                                {
+                                    usersToEmail.Add(bookingToDelete.User.Email);
+
+                                    if (deletedCountPerEmail.ContainsKey(bookingToDelete.User.Email))
+                                    {
+                                        deletedCountPerEmail[bookingToDelete.User.Email]++;
+                                    }
+                                    else
+                                    {
+                                        deletedCountPerEmail[bookingToDelete.User.Email] = 1;
+                                    }
+                                }
+                            }
                         }
                         await _context.SaveChangesAsync();
                         TempData["Message"] =  deletedCount.ToString() + " Bookings deleted successfully!";
+
+                        foreach (string email in usersToEmail)
+                        {
+                            await _emailSender.SendEmailAsync(
+                                   email,
+                                   "Booking Deleted",
+                                   $"{deletedCountPerEmail[email]} of your room bookings were deleted.<br /><br />" +
+                                   $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                        }
+
                         return Redirect(ViewData["returnURL"].ToString());
                     }
                     catch
@@ -402,6 +434,9 @@ namespace BRTF_Room_Booking_App.Controllers
                 ViewData["UserIdDisabled"] = true;
                 roomBooking.UserID = _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.ID).FirstOrDefault();
             }
+
+            // After confirming the ID of the User this booking will belong to, pull their details
+            roomBooking.User = _context.Users.Where(u => u.ID == roomBooking.UserID).FirstOrDefault();
 
             // Check that Start Time is not in the past
             if (roomBooking.StartDate < DateTime.Today)
@@ -799,18 +834,23 @@ namespace BRTF_Room_Booking_App.Controllers
                         throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
                     }
 
-                    //if (roomBooking.User.EmailBookingNotifications)
-                    //{
-                    //    await _emailSender.SendEmailAsync(
-                    //           roomBooking.User.Email,
-                    //           "Booking Created",
-                    //           $"Your room booking has been created.");
-                    //}
-
                     //_context.Add(roomBooking);    // DO NOT ADD "roomBooking" variable. "roomBooking" variable is ONLY used to validate model state
                     _context.RoomBookings.AddRange(overallNewBookingsToAdd);  // Add new bookings to _context
                     await _context.SaveChangesAsync();              // Save changes to _context
                     TempData["Message"] = "Booking was created successfully!";
+
+                    if (roomBooking.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
+                    {
+                        if (!globalSettings.PreventBookingNotificationsOverride)
+                        {
+                            await _emailSender.SendEmailAsync(
+                                   roomBooking.User.Email,
+                                   "Bookings Created",
+                                   $"{overallNewBookingsToAdd.Count()} new bookings created for your account.<br /><br />" +
+                                   $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                        }
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -1205,16 +1245,21 @@ namespace BRTF_Room_Booking_App.Controllers
                         throw new DbUpdateException("Booking time conflict violation.");    // Break before bookings are added or saved
                     }
 
-                    //if (roomBookingToUpdate.User.EmailBookingNotifications)
-                    //{
-                    //    await _emailSender.SendEmailAsync(
-                    //           roomBookingToUpdate.User.Email,
-                    //           "Booking Updated",
-                    //           $"Your room booking has been updated.");
-                    //}
-
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Booking was edited successfully!";
+
+                    if (roomBookingToUpdate.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
+                    {
+                        if (!globalSettings.PreventBookingNotificationsOverride)
+                        {
+                            await _emailSender.SendEmailAsync(
+                               roomBookingToUpdate.User.Email,
+                               "Booking Updated",
+                               $"Your room booking was updated.<br /><br />" +
+                               $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                        }
+                    }
+
                     return RedirectToAction(nameof(Details), new { roomBookingToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -1312,19 +1357,25 @@ namespace BRTF_Room_Booking_App.Controllers
                 }
             }
 
+            var globalSettings = _context.GlobalSettings.FirstOrDefault(); // Get global settings
+
             try
             {
                 _context.RoomBookings.Remove(roomBooking);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Booking was deleted successfully!";
 
-                //if (roomBooking.User.EmailCancelNotifications)
-                //{
-                //    await _emailSender.SendEmailAsync(
-                //           roomBooking.User.Email,
-                //           "Booking Deleted",
-                //           $"Your room booking has been deleted.");
-                //}
+                if (roomBooking.User.EmailCancelNotifications || globalSettings.EmailCancelNotificationsOverride)
+                {
+                    if (!globalSettings.PreventCancelNotificationsOverride)
+                    {
+                        await _emailSender.SendEmailAsync(
+                               roomBooking.User.Email,
+                               "Booking Deleted",
+                               $"Your room booking was deleted.<br /><br />" +
+                               $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                    }
+                }
 
                 return Redirect(ViewData["returnURL"].ToString());
             }
