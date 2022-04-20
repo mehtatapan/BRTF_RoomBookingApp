@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xpYdbfzAb1soXW0EjU1bD0RuUp9MHjBOxHh5ZpbkL4/e5Bp5Hv4NmzKBXP/hBz8Saq67pXgRoJ5n5kanna8dcg==",
+  "dgSpecHash": "QXvDe//jf69Ohu2Q5q3DhzU+8Fil/jZt6Km3JhKdtqb7O3C5xatniMI7uFzyH+x3bQUIyYhEKrSjch1hcQArkg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\emmaa\\Desktop\\PROG1440-Prototype_4\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App.csproj",
+  "projectFilePath": "C:\\Users\\emmaa\\Desktop\\PROG1440-Prototype_4_v2\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App\\BRTF_Room_Booking_App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\emmaa\\.nuget\\packages\\epplus\\4.5.3.3\\epplus.4.5.3.3.nupkg.sha512",
     "C:\\Users\\emmaa\\.nuget\\packages\\mailkit\\3.2.0\\mailkit.3.2.0.nupkg.sha512",
