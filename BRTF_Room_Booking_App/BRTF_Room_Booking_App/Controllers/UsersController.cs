@@ -399,7 +399,13 @@ namespace BRTF_Room_Booking_App.Controllers
                         IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(identityUserToUpdate, resetToken, Password);
                         if (!passwordChangeResult.Succeeded)
                         {
-                            ModelState.AddModelError("", "Unable to save Password. " + passwordChangeResult.Errors.FirstOrDefault().Description);
+                            ModelState.AddModelError("", "Unable to save Password.");
+
+                            foreach (var error in passwordChangeResult.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+
                             throw new Exception("Error updating User password in Identity.");
                         }
                     }
@@ -456,6 +462,17 @@ namespace BRTF_Room_Booking_App.Controllers
                     else
                     {
                         ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException().Message.Contains("Error updating User password in Identity."))
+                    {
+                        // We already added this error message to the model earlier
+                    }
+                    else if (ex.GetBaseException().Message.Contains("Error updating User email in Identity."))
+                    {
+                        // We already added this error message to the model earlier
                     }
                 }
             }
