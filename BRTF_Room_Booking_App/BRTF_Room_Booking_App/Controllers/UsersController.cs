@@ -210,7 +210,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(user);
-                    
+
                     IdentityUser identityUser = new IdentityUser
                     {
                         UserName = user.Username,
@@ -338,11 +338,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("User")
+                || (User.IsInRole("Admin") && _userManager.GetRolesAsync(identityUser).Result.FirstOrDefault() == "Top-level Admin"))
             {
                 if (User.Identity.Name != user.Username)
                 {
-                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to edit this user's details.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -373,11 +374,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole("User")
+                || (User.IsInRole("Admin") && identityUserRole == "Top-level Admin"))
             {
                 if (User.Identity.Name != userToUpdate.Username)
                 {
-                    TempData["AlertMessage"] = "You are not authorized to view other users details.";
+                    TempData["AlertMessage"] = "You are not authorized to edit this user's details.";
                     return Redirect(ViewData["returnURL"].ToString());
                 }
             }
@@ -655,12 +657,12 @@ namespace BRTF_Room_Booking_App.Controllers
                 // Get Terms and Programs corresponding to the selected User Groups
                 var selectedTermsAndPrograms = from t in _context.TermAndPrograms
                     .Where(t => selectedGroups.Contains(t.UserGroupID))
-                    select t.ID;
+                                               select t.ID;
 
                 var users = from u in _context.Users select u;
 
                 // Delete Users whose Term and Programs is in a selected User Group
-                foreach(var user in users)
+                foreach (var user in users)
                 {
                     if (selectedTermsAndPrograms.Contains(user.TermAndProgramID))
                     {
