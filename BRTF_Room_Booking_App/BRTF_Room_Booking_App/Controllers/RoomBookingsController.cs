@@ -839,6 +839,7 @@ namespace BRTF_Room_Booking_App.Controllers
                     await _context.SaveChangesAsync();              // Save changes to _context
                     TempData["Message"] = "Booking was created successfully!";
 
+                    // Uncomment to test email functionality, but make sure to comment it again before pushing any changes to GitHub
                     if (roomBooking.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
                     {
                         if (!globalSettings.PreventBookingNotificationsOverride)
@@ -1248,6 +1249,8 @@ namespace BRTF_Room_Booking_App.Controllers
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Booking was edited successfully!";
 
+
+                    // Uncomment to test email functionality, but make sure to comment it again before pushing any changes to GitHub
                     if (roomBookingToUpdate.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
                     {
                         if (!globalSettings.PreventBookingNotificationsOverride)
@@ -1255,7 +1258,7 @@ namespace BRTF_Room_Booking_App.Controllers
                             await _emailSender.SendEmailAsync(
                                roomBookingToUpdate.User.Email,
                                "Booking Updated",
-                               $"Your room booking was updated.<br /><br />" +
+                               $"Your room booking for " + roomBookingToUpdate.Room.RoomName + " on " + roomBookingToUpdate.StartDate.ToShortDateString() + " was updated.<br /><br />" +
                                $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
                         }
                     }
@@ -1365,6 +1368,7 @@ namespace BRTF_Room_Booking_App.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Booking was deleted successfully!";
 
+                // Uncomment to test email functionality, but make sure to comment it again before pushing any changes to GitHub
                 if (roomBooking.User.EmailCancelNotifications || globalSettings.EmailCancelNotificationsOverride)
                 {
                     if (!globalSettings.PreventCancelNotificationsOverride)
@@ -1372,7 +1376,7 @@ namespace BRTF_Room_Booking_App.Controllers
                         await _emailSender.SendEmailAsync(
                                roomBooking.User.Email,
                                "Booking Deleted",
-                               $"Your room booking was deleted.<br /><br />" +
+                               $"Your room booking for " + roomBooking.Room.RoomName + " on " + roomBooking.StartDate.ToShortDateString() + " was deleted.<br /><br />" +
                                $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
                     }
                 }

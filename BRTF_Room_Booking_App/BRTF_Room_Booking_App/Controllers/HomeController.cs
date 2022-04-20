@@ -112,15 +112,22 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.ID == id);
 
+            var globalSettings = _context.GlobalSettings.FirstOrDefault();
+
             roomBookingToUpdate.ApprovalStatus = "Approved";
 
-            //if (roomBookingToUpdate.User.EmailBookingNotifications)
-            //{
-            //    await _emailSender.SendEmailAsync(
-            //           roomBookingToUpdate.User.Email,
-            //           "Booking Approval",
-            //           $"Your room booking has been approved.");
-            //}
+            // Uncomment to test email functionality, but make sure to comment it again before pushing any changes to GitHub
+            if (roomBookingToUpdate.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
+            {
+                if (!globalSettings.PreventBookingNotificationsOverride)
+                {
+                    await _emailSender.SendEmailAsync(
+                           roomBookingToUpdate.User.Email,
+                           "Booking Approval",
+                           "Your room booking for " + roomBookingToUpdate.Room.RoomName + " on " + roomBookingToUpdate.StartDate.ToShortDateString() + " has been approved.<br /><br />" +
+                                   $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                }
+            }
 
             await _context.SaveChangesAsync();
 
@@ -132,15 +139,22 @@ namespace BRTF_Room_Booking_App.Controllers
                 .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.ID == id);
 
+            var globalSettings = _context.GlobalSettings.FirstOrDefault();
+
             roomBookingToUpdate.ApprovalStatus = "Denied";
 
-            //if (roomBookingToUpdate.User.EmailBookingNotifications)
-            //{
-            //    await _emailSender.SendEmailAsync(
-            //           roomBookingToUpdate.User.Email,
-            //           "Booking Denied",
-            //           $"Your room booking has been denied.");
-            //}
+            // Uncomment to test email functionality, but make sure to comment it again before pushing any changes to GitHub
+            if (roomBookingToUpdate.User.EmailBookingNotifications || globalSettings.EmailBookingNotificationsOverride)
+            {
+                if (!globalSettings.PreventBookingNotificationsOverride)
+                {
+                    await _emailSender.SendEmailAsync(
+                       roomBookingToUpdate.User.Email,
+                       "Booking Denied",
+                       $"Your room booking for " + roomBookingToUpdate.Room.RoomName + " on " + roomBookingToUpdate.StartDate.ToShortDateString() + " has been denied.<br /><br />" +
+                                   $"<a href='{Request.Scheme}://{Request.Host.Value}'>Log-in to BRTF Room Booking</a> to review your bookings.");
+                }
+            }
 
             await _context.SaveChangesAsync();
 
